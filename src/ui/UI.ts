@@ -32,6 +32,8 @@ export class UI {
       </div>
       
       <div class="bottom-actions ui-element" id="bottom-actions">
+        <span class="action-link" id="auto-arrange-action">Auto Arrange</span>
+        <span class="action-separator">|</span>
         <span class="action-link" id="clear-action">Clear</span>
         <span class="action-separator">|</span>
         <span class="action-link" id="reset-action">Reset</span>
@@ -332,6 +334,13 @@ export class UI {
       }
     });
     
+    // Auto arrange action
+    const autoArrangeAction = document.getElementById('auto-arrange-action')!;
+    autoArrangeAction.addEventListener('click', () => {
+      this.autoArrangeElements();
+      this.showToast('Elements arranged!');
+    });
+    
     // Clear action
     const clearAction = document.getElementById('clear-action')!;
     clearAction.addEventListener('click', async () => {
@@ -479,6 +488,10 @@ export class UI {
       const elementName = element ? element.name : elementId;
       this.showToast(`Added ${elementName}!`);
     }
+  }
+
+  private autoArrangeElements(): void {
+    this.game.autoArrangeElements();
   }
 
   private hideInstructionsIfNeeded(): void {

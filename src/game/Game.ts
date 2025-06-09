@@ -510,6 +510,93 @@ export class Game {
     this.onGameStateChanged();
   }
 
+  public autoArrangeElements(): void {
+    if (this.elements.length === 0) return;
+
+    // Get canvas dimensions (excluding discovery panel on desktop)
+    const canvas = this.app.view as HTMLCanvasElement;
+    const rect = canvas.getBoundingClientRect();
+    
+    // On desktop, exclude the 240px discovery panel from the right
+    // On mobile, use full width (discovery panel is at bottom)
+    const isDesktop = window.innerWidth > 768;
+    const availableWidth = isDesktop ? rect.width - 240 : rect.width;
+    const availableHeight = rect.height;
+    
+    // Add some padding from edges
+    const padding = 20;
+    const usableWidth = availableWidth - (padding * 2);
+    const usableHeight = availableHeight - (padding * 2);
+    
+    // Each element is roughly 60px diameter
+    const elementSize = 60;
+    
+    // Calculate optimal grid dimensions
+    const elementCount = this.elements.length;
+    const cols = Math.ceil(Math.sqrt(elementCount * (usableWidth / usableHeight)));
+    const rows = Math.ceil(elementCount / cols);
+    
+    // Calculate spacing
+    let spacingX = 9; // Default 9px margin
+    let spacingY = 9;
+    
+    // If elements don't fit with 9px spacing, reduce it
+    const requiredWidth = cols * elementSize + (cols - 1) * spacingX;
+    const requiredHeight = rows * elementSize + (rows - 1) * spacingY;
+    
+    if (requiredWidth > usableWidth) {
+      spacingX = Math.max(2, Math.floor((usableWidth - cols * elementSize) / (cols - 1)));
+    }
+    
+    if (requiredHeight > usableHeight) {
+      spacingY = Math.max(2, Math.floor((usableHeight - rows * elementSize) / (rows - 1)));
+    }
+    
+    // Calculate grid starting position (center the grid)
+    const gridWidth = cols * elementSize + (cols - 1) * spacingX;
+    const gridHeight = rows * elementSize + (rows - 1) * spacingY;
+    const startX = padding + (usableWidth - gridWidth) / 2;
+    const startY = padding + (usableHeight - gridHeight) / 2;
+    
+    // Convert to world coordinates (account for current panning and center to current view)
+    const worldStartX = startX - this.panOffset.x;
+    const worldStartY = startY - this.panOffset.y;
+    
+    // Arrange elements in grid
+    this.elements.forEach((element, index) => {
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+      
+      const x = worldStartX + col * (elementSize + spacingX);
+      const y = worldStartY + row * (elementSize + spacingY);
+      
+      // Animate to new position
+      const startX = element.x;
+      const startY = element.y;
+      const targetX = x;
+      const targetY = y;
+      
+      let progress = 0;
+      const animate = () => {
+        progress += 0.1;
+        if (progress >= 1) {
+          element.x = targetX;
+          element.y = targetY;
+          return;
+        }
+        
+        // Smooth easing
+        const eased = 1 - Math.pow(1 - progress, 3);
+        element.x = startX + (targetX - startX) * eased;
+        element.y = startY + (targetY - startY) * eased;
+        
+        requestAnimationFrame(animate);
+      };
+      
+      animate();
+    });
+  }
+
   public destroy(): void {
     this.app.destroy(true);
   }

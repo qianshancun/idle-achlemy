@@ -1,5 +1,6 @@
 import { Element } from './Element';
 import { configLoader, ElementDefinition } from '@/config/ConfigLoader';
+import { i18n, t } from '@/i18n/Translation';
 
 export class ElementManager {
   private discoveredElements: Set<string> = new Set();
@@ -177,7 +178,7 @@ export class ElementManager {
     const possibleRecipes = availableRecipes.filter(r => r.canMake);
     
     if (possibleRecipes.length === 0) {
-      return "Keep experimenting with your discovered elements!";
+      return t('ui.messages.keepExperimenting');
     }
     
     const randomRecipe = possibleRecipes[Math.floor(Math.random() * possibleRecipes.length)];
@@ -187,10 +188,16 @@ export class ElementManager {
     const element2 = elements.get(input2);
     
     if (!element1 || !element2) {
-      return "Keep experimenting with your discovered elements!";
+      return t('ui.messages.keepExperimenting');
     }
     
-    return `Try combining ${element1.emoji} ${element1.name} with ${element2.emoji} ${element2.name}!`;
+    const element1Name = i18n.getElementName(input1, element1.name);
+    const element2Name = i18n.getElementName(input2, element2.name);
+    
+    return t('ui.hints.tryCombing', { 
+      element1: `${element1.emoji} ${element1Name}`, 
+      element2: `${element2.emoji} ${element2Name}` 
+    });
   }
   
   public saveProgress(): string {

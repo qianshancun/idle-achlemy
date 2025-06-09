@@ -87,7 +87,7 @@ class ConfigLoader {
   private async loadCompiled(): Promise<void> {
     try {
       console.log('🔄 Loading compiled elements...');
-      const response = await fetch('/src/config/elements-compiled.json');
+      const response = await fetch('/elements-compiled.json');
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -134,7 +134,7 @@ class ConfigLoader {
           id: `${recipe.inputs[0]}_${recipe.inputs[1]}`,
           inputs: recipe.inputs,
           output: recipe.output,
-          discoveryMessage: `${elementName} discovered!`
+          discoveryMessage: elementName // Store just the element name, we'll format it with i18n later
         };
         
         this.recipes.push(recipeDef);

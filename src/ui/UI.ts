@@ -1,6 +1,7 @@
 import { Game } from '@/game/Game';
 import { showConfirm } from '@/ui/Dialog';
 import { configLoader } from '@/config/ConfigLoader';
+import { i18n, t } from '@/i18n/Translation';
 
 export class UI {
   private game: Game;
@@ -12,52 +13,61 @@ export class UI {
     this.uiContainer = document.getElementById('ui-overlay')!;
     
     this.createUI();
-    this.setupEventListeners();
     this.updateUI();
     
     // Check if help should be shown based on progress
     this.hideInstructionsIfNeeded();
+    
+    // Listen for language changes
+    window.addEventListener('languageChanged', () => {
+      this.refreshUI();
+    });
   }
   
   private createUI(): void {
     this.uiContainer.innerHTML = `
-
-      
-              <div class="discovery-panel ui-element" id="discovery-panel">
+      <div class="discovery-panel ui-element" id="discovery-panel">
         <div class="panel-header">
           <h3 id="elements-title">🧪 Elements (4)</h3>
-          <div class="panel-info">Drag to canvas</div>
+          <div class="language-selector" id="language-selector">
+            <button class="language-button" id="language-button"></button>
+            <div class="language-dropdown" id="language-dropdown"></div>
+          </div>
         </div>
         <div class="element-grid" id="element-grid"></div>
       </div>
       
       <div class="bottom-actions ui-element" id="bottom-actions">
-        <span class="action-link" id="auto-arrange-action">Auto Arrange</span>
+        <span class="action-link" id="auto-arrange-action"></span>
         <span class="action-separator">|</span>
-        <span class="action-link" id="remove-duplicate-action">Remove Duplicate</span>
+        <span class="action-link" id="remove-duplicate-action"></span>
         <span class="action-separator">|</span>
-        <span class="action-link" id="clear-action">Clear</span>
+        <span class="action-link" id="clear-action"></span>
         <span class="action-separator">|</span>
-        <span class="action-link" id="reset-action">Reset</span>
+        <span class="action-link" id="reset-action"></span>
       </div>
       
       <div class="help-tooltip ui-element" id="help-tooltip">
         <div class="tooltip-content">
-          <p>🎯 <strong>How to Play:</strong></p>
-          <p>1. Click or drag elements from the discovery panel to the canvas</p>
-          <p>2. Drag canvas elements onto each other to merge</p>
-          <p>3. Double-tap canvas elements to duplicate them</p>
-          <p>4. Drag empty space to pan around the unlimited canvas</p>
-          <p>5. Discover new elements by experimenting!</p>
-          <button class="close-tooltip" id="close-tooltip">✕</button>
+          <p><strong id="help-title"></strong></p>
+          <p id="help-step1"></p>
+          <p id="help-step2"></p>
+          <p id="help-step3"></p>
+          <p id="help-step4"></p>
+          <p id="help-step5"></p>
+          <button class="close-tooltip" id="close-tooltip"></button>
         </div>
       </div>
     `;
+    
+    // Now populate with translated content
+    this.updateTranslatedContent();
     
     // Get references
     this.elementGrid = document.getElementById('element-grid')!;
     
     this.addStyles();
+    this.setupEventListeners();
   }
   
   private addStyles(): void {
@@ -320,12 +330,80 @@ export class UI {
       .element-grid::-webkit-scrollbar-thumb:hover {
         background: rgba(0, 0, 0, 0.3);
       }
+      
+      /* Language Selector */
+      .language-selector {
+        position: relative;
+        z-index: 1000;
+      }
+      
+      .language-button {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        color: #666;
+        padding: 4px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 10px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+      }
+      
+      .language-button:hover {
+        background: rgba(255, 255, 255, 1);
+        border-color: rgba(0, 0, 0, 0.2);
+        color: #333;
+      }
+      
+      .language-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        min-width: 120px;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+        margin-top: 2px;
+        z-index: 1001;
+      }
+      
+      .language-dropdown.show {
+        display: block;
+      }
+      
+      .language-option {
+        padding: 8px 12px;
+        color: #333;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        font-size: 10px;
+      }
+      
+      .language-option:last-child {
+        border-bottom: none;
+      }
+      
+      .language-option:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+      
+      .language-option.active {
+        background: rgba(33, 150, 243, 0.1);
+        color: #1976d2;
+        font-weight: bold;
+      }
     `;
     
     document.head.appendChild(style);
   }
   
   private setupEventListeners(): void {
+    console.log('📋 Setting up event listeners...');
     // Close help tooltip
     const closeTooltip = document.getElementById('close-tooltip')!;
     closeTooltip.addEventListener('click', () => {
@@ -340,7 +418,7 @@ export class UI {
     const autoArrangeAction = document.getElementById('auto-arrange-action')!;
     autoArrangeAction.addEventListener('click', () => {
       this.autoArrangeElements();
-      this.showToast('Elements arranged!');
+      this.showToast(t('ui.messages.elementsArranged'));
     });
     
     // Remove duplicate action
@@ -348,9 +426,10 @@ export class UI {
     removeDuplicateAction.addEventListener('click', () => {
       const removedCount = this.removeDuplicateElements();
       if (removedCount > 0) {
-        this.showToast(`Removed ${removedCount} duplicate${removedCount > 1 ? 's' : ''}!`);
+        const pluralS = removedCount > 1 ? 's' : '';
+        this.showToast(t('ui.messages.removedDuplicates', { count: removedCount, s: pluralS }));
       } else {
-        this.showToast('No duplicates found!');
+        this.showToast(t('ui.messages.noDuplicatesFound'));
       }
     });
     
@@ -358,16 +437,16 @@ export class UI {
     const clearAction = document.getElementById('clear-action')!;
     clearAction.addEventListener('click', async () => {
       const confirmed = await showConfirm({
-        title: '🧹 Clear Canvas',
-        message: 'This will remove all elements from the canvas, but keep your discovered elements. Are you sure?',
-        confirmText: 'Clear',
-        cancelText: 'Cancel',
+        title: t('ui.confirmations.clearCanvas.title'),
+        message: t('ui.confirmations.clearCanvas.message'),
+        confirmText: t('ui.confirmations.clearCanvas.confirm'),
+        cancelText: t('ui.confirmations.clearCanvas.cancel'),
         type: 'confirm'
       });
       
       if (confirmed) {
         this.game.clearCanvas();
-        this.showToast('Canvas cleared!');
+        this.showToast(t('ui.messages.canvasCleared'));
       }
     });
     
@@ -375,19 +454,22 @@ export class UI {
     const resetAction = document.getElementById('reset-action')!;
     resetAction.addEventListener('click', async () => {
       const confirmed = await showConfirm({
-        title: '🔄 Reset Game',
-        message: 'This will reset your entire progress and remove all discovered elements. You will start over with just the 4 basic elements. This action cannot be undone!',
-        confirmText: 'Reset Game',
-        cancelText: 'Cancel',
+        title: t('ui.confirmations.resetGame.title'),
+        message: t('ui.confirmations.resetGame.message'),
+        confirmText: t('ui.confirmations.resetGame.confirm'),
+        cancelText: t('ui.confirmations.resetGame.cancel'),
         type: 'warning'
       });
       
       if (confirmed) {
         this.game.reset();
-        this.showToast('Game reset!');
+        this.showToast(t('ui.messages.gameReset'));
       }
     });
     
+    // Language selector
+    this.setupLanguageSelector();
+
     // Game state changes
     window.addEventListener('gameStateChanged', ((event: CustomEvent) => {
       // Store game state for element grid updates
@@ -402,7 +484,7 @@ export class UI {
     
     // Update elements title with count
     const elementsTitle = document.getElementById('elements-title')!;
-    elementsTitle.textContent = `🧪 Elements (${progress.discovered})`;
+    elementsTitle.textContent = t('ui.titles.elements', { count: progress.discovered });
     
     // Update element grid
     this.updateElementGrid();
@@ -441,9 +523,10 @@ export class UI {
       const elementCard = document.createElement('div');
       elementCard.className = `element-card`;
       elementCard.draggable = true;
+      const elementName = i18n.getElementName(element.id, element.name);
       elementCard.innerHTML = `
         <span class="element-emoji">${element.emoji}</span>
-        <span class="element-name">${element.name}</span>
+        <span class="element-name">${elementName}</span>
       `;
       
       // Add drag functionality
@@ -498,8 +581,8 @@ export class UI {
     if (success) {
       // Get element name from config for display
       const element = configLoader.getElements().get(elementId);
-      const elementName = element ? element.name : elementId;
-      this.showToast(`Added ${elementName}!`);
+      const elementName = element ? i18n.getElementName(elementId, element.name) : elementId;
+      this.showToast(t('ui.messages.added', { element: elementName }));
     }
   }
 
@@ -533,6 +616,176 @@ export class UI {
     }
   }
   
+  private refreshUI(): void {
+    // Update translated content without recreating the entire UI
+    this.updateTranslatedContent();
+    this.updateUI();
+    this.hideInstructionsIfNeeded();
+    
+    // Reattach language selector listeners
+    this.setupLanguageOptions();
+  }
+  
+  private updateTranslatedContent(): void {
+    console.log('🌍 Updating translated content...');
+    // Update action buttons
+    const autoArrangeAction = document.getElementById('auto-arrange-action');
+    if (autoArrangeAction) autoArrangeAction.textContent = t('ui.buttons.autoArrange');
+    
+    const removeDuplicateAction = document.getElementById('remove-duplicate-action');
+    if (removeDuplicateAction) removeDuplicateAction.textContent = t('ui.buttons.removeDuplicate');
+    
+    const clearAction = document.getElementById('clear-action');
+    if (clearAction) clearAction.textContent = t('ui.buttons.clear');
+    
+    const resetAction = document.getElementById('reset-action');
+    if (resetAction) resetAction.textContent = t('ui.buttons.reset');
+    
+    // Update help tooltip
+    const helpTitle = document.getElementById('help-title');
+    if (helpTitle) helpTitle.textContent = t('ui.titles.howToPlay');
+    
+    const helpStep1 = document.getElementById('help-step1');
+    if (helpStep1) helpStep1.textContent = t('ui.instructions.step1');
+    
+    const helpStep2 = document.getElementById('help-step2');
+    if (helpStep2) helpStep2.textContent = t('ui.instructions.step2');
+    
+    const helpStep3 = document.getElementById('help-step3');
+    if (helpStep3) helpStep3.textContent = t('ui.instructions.step3');
+    
+    const helpStep4 = document.getElementById('help-step4');
+    if (helpStep4) helpStep4.textContent = t('ui.instructions.step4');
+    
+    const helpStep5 = document.getElementById('help-step5');
+    if (helpStep5) helpStep5.textContent = t('ui.instructions.step5');
+    
+    const closeTooltip = document.getElementById('close-tooltip');
+    if (closeTooltip) closeTooltip.textContent = t('ui.buttons.close');
+    
+    // Update language selector
+    this.updateLanguageSelector();
+  }
+  
+  private updateLanguageSelector(): void {
+    console.log('🔄 Updating language selector...');
+    const languageButton = document.getElementById('language-button');
+    if (languageButton) {
+      const currentLang = i18n.getCurrentLanguageConfig();
+      const buttonText = `🌍 ${currentLang?.nativeName || 'English'}`;
+      languageButton.textContent = buttonText;
+      console.log('🔄 Updated button text to:', buttonText);
+    } else {
+      console.error('❌ Language button not found during update!');
+    }
+    
+    // Update language dropdown
+    const languageDropdown = document.getElementById('language-dropdown');
+    if (languageDropdown) {
+      const currentLang = i18n.getCurrentLanguage();
+      const dropdownHTML = i18n.getSupportedLanguages().map(lang => 
+        `<div class="language-option ${lang.code === currentLang ? 'active' : ''}" data-lang="${lang.code}">
+          ${lang.nativeName}
+        </div>`
+      ).join('');
+      languageDropdown.innerHTML = dropdownHTML;
+      console.log('🔄 Updated dropdown with', i18n.getSupportedLanguages().length, 'languages');
+    } else {
+      console.error('❌ Language dropdown not found during update!');
+    }
+  }
+  
+  private setupLanguageSelector(): void {
+    console.log('🔧 Setting up language selector...');
+    const languageButton = document.getElementById('language-button');
+    const languageDropdown = document.getElementById('language-dropdown');
+    
+    console.log('🔍 Language button:', languageButton);
+    console.log('🔍 Language dropdown:', languageDropdown);
+    
+    if (!languageButton || !languageDropdown) {
+      console.error('❌ Language selector elements not found!');
+      return;
+    }
+    
+    // Store reference for cleanup (avoid cloning)
+    (languageButton as any)._clickHandler = (e: Event) => {
+      console.log('🖱️ Language button clicked!');
+      e.stopPropagation();
+      const currentDropdown = document.getElementById('language-dropdown')!;
+      const isShowing = currentDropdown.classList.contains('show');
+      console.log('🔍 Dropdown currently showing:', isShowing);
+      currentDropdown.classList.toggle('show');
+      console.log('🔍 Dropdown after toggle:', currentDropdown.classList.contains('show'));
+    };
+    
+    // Remove old listener if exists
+    if ((languageButton as any)._oldClickHandler) {
+      languageButton.removeEventListener('click', (languageButton as any)._oldClickHandler);
+    }
+    
+    console.log('🔧 Adding click listener to language button...');
+    languageButton.addEventListener('click', (languageButton as any)._clickHandler);
+    (languageButton as any)._oldClickHandler = (languageButton as any)._clickHandler;
+    
+    // Close dropdown when clicking outside
+    const closeDropdown = (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.language-selector')) {
+        const currentDropdown = document.getElementById('language-dropdown');
+        if (currentDropdown) {
+          currentDropdown.classList.remove('show');
+        }
+      }
+    };
+    document.addEventListener('click', closeDropdown);
+    
+    // Set up language option listeners
+    this.setupLanguageOptions();
+  }
+  
+  private setupLanguageOptions(): void {
+    console.log('🔧 Setting up language options...');
+    const languageDropdown = document.getElementById('language-dropdown');
+    
+    if (!languageDropdown) {
+      console.error('❌ Language dropdown not found!');
+      return;
+    }
+    
+    console.log('🔍 Language dropdown found:', languageDropdown);
+    
+    // Store reference for cleanup (avoid cloning)
+    (languageDropdown as any)._clickHandler = async (e: Event) => {
+      console.log('🖱️ Language dropdown clicked!');
+      e.stopPropagation();
+      const target = e.target as HTMLElement;
+      console.log('🔍 Clicked target:', target);
+      
+      if (target.classList.contains('language-option')) {
+        const langCode = target.dataset.lang;
+        console.log('🌍 Language option clicked:', langCode);
+        if (langCode) {
+          try {
+            await i18n.setLanguage(langCode);
+            languageDropdown.classList.remove('show');
+          } catch (error) {
+            console.error('Failed to change language:', error);
+          }
+        }
+      }
+    };
+    
+    // Remove old listener if exists
+    if ((languageDropdown as any)._oldClickHandler) {
+      languageDropdown.removeEventListener('click', (languageDropdown as any)._oldClickHandler);
+    }
+    
+    console.log('🔧 Adding click listener to language dropdown...');
+    languageDropdown.addEventListener('click', (languageDropdown as any)._clickHandler);
+    (languageDropdown as any)._oldClickHandler = (languageDropdown as any)._clickHandler;
+  }
+
   private showToast(message: string): void {
     const toast = document.createElement('div');
     toast.style.cssText = `

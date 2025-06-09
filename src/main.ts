@@ -1,6 +1,7 @@
 import { Game } from '@/game/Game';
 import { UI } from '@/ui/UI';
 import { configLoader } from '@/config/ConfigLoader';
+import { i18n } from '@/i18n/Translation';
 
 class IdleAlchemy {
   private game: Game | null = null;
@@ -40,6 +41,10 @@ class IdleAlchemy {
           </div>
         </div>
       `;
+      
+      // Initialize i18n system first
+      await i18n.initialize();
+      console.log('✅ i18n system loaded successfully');
       
       // Initialize configuration
       await configLoader.initialize();

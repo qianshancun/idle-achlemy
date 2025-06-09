@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Element } from './Element';
 import { ElementManager } from './ElementManager';
+import { i18n } from '@/i18n/Translation';
 
 export class Game {
   private app: PIXI.Application;
@@ -82,7 +83,8 @@ export class Game {
               this.performMerge(tempElement, targetElement, mergeResult.result, mergeResult.isNewDiscovery || false);
               
               if (mergeResult.isNewDiscovery && mergeResult.message) {
-                this.showDiscoveryMessage(mergeResult.message);
+                const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, mergeResult.message);
+                this.showDiscoveryMessage(discoveryMessage);
               }
             } else {
               // Failed merge - place element nearby
@@ -261,9 +263,10 @@ export class Game {
         this.performMerge(this.draggedElement, target, mergeResult.result, mergeResult.isNewDiscovery || false);
         merged = true;
         
-        if (mergeResult.isNewDiscovery && mergeResult.message) {
-          this.showDiscoveryMessage(mergeResult.message);
-        }
+                  if (mergeResult.isNewDiscovery && mergeResult.message) {
+            const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, mergeResult.message);
+            this.showDiscoveryMessage(discoveryMessage);
+          }
         break;
       }
     }

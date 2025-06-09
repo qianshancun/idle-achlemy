@@ -9,7 +9,8 @@ const path = require('path');
  */
 
 const TSV_PATH = path.join(__dirname, '../src/config/elements.tsv');
-const OUTPUT_PATH = path.join(__dirname, '../src/config/elements-compiled.json');
+const OUTPUT_PATH_SRC = path.join(__dirname, '../src/config/elements-compiled.json');
+const OUTPUT_PATH_PUBLIC = path.join(__dirname, '../public/elements-compiled.json');
 
 function compileElements() {
   console.log('🔄 Compiling elements.tsv...');
@@ -106,11 +107,14 @@ function compileElements() {
       idMapping: Object.fromEntries(idMapping)
     };
     
-    // Write compiled file
-    fs.writeFileSync(OUTPUT_PATH, JSON.stringify(compiled, null, 2));
+    // Write compiled file to both locations
+    const compiledJson = JSON.stringify(compiled, null, 2);
+    fs.writeFileSync(OUTPUT_PATH_SRC, compiledJson);
+    fs.writeFileSync(OUTPUT_PATH_PUBLIC, compiledJson);
     
     console.log(`✅ Compilation complete!`);
-    console.log(`📁 Output: ${OUTPUT_PATH}`);
+    console.log(`📁 Output (dev): ${OUTPUT_PATH_SRC}`);
+    console.log(`📁 Output (prod): ${OUTPUT_PATH_PUBLIC}`);
     console.log(`📊 ${compiledElements.length} elements, ${recipes.length} recipes`);
     console.log(`💾 Storage optimization: ${calculateStorageReduction(idMapping)}`);
     

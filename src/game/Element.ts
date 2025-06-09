@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { ElementDefinition } from '@/config/ConfigLoader';
+import { i18n } from '@/i18n/Translation';
 
 export class Element extends PIXI.Container {
   public definition: ElementDefinition;
@@ -18,6 +19,7 @@ export class Element extends PIXI.Container {
     
     this.setupGraphics();
     this.setupInteraction();
+    this.setupLanguageListener();
   }
   
   private setupGraphics(): void {
@@ -42,8 +44,9 @@ export class Element extends PIXI.Container {
     this.emojiText.y = -8;
     this.addChild(this.emojiText);
     
-    // Name - smaller
-    this.nameText = new PIXI.Text(this.definition.name, {
+    // Name - smaller (use i18n for translation)
+    const translatedName = i18n.getElementName(this.definition.id, this.definition.name);
+    this.nameText = new PIXI.Text(translatedName, {
       fontSize: 10,
       fill: 0x333333,
       align: 'center',
@@ -68,6 +71,19 @@ export class Element extends PIXI.Container {
     // Hover effects
     this.on('pointerover', this.onHover, this);
     this.on('pointerout', this.onHoverEnd, this);
+  }
+  
+  private setupLanguageListener(): void {
+    // Listen for language changes and update the name text
+    const updateLanguage = () => {
+      const translatedName = i18n.getElementName(this.definition.id, this.definition.name);
+      this.nameText.text = translatedName;
+    };
+    
+    window.addEventListener('languageChanged', updateLanguage);
+    
+    // Store reference for cleanup
+    (this as any)._languageListener = updateLanguage;
   }
   
   private lastTapTime: number = 0;
@@ -255,5 +271,15 @@ export class Element extends PIXI.Container {
     const dx = this.x - other.x;
     const dy = this.y - other.y;
     return Math.sqrt(dx * dx + dy * dy);
+  }
+  
+  public destroy(): void {
+    // Clean up language listener
+    if ((this as any)._languageListener) {
+      window.removeEventListener('languageChanged', (this as any)._languageListener);
+    }
+    
+    // Call parent destroy
+    super.destroy();
   }
 } 

@@ -84,39 +84,39 @@ export class UI {
     style.textContent = `
       .ui-header {
         position: absolute;
-        top: 20px;
-        left: 20px;
-        right: 20px;
+        top: 10px;
+        left: 10px;
+        right: 260px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         background: rgba(0, 0, 0, 0.7);
-        border-radius: 15px;
-        padding: 15px 20px;
+        border-radius: 8px;
+        padding: 8px 12px;
         backdrop-filter: blur(10px);
       }
       
       .progress-container {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 10px;
         flex: 1;
       }
       
       .progress-text {
         color: white;
         font-weight: bold;
-        font-size: 16px;
-        min-width: 120px;
+        font-size: 14px;
+        min-width: 80px;
       }
       
       .progress-bar {
         flex: 1;
-        height: 8px;
+        height: 6px;
         background: rgba(255, 255, 255, 0.2);
-        border-radius: 4px;
+        border-radius: 3px;
         overflow: hidden;
-        max-width: 200px;
+        max-width: 150px;
       }
       
       .progress-fill {
@@ -128,19 +128,19 @@ export class UI {
       
       .header-buttons {
         display: flex;
-        gap: 10px;
+        gap: 6px;
       }
       
       .ui-button {
         background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         color: white;
-        padding: 8px 16px;
-        border-radius: 8px;
+        padding: 6px 12px;
+        border-radius: 6px;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: bold;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
         touch-action: manipulation;
       }
       
@@ -155,12 +155,12 @@ export class UI {
       
       .mobile-menu {
         position: absolute;
-        top: 80px;
-        right: 20px;
+        top: 50px;
+        right: 10px;
         background: rgba(0, 0, 0, 0.9);
-        border-radius: 15px;
-        padding: 20px;
-        min-width: 200px;
+        border-radius: 8px;
+        padding: 12px;
+        min-width: 150px;
         display: none;
         backdrop-filter: blur(10px);
       }
@@ -171,13 +171,14 @@ export class UI {
       
       .menu-content h3 {
         color: white;
-        margin: 0 0 15px 0;
+        margin: 0 0 8px 0;
         text-align: center;
+        font-size: 14px;
       }
       
       .menu-content .ui-button {
         width: 100%;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         justify-content: center;
         display: flex;
         align-items: center;
@@ -185,116 +186,112 @@ export class UI {
       
       .discovery-panel {
         position: absolute;
-        bottom: 20px;
-        left: 20px;
-        right: 20px;
-        max-height: 40vh;
-        background: rgba(0, 0, 0, 0.8);
-        border-radius: 15px;
-        padding: 20px;
+        top: 10px;
+        right: 10px;
+        bottom: 10px;
+        width: 240px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 8px;
+        padding: 12px;
         backdrop-filter: blur(10px);
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.1);
       }
       
       .discovery-panel.collapsed {
-        max-height: 60px;
+        width: 60px;
       }
       
       .panel-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: white;
-        margin-bottom: 15px;
+        color: #333;
+        margin-bottom: 10px;
       }
       
       .panel-header h3 {
         margin: 0;
-        font-size: 18px;
+        font-size: 14px;
+        font-weight: 600;
       }
       
       .panel-info {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 10px;
+        color: #666;
         font-style: italic;
       }
       
       .panel-toggle {
         background: none;
         border: none;
-        color: white;
-        font-size: 20px;
+        color: #666;
+        font-size: 16px;
         cursor: pointer;
-        padding: 5px;
+        padding: 4px;
         border-radius: 4px;
         transition: background 0.2s ease;
       }
       
       .panel-toggle:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.1);
       }
       
       .element-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 10px;
-        max-height: 200px;
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 4px;
+        height: calc(100% - 40px);
         overflow-y: auto;
       }
       
       .element-card {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 12px;
+        background: white;
+        border-radius: 6px;
+        padding: 6px 4px;
         text-align: center;
         cursor: pointer;
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
+        transition: all 0.15s ease;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        min-height: 32px;
       }
       
       .element-card:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
+        background: #f5f5f5;
+        border-color: #ccc;
       }
       
-      .element-card.rare {
-        border-color: rgba(0, 128, 255, 0.5);
-        box-shadow: 0 0 10px rgba(0, 128, 255, 0.3);
-      }
-      
-      .element-card.epic {
-        border-color: rgba(128, 0, 255, 0.5);
-        box-shadow: 0 0 10px rgba(128, 0, 255, 0.3);
-      }
-      
-      .element-card.legendary {
-        border-color: rgba(255, 128, 0, 0.5);
-        box-shadow: 0 0 10px rgba(255, 128, 0, 0.3);
+      .element-card:active {
+        transform: scale(0.98);
       }
       
       .element-emoji {
-        font-size: 24px;
-        display: block;
-        margin-bottom: 5px;
+        font-size: 14px;
+        line-height: 1;
       }
       
       .element-name {
-        color: white;
-        font-size: 12px;
-        font-weight: bold;
+        color: #333;
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1;
       }
       
       .help-tooltip {
         position: absolute;
-        top: 100px;
-        right: 20px;
+        top: 60px;
+        right: 10px;
         background: rgba(0, 0, 0, 0.9);
-        border-radius: 15px;
-        padding: 20px;
-        max-width: 280px;
+        border-radius: 8px;
+        padding: 12px;
+        max-width: 200px;
         backdrop-filter: blur(10px);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         transition: opacity 0.3s ease;
       }
       
@@ -305,12 +302,12 @@ export class UI {
       
       .tooltip-content {
         color: white;
-        font-size: 14px;
-        line-height: 1.4;
+        font-size: 11px;
+        line-height: 1.3;
       }
       
       .tooltip-content p {
-        margin-bottom: 8px;
+        margin-bottom: 6px;
       }
       
       .tooltip-content strong {
@@ -319,15 +316,15 @@ export class UI {
       
       .close-tooltip {
         position: absolute;
-        top: 8px;
-        right: 8px;
+        top: 4px;
+        right: 4px;
         background: none;
         border: none;
         color: rgba(255, 255, 255, 0.7);
-        font-size: 16px;
+        font-size: 14px;
         cursor: pointer;
-        padding: 4px;
-        border-radius: 4px;
+        padding: 2px;
+        border-radius: 3px;
         transition: all 0.2s ease;
       }
       
@@ -339,9 +336,10 @@ export class UI {
       /* Mobile optimizations */
       @media (max-width: 768px) {
         .ui-header {
+          right: 10px;
           flex-direction: column;
-          gap: 15px;
-          padding: 15px;
+          gap: 8px;
+          padding: 8px;
         }
         
         .progress-container {
@@ -354,23 +352,33 @@ export class UI {
         }
         
         .discovery-panel {
-          max-height: 35vh;
+          top: auto;
+          bottom: 10px;
+          left: 10px;
+          right: 10px;
+          width: auto;
+          height: 180px;
+        }
+        
+        .discovery-panel.collapsed {
+          width: auto;
+          height: 50px;
         }
         
         .element-grid {
           grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-          max-height: 150px;
+          height: calc(100% - 40px);
         }
         
         .help-tooltip {
-          top: 80px;
-          right: 10px;
-          left: 10px;
+          top: 50px;
+          right: 5px;
+          left: 5px;
           max-width: none;
         }
         
         .tooltip-content {
-          font-size: 12px;
+          font-size: 10px;
         }
       }
       
@@ -380,13 +388,17 @@ export class UI {
       }
       
       .element-grid::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.05);
         border-radius: 3px;
       }
       
       .element-grid::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(0, 0, 0, 0.2);
         border-radius: 3px;
+      }
+      
+      .element-grid::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.3);
       }
     `;
     
@@ -398,7 +410,8 @@ export class UI {
     const panelToggle = document.getElementById('panel-toggle')!;
     panelToggle.addEventListener('click', () => {
       this.discoveryPanel.classList.toggle('collapsed');
-      panelToggle.textContent = this.discoveryPanel.classList.contains('collapsed') ? '+' : '−';
+      const isCollapsed = this.discoveryPanel.classList.contains('collapsed');
+      panelToggle.textContent = isCollapsed ? '+' : '−';
     });
     
     // Mobile menu toggle
@@ -446,7 +459,9 @@ export class UI {
     });
     
     // Game state changes
-    window.addEventListener('gameStateChanged', (() => {
+    window.addEventListener('gameStateChanged', ((event: CustomEvent) => {
+      // Store game state for element grid updates
+      (window as any).lastGameState = event;
       this.updateUI();
       this.hideInstructionsIfNeeded();
     }) as EventListener);
@@ -474,20 +489,26 @@ export class UI {
   private updateElementGrid(): void {
     this.elementGrid.innerHTML = '';
     
-    // Add basic elements first (always available)
-    const basicElements = [
-      { id: 'water', name: 'Water', emoji: '💧', rarity: 'common' },
-      { id: 'fire', name: 'Fire', emoji: '🔥', rarity: 'common' },
-      { id: 'earth', name: 'Earth', emoji: '🌍', rarity: 'common' },
-      { id: 'air', name: 'Air', emoji: '🌬️', rarity: 'common' },
-    ];
+    // Get discovered elements from the game's event data
+    let discoveredElements: any[] = [];
     
-    // Add any other discovered elements (this would be expanded with actual element manager integration)
-    const allElements = [...basicElements];
+    // Listen for game state changes to get discovered elements
+    const gameStateEvent = (window as any).lastGameState;
+    if (gameStateEvent?.detail?.discoveredElements) {
+      discoveredElements = gameStateEvent.detail.discoveredElements;
+    } else {
+      // Fallback to basic elements if no game state available yet
+      discoveredElements = [
+        { id: 'water', name: 'Water', emoji: '💧', rarity: 'common' },
+        { id: 'fire', name: 'Fire', emoji: '🔥', rarity: 'common' },
+        { id: 'earth', name: 'Earth', emoji: '🌍', rarity: 'common' },
+        { id: 'air', name: 'Air', emoji: '🌬️', rarity: 'common' },
+      ];
+    }
     
-    allElements.forEach(element => {
+    discoveredElements.forEach(element => {
       const elementCard = document.createElement('div');
-      elementCard.className = `element-card ${element.rarity}`;
+      elementCard.className = `element-card`;
       elementCard.draggable = true;
       elementCard.innerHTML = `
         <span class="element-emoji">${element.emoji}</span>

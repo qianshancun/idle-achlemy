@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { ElementDefinition } from '@/config/elements';
+import { ElementDefinition } from '@/config/ConfigLoader';
 
 export class Element extends PIXI.Container {
   public definition: ElementDefinition;
@@ -84,8 +84,8 @@ export class Element extends PIXI.Container {
   private onDragStart(event: PIXI.FederatedPointerEvent): void {
     console.log('🖱️ Drag started:', this.definition.id);
     this.isDragging = true;
-    this.alpha = 0.8;
-    this.scale.set(1.1);
+    this.alpha = 0.9;
+    this.scale.set(1.05);
     
     // Debug parent hierarchy
     console.log('🔍 Parent hierarchy:', {
@@ -199,7 +199,7 @@ export class Element extends PIXI.Container {
   
   private onHover(): void {
     if (!this.isDragging) {
-      this.scale.set(1.05);
+      this.scale.set(1.03);
     }
   }
   
@@ -240,32 +240,28 @@ export class Element extends PIXI.Container {
   }
   
   public playDiscoveryAnimation(): void {
-    // Scale up and down animation for new discoveries
-    this.scale.set(0.5);
-    this.alpha = 0;
+    // Simple and fast scale animation for new discoveries
+    this.scale.set(0.8);
+    this.alpha = 0.5;
     
     const tween = {
-      scale: 0.5,
-      alpha: 0,
-      rotation: 0
+      scale: 0.8,
+      alpha: 0.5
     };
     
-    // Simple animation using requestAnimationFrame
+    // Fast animation using requestAnimationFrame
     const animate = () => {
-      tween.scale += (1 - tween.scale) * 0.15;
-      tween.alpha += (1 - tween.alpha) * 0.15;
-      tween.rotation += 0.1;
+      tween.scale += (1 - tween.scale) * 0.25;
+      tween.alpha += (1 - tween.alpha) * 0.25;
       
       this.scale.set(tween.scale);
       this.alpha = tween.alpha;
-      this.rotation = tween.rotation;
       
       if (Math.abs(tween.scale - 1) > 0.01) {
         requestAnimationFrame(animate);
       } else {
         this.scale.set(1);
         this.alpha = 1;
-        this.rotation = 0;
       }
     };
     

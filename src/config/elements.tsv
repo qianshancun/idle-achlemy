@@ -1,0 +1,22 @@
+# Elements Configuration File
+# Format: TSV for simplicity and human-readable maintenance
+# Columns: id, name, emoji, description, recipe (recipe as two IDs, e.g., id1+id2; empty for base elements)
+id	name	emoji	description	recipe
+water	Water	💧	The essence of life, fluid and adaptable	
+fire	Fire	🔥	Pure energy, destructive yet creative	
+earth	Earth	🌍	Solid foundation, stable and enduring	
+air	Air	🌬️	Invisible force, ever-moving and free	
+steam	Steam	💨	Water transformed by fire	water+fire
+mud	Mud	🟫	Earth mixed with water	earth+water
+lava	Lava	🌋	Earth melted by fire	fire+earth
+dust	Dust	💨	Earth scattered by air	air+earth
+lightning	Lightning	⚡	Fire channeled through air	fire+air
+cloud	Cloud	☁️	Water suspended in air	water+air
+rain	Rain	🌧️	Water falling from clouds	cloud+water
+storm	Storm	⛈️	Lightning and clouds combined	lightning+cloud
+obsidian	Obsidian	⬛	Lava cooled rapidly	lava+water
+plant	Plant	🌱	Life sprouting from mud	mud+air
+lake	Lake	🏞️	A large body of still water	water+water
+inferno	Inferno	🔥	An intense, destructive fire	fire+fire
+mountain	Mountain	⛰️	A towering peak of earth and stone	earth+earth
+wind	Wind	💨	Moving air with great force	air+air 

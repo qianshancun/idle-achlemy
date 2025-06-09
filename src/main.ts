@@ -1,5 +1,6 @@
 import { Game } from '@/game/Game';
 import { UI } from '@/ui/UI';
+import { configLoader } from '@/config/ConfigLoader';
 
 class IdleAlchemy {
   private game: Game | null = null;
@@ -13,7 +14,7 @@ class IdleAlchemy {
     }
   }
   
-  private initialize(): void {
+  private async initialize(): Promise<void> {
     const gameContainer = document.getElementById('game-container');
     
     if (!gameContainer) {
@@ -22,6 +23,31 @@ class IdleAlchemy {
     }
     
     try {
+      // Show loading message
+      gameContainer.innerHTML = `
+        <div style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+          color: white;
+          text-align: center;
+          font-family: Arial, sans-serif;
+        ">
+          <div>
+            <h2>🧪 Loading Idle Alchemy...</h2>
+            <p>Loading element configurations...</p>
+          </div>
+        </div>
+      `;
+      
+      // Initialize configuration
+      await configLoader.initialize();
+      console.log('✅ Configuration loaded successfully');
+      
+      // Clear loading message
+      gameContainer.innerHTML = '';
+      
       // Initialize the game
       this.game = new Game(gameContainer);
       
@@ -33,7 +59,9 @@ class IdleAlchemy {
       // Add some helpful console commands for development
       if (typeof window !== 'undefined') {
         (window as any).game = this.game;
+        (window as any).config = configLoader;
         console.log('💡 Development tip: Access the game instance via window.game');
+        console.log('💡 Development tip: Access the config loader via window.config');
       }
       
     } catch (error) {

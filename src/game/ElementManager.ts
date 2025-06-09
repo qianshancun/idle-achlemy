@@ -1,13 +1,17 @@
 import { Element } from './Element';
-import { ELEMENT_DEFINITIONS, ElementDefinition } from '@/config/elements';
-import { findRecipe, RECIPES } from '@/config/recipes';
+import { configLoader, ElementDefinition } from '@/config/ConfigLoader';
 
 export class ElementManager {
   private discoveredElements: Set<string> = new Set();
   private elementCounts: Map<string, number> = new Map();
   
   constructor() {
-    // Initialize with basic elements
+    // Initialize with basic elements after config is loaded
+    this.initializeBasicElements();
+  }
+  
+  private async initializeBasicElements() {
+    await configLoader.initialize();
     this.discoverElement('water');
     this.discoverElement('fire');
     this.discoverElement('earth');
@@ -15,7 +19,8 @@ export class ElementManager {
   }
   
   public discoverElement(elementId: string): boolean {
-    if (!ELEMENT_DEFINITIONS[elementId]) {
+    const elements = configLoader.getElements();
+    if (!elements.has(elementId)) {
       console.warn(`Element ${elementId} not found in definitions`);
       return false;
     }
@@ -35,9 +40,10 @@ export class ElementManager {
   }
   
   public getDiscoveredElements(): ElementDefinition[] {
+    const elements = configLoader.getElements();
     return Array.from(this.discoveredElements)
-      .map(id => ELEMENT_DEFINITIONS[id])
-      .filter(Boolean);
+      .map(id => elements.get(id))
+      .filter(Boolean) as ElementDefinition[];
   }
   
   public getElementCount(elementId: string): number {
@@ -45,7 +51,8 @@ export class ElementManager {
   }
   
   public createElement(elementId: string, x: number = 0, y: number = 0): Element | null {
-    const definition = ELEMENT_DEFINITIONS[elementId];
+    const elements = configLoader.getElements();
+    const definition = elements.get(elementId);
     if (!definition || !this.isDiscovered(elementId)) {
       return null;
     }
@@ -64,7 +71,7 @@ export class ElementManager {
       return { success: false };
     }
     
-    const recipe = findRecipe(element1.definition.id, element2.definition.id);
+    const recipe = configLoader.findRecipe(element1.definition.id, element2.definition.id);
     
     if (!recipe) {
       return { success: false };
@@ -81,11 +88,12 @@ export class ElementManager {
   }
   
   public getAvailableRecipes(): Array<{
-    recipe: typeof RECIPES[0];
+    recipe: any;
     canMake: boolean;
     hasIngredients: boolean;
   }> {
-    return RECIPES.map(recipe => {
+    const recipes = configLoader.getRecipes();
+    return recipes.map(recipe => {
       const hasIngredient1 = this.isDiscovered(recipe.inputs[0]);
       const hasIngredient2 = this.isDiscovered(recipe.inputs[1]);
       const hasIngredients = hasIngredient1 && hasIngredient2;
@@ -104,7 +112,8 @@ export class ElementManager {
     total: number;
     percentage: number;
   } {
-    const total = Object.keys(ELEMENT_DEFINITIONS).length;
+    const elements = configLoader.getElements();
+    const total = elements.size;
     const discovered = this.discoveredElements.size;
     
     return {
@@ -124,8 +133,13 @@ export class ElementManager {
     
     const randomRecipe = possibleRecipes[Math.floor(Math.random() * possibleRecipes.length)];
     const [input1, input2] = randomRecipe.recipe.inputs;
-    const element1 = ELEMENT_DEFINITIONS[input1];
-    const element2 = ELEMENT_DEFINITIONS[input2];
+    const elements = configLoader.getElements();
+    const element1 = elements.get(input1);
+    const element2 = elements.get(input2);
+    
+    if (!element1 || !element2) {
+      return "Keep experimenting with your discovered elements!";
+    }
     
     return `Try combining ${element1.emoji} ${element1.name} with ${element2.emoji} ${element2.name}!`;
   }

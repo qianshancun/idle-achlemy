@@ -34,6 +34,8 @@ export class UI {
       <div class="bottom-actions ui-element" id="bottom-actions">
         <span class="action-link" id="auto-arrange-action">Auto Arrange</span>
         <span class="action-separator">|</span>
+        <span class="action-link" id="remove-duplicate-action">Remove Duplicate</span>
+        <span class="action-separator">|</span>
         <span class="action-link" id="clear-action">Clear</span>
         <span class="action-separator">|</span>
         <span class="action-link" id="reset-action">Reset</span>
@@ -341,6 +343,17 @@ export class UI {
       this.showToast('Elements arranged!');
     });
     
+    // Remove duplicate action
+    const removeDuplicateAction = document.getElementById('remove-duplicate-action')!;
+    removeDuplicateAction.addEventListener('click', () => {
+      const removedCount = this.removeDuplicateElements();
+      if (removedCount > 0) {
+        this.showToast(`Removed ${removedCount} duplicate${removedCount > 1 ? 's' : ''}!`);
+      } else {
+        this.showToast('No duplicates found!');
+      }
+    });
+    
     // Clear action
     const clearAction = document.getElementById('clear-action')!;
     clearAction.addEventListener('click', async () => {
@@ -492,6 +505,10 @@ export class UI {
 
   private autoArrangeElements(): void {
     this.game.autoArrangeElements();
+  }
+
+  private removeDuplicateElements(): number {
+    return this.game.removeDuplicateElements();
   }
 
   private hideInstructionsIfNeeded(): void {

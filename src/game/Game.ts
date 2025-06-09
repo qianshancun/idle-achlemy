@@ -597,6 +597,43 @@ export class Game {
     });
   }
 
+  public removeDuplicateElements(): number {
+    if (this.elements.length === 0) return 0;
+
+    // Group elements by their type (definition.id)
+    const elementGroups = new Map<string, Element[]>();
+    
+    this.elements.forEach(element => {
+      const elementType = element.definition.id;
+      if (!elementGroups.has(elementType)) {
+        elementGroups.set(elementType, []);
+      }
+      elementGroups.get(elementType)!.push(element);
+    });
+    
+    let removedCount = 0;
+    
+    // For each group, keep only the last element (most recently created)
+    elementGroups.forEach((elementsOfType, _elementType) => {
+      if (elementsOfType.length > 1) {
+        // Keep the last element, remove all others
+        const elementsToRemove = elementsOfType.slice(0, -1); // All except the last
+        
+        elementsToRemove.forEach(element => {
+          this.removeElement(element);
+          removedCount++;
+        });
+      }
+    });
+    
+    // Update game state if any elements were removed
+    if (removedCount > 0) {
+      this.onGameStateChanged();
+    }
+    
+    return removedCount;
+  }
+
   public destroy(): void {
     this.app.destroy(true);
   }

@@ -11,11 +11,13 @@ export class ElementManager {
   }
   
   private initializeBasicElements() {
-    // Force immediate discovery of basic elements
-    this.discoveredElements.add('water');
-    this.discoveredElements.add('fire');
-    this.discoveredElements.add('earth');
-    this.discoveredElements.add('air');
+    // Force immediate discovery of basic elements using HEX IDs
+    console.log('🔧 Initializing basic elements with hex IDs...');
+    this.discoveredElements.add('0'); // water
+    this.discoveredElements.add('1'); // fire
+    this.discoveredElements.add('2'); // earth
+    this.discoveredElements.add('3'); // air
+    console.log('✅ Basic elements initialized:', Array.from(this.discoveredElements));
   }
   
   public resetToBasicElements() {
@@ -45,8 +47,8 @@ export class ElementManager {
   }
   
   public isDiscovered(elementId: string): boolean {
-    // Basic elements are always considered discovered
-    const basicElements = ['water', 'fire', 'earth', 'air'];
+    // Basic elements are always considered discovered (using HEX IDs)
+    const basicElements = ['0', '1', '2', '3']; // water, fire, earth, air
     if (basicElements.includes(elementId)) {
       return true;
     }
@@ -55,9 +57,21 @@ export class ElementManager {
   
   public getDiscoveredElements(): ElementDefinition[] {
     const elements = configLoader.getElements();
-    return Array.from(this.discoveredElements)
-      .map(id => elements.get(id))
+    
+    console.log('🔍 ElementManager.getDiscoveredElements() called');
+    console.log('   📦 Discovered IDs:', Array.from(this.discoveredElements));
+    console.log('   📚 Available elements in config:', elements.size);
+    
+    const result = Array.from(this.discoveredElements)
+      .map(id => {
+        const element = elements.get(id);
+        console.log(`   🔗 Mapping ${id} -> ${element ? element.name : 'NOT FOUND'}`);
+        return element;
+      })
       .filter(Boolean) as ElementDefinition[];
+    
+    console.log('   ✅ Final discovered elements:', result);
+    return result;
   }
   
   public getElementCount(elementId: string): number {

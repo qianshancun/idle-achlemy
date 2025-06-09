@@ -1,0 +1,4406 @@
+{
+  "version": "1.0",
+  "timestamp": "2025-06-09T09:54:25.285Z",
+  "elements": [
+    {
+      "id": "0",
+      "name": "Water",
+      "emoji": "💧",
+      "discovered": true
+    },
+    {
+      "id": "1",
+      "name": "Fire",
+      "emoji": "🔥",
+      "discovered": true
+    },
+    {
+      "id": "2",
+      "name": "Earth",
+      "emoji": "🌍",
+      "discovered": true
+    },
+    {
+      "id": "3",
+      "name": "Air",
+      "emoji": "🌬️",
+      "discovered": true
+    },
+    {
+      "id": "4",
+      "name": "Steam",
+      "emoji": "💨",
+      "discovered": false
+    },
+    {
+      "id": "5",
+      "name": "Mud",
+      "emoji": "🟫",
+      "discovered": false
+    },
+    {
+      "id": "6",
+      "name": "Lava",
+      "emoji": "🌋",
+      "discovered": false
+    },
+    {
+      "id": "7",
+      "name": "Dust",
+      "emoji": "🌫️",
+      "discovered": false
+    },
+    {
+      "id": "8",
+      "name": "Lightning",
+      "emoji": "⚡",
+      "discovered": false
+    },
+    {
+      "id": "9",
+      "name": "Cloud",
+      "emoji": "☁️",
+      "discovered": false
+    },
+    {
+      "id": "A",
+      "name": "Rain",
+      "emoji": "🌧️",
+      "discovered": false
+    },
+    {
+      "id": "B",
+      "name": "Storm",
+      "emoji": "⛈️",
+      "discovered": false
+    },
+    {
+      "id": "C",
+      "name": "Obsidian",
+      "emoji": "⬛",
+      "discovered": false
+    },
+    {
+      "id": "D",
+      "name": "Plant",
+      "emoji": "🌱",
+      "discovered": false
+    },
+    {
+      "id": "E",
+      "name": "Lake",
+      "emoji": "🏞️",
+      "discovered": false
+    },
+    {
+      "id": "F",
+      "name": "Inferno",
+      "emoji": "🔥",
+      "discovered": false
+    },
+    {
+      "id": "10",
+      "name": "Mountain",
+      "emoji": "⛰️",
+      "discovered": false
+    },
+    {
+      "id": "11",
+      "name": "Wind",
+      "emoji": "💨",
+      "discovered": false
+    },
+    {
+      "id": "12",
+      "name": "Stone",
+      "emoji": "🪨",
+      "discovered": false
+    },
+    {
+      "id": "13",
+      "name": "Sand",
+      "emoji": "🏜️",
+      "discovered": false
+    },
+    {
+      "id": "14",
+      "name": "Glass",
+      "emoji": "🪟",
+      "discovered": false
+    },
+    {
+      "id": "15",
+      "name": "Sea",
+      "emoji": "🌊",
+      "discovered": false
+    },
+    {
+      "id": "16",
+      "name": "Beach",
+      "emoji": "🏖️",
+      "discovered": false
+    },
+    {
+      "id": "17",
+      "name": "Swamp",
+      "emoji": "🏞️",
+      "discovered": false
+    },
+    {
+      "id": "18",
+      "name": "Volcano",
+      "emoji": "🌋",
+      "discovered": false
+    },
+    {
+      "id": "19",
+      "name": "Geyser",
+      "emoji": "⛲",
+      "discovered": false
+    },
+    {
+      "id": "1A",
+      "name": "Mist",
+      "emoji": "🌫️",
+      "discovered": false
+    },
+    {
+      "id": "1B",
+      "name": "Pressure",
+      "emoji": "🗜️",
+      "discovered": false
+    },
+    {
+      "id": "1C",
+      "name": "Energy",
+      "emoji": "⚡",
+      "discovered": false
+    },
+    {
+      "id": "1D",
+      "name": "Earthquake",
+      "emoji": "🌋",
+      "discovered": false
+    },
+    {
+      "id": "1E",
+      "name": "Tsunami",
+      "emoji": "🌊",
+      "discovered": false
+    },
+    {
+      "id": "1F",
+      "name": "Sky",
+      "emoji": "🌌",
+      "discovered": false
+    },
+    {
+      "id": "20",
+      "name": "Sun",
+      "emoji": "☀️",
+      "discovered": false
+    },
+    {
+      "id": "21",
+      "name": "Moon",
+      "emoji": "🌕",
+      "discovered": false
+    },
+    {
+      "id": "22",
+      "name": "Night",
+      "emoji": "🌃",
+      "discovered": false
+    },
+    {
+      "id": "23",
+      "name": "Time",
+      "emoji": "⏳",
+      "discovered": false
+    },
+    {
+      "id": "24",
+      "name": "Tree",
+      "emoji": "🌳",
+      "discovered": false
+    },
+    {
+      "id": "25",
+      "name": "Forest",
+      "emoji": "🌲",
+      "discovered": false
+    },
+    {
+      "id": "26",
+      "name": "Wood",
+      "emoji": "🪵",
+      "discovered": false
+    },
+    {
+      "id": "27",
+      "name": "Salt",
+      "emoji": "🧂",
+      "discovered": false
+    },
+    {
+      "id": "28",
+      "name": "Primordial Soup",
+      "emoji": "🥣",
+      "discovered": false
+    },
+    {
+      "id": "29",
+      "name": "Life",
+      "emoji": "🧬",
+      "discovered": false
+    },
+    {
+      "id": "2A",
+      "name": "Egg",
+      "emoji": "🥚",
+      "discovered": false
+    },
+    {
+      "id": "2B",
+      "name": "Animal",
+      "emoji": "🐾",
+      "discovered": false
+    },
+    {
+      "id": "2C",
+      "name": "Bird",
+      "emoji": "🐦",
+      "discovered": false
+    },
+    {
+      "id": "2D",
+      "name": "Fish",
+      "emoji": "🐟",
+      "discovered": false
+    },
+    {
+      "id": "2E",
+      "name": "Lizard",
+      "emoji": "🦎",
+      "discovered": false
+    },
+    {
+      "id": "2F",
+      "name": "Dinosaur",
+      "emoji": "🦖",
+      "discovered": false
+    },
+    {
+      "id": "30",
+      "name": "Fossil",
+      "emoji": "🦴",
+      "discovered": false
+    },
+    {
+      "id": "31",
+      "name": "Flower",
+      "emoji": "🌸",
+      "discovered": false
+    },
+    {
+      "id": "32",
+      "name": "Grass",
+      "emoji": "🌿",
+      "discovered": false
+    },
+    {
+      "id": "33",
+      "name": "Bee",
+      "emoji": "🐝",
+      "discovered": false
+    },
+    {
+      "id": "34",
+      "name": "Honey",
+      "emoji": "🍯",
+      "discovered": false
+    },
+    {
+      "id": "35",
+      "name": "Tool",
+      "emoji": "🔧",
+      "discovered": false
+    },
+    {
+      "id": "36",
+      "name": "Human",
+      "emoji": "🧑",
+      "discovered": false
+    },
+    {
+      "id": "37",
+      "name": "Field",
+      "emoji": "🌾",
+      "discovered": false
+    },
+    {
+      "id": "38",
+      "name": "Farmer",
+      "emoji": "👨‍🌾",
+      "discovered": false
+    },
+    {
+      "id": "39",
+      "name": "Livestock",
+      "emoji": "🐄",
+      "discovered": false
+    },
+    {
+      "id": "3A",
+      "name": "Clay",
+      "emoji": "🏺",
+      "discovered": false
+    },
+    {
+      "id": "3B",
+      "name": "Pottery",
+      "emoji": "🏺",
+      "discovered": false
+    },
+    {
+      "id": "3C",
+      "name": "Bricks",
+      "emoji": "🧱",
+      "discovered": false
+    },
+    {
+      "id": "3D",
+      "name": "House",
+      "emoji": "🏠",
+      "discovered": false
+    },
+    {
+      "id": "3E",
+      "name": "Village",
+      "emoji": "🏘️",
+      "discovered": false
+    },
+    {
+      "id": "3F",
+      "name": "City",
+      "emoji": "🏙️",
+      "discovered": false
+    },
+    {
+      "id": "40",
+      "name": "Charcoal",
+      "emoji": "⚫",
+      "discovered": false
+    },
+    {
+      "id": "41",
+      "name": "Metal",
+      "emoji": "⚙️",
+      "discovered": false
+    },
+    {
+      "id": "42",
+      "name": "Blade",
+      "emoji": "🔪",
+      "discovered": false
+    },
+    {
+      "id": "43",
+      "name": "Sword",
+      "emoji": "⚔️",
+      "discovered": false
+    },
+    {
+      "id": "44",
+      "name": "Warrior",
+      "emoji": "🛡️",
+      "discovered": false
+    },
+    {
+      "id": "45",
+      "name": "Blood",
+      "emoji": "🩸",
+      "discovered": false
+    },
+    {
+      "id": "46",
+      "name": "Paper",
+      "emoji": "📜",
+      "discovered": false
+    },
+    {
+      "id": "47",
+      "name": "Writing",
+      "emoji": "✍️",
+      "discovered": false
+    },
+    {
+      "id": "48",
+      "name": "Book",
+      "emoji": "📖",
+      "discovered": false
+    },
+    {
+      "id": "49",
+      "name": "Library",
+      "emoji": "📚",
+      "discovered": false
+    },
+    {
+      "id": "4A",
+      "name": "Knowledge",
+      "emoji": "🧠",
+      "discovered": false
+    },
+    {
+      "id": "4B",
+      "name": "Civilization",
+      "emoji": "🏛️",
+      "discovered": false
+    },
+    {
+      "id": "4C",
+      "name": "Electricity",
+      "emoji": "⚡",
+      "discovered": false
+    },
+    {
+      "id": "4D",
+      "name": "Light Bulb",
+      "emoji": "💡",
+      "discovered": false
+    },
+    {
+      "id": "4E",
+      "name": "Engine",
+      "emoji": "⚙️",
+      "discovered": false
+    },
+    {
+      "id": "4F",
+      "name": "Car",
+      "emoji": "🚗",
+      "discovered": false
+    },
+    {
+      "id": "50",
+      "name": "Boat",
+      "emoji": "⛵",
+      "discovered": false
+    },
+    {
+      "id": "51",
+      "name": "Ship",
+      "emoji": "🚢",
+      "discovered": false
+    },
+    {
+      "id": "52",
+      "name": "Airplane",
+      "emoji": "✈️",
+      "discovered": false
+    },
+    {
+      "id": "53",
+      "name": "Computer",
+      "emoji": "💻",
+      "discovered": false
+    },
+    {
+      "id": "54",
+      "name": "Software",
+      "emoji": "💾",
+      "discovered": false
+    },
+    {
+      "id": "55",
+      "name": "Internet",
+      "emoji": "🌐",
+      "discovered": false
+    },
+    {
+      "id": "56",
+      "name": "AI",
+      "emoji": "🤖",
+      "discovered": false
+    },
+    {
+      "id": "57",
+      "name": "Robot",
+      "emoji": "🤖",
+      "discovered": false
+    },
+    {
+      "id": "58",
+      "name": "Space",
+      "emoji": "🚀",
+      "discovered": false
+    },
+    {
+      "id": "59",
+      "name": "Spaceship",
+      "emoji": "🚀",
+      "discovered": false
+    },
+    {
+      "id": "5A",
+      "name": "Alien",
+      "emoji": "👽",
+      "discovered": false
+    },
+    {
+      "id": "5B",
+      "name": "UFO",
+      "emoji": "🛸",
+      "discovered": false
+    },
+    {
+      "id": "5C",
+      "name": "Story",
+      "emoji": "📖",
+      "discovered": false
+    },
+    {
+      "id": "5D",
+      "name": "Myth",
+      "emoji": "📜",
+      "discovered": false
+    },
+    {
+      "id": "5E",
+      "name": "Magic",
+      "emoji": "✨",
+      "discovered": false
+    },
+    {
+      "id": "5F",
+      "name": "Wizard",
+      "emoji": "🧙",
+      "discovered": false
+    },
+    {
+      "id": "60",
+      "name": "Spell",
+      "emoji": "🪄",
+      "discovered": false
+    },
+    {
+      "id": "61",
+      "name": "Potion",
+      "emoji": "🧪",
+      "discovered": false
+    },
+    {
+      "id": "62",
+      "name": "Golem",
+      "emoji": "🗿",
+      "discovered": false
+    },
+    {
+      "id": "63",
+      "name": "Dragon",
+      "emoji": "🐉",
+      "discovered": false
+    },
+    {
+      "id": "64",
+      "name": "Phoenix",
+      "emoji": "🐦‍🔥",
+      "discovered": false
+    },
+    {
+      "id": "65",
+      "name": "Horse",
+      "emoji": "🐴",
+      "discovered": false
+    },
+    {
+      "id": "66",
+      "name": "Unicorn",
+      "emoji": "🦄",
+      "discovered": false
+    },
+    {
+      "id": "67",
+      "name": "Mermaid",
+      "emoji": "🧜‍♀️",
+      "discovered": false
+    },
+    {
+      "id": "68",
+      "name": "Pegasus",
+      "emoji": "🐎",
+      "discovered": false
+    },
+    {
+      "id": "69",
+      "name": "Death",
+      "emoji": "💀",
+      "discovered": false
+    },
+    {
+      "id": "6A",
+      "name": "Undead",
+      "emoji": "🧟",
+      "discovered": false
+    },
+    {
+      "id": "6B",
+      "name": "Zombie",
+      "emoji": "🧟‍♂️",
+      "discovered": false
+    },
+    {
+      "id": "6C",
+      "name": "Ghost",
+      "emoji": "👻",
+      "discovered": false
+    },
+    {
+      "id": "6D",
+      "name": "God",
+      "emoji": "👑",
+      "discovered": false
+    },
+    {
+      "id": "6E",
+      "name": "Angel",
+      "emoji": "😇",
+      "discovered": false
+    },
+    {
+      "id": "6F",
+      "name": "Demon",
+      "emoji": "😈",
+      "discovered": false
+    },
+    {
+      "id": "70",
+      "name": "Heaven",
+      "emoji": "☁️",
+      "discovered": false
+    },
+    {
+      "id": "71",
+      "name": "Hell",
+      "emoji": "🔥",
+      "discovered": false
+    },
+    {
+      "id": "72",
+      "name": "Art",
+      "emoji": "🎨",
+      "discovered": false
+    },
+    {
+      "id": "73",
+      "name": "Music",
+      "emoji": "🎵",
+      "discovered": false
+    },
+    {
+      "id": "74",
+      "name": "Love",
+      "emoji": "❤️",
+      "discovered": false
+    },
+    {
+      "id": "75",
+      "name": "Dream",
+      "emoji": "💭",
+      "discovered": false
+    },
+    {
+      "id": "76",
+      "name": "Cold",
+      "emoji": "🥶",
+      "discovered": false
+    },
+    {
+      "id": "77",
+      "name": "Ice",
+      "emoji": "🧊",
+      "discovered": false
+    },
+    {
+      "id": "78",
+      "name": "Glacier",
+      "emoji": "🏔️",
+      "discovered": false
+    },
+    {
+      "id": "79",
+      "name": "Avalanche",
+      "emoji": "🌨️",
+      "discovered": false
+    },
+    {
+      "id": "7A",
+      "name": "Desert",
+      "emoji": "🏜️",
+      "discovered": false
+    },
+    {
+      "id": "7B",
+      "name": "Oasis",
+      "emoji": "🏝️",
+      "discovered": false
+    },
+    {
+      "id": "7C",
+      "name": "Jungle",
+      "emoji": "🌴",
+      "discovered": false
+    },
+    {
+      "id": "7D",
+      "name": "Fruit",
+      "emoji": "🍎",
+      "discovered": false
+    },
+    {
+      "id": "7E",
+      "name": "Garden",
+      "emoji": "🏡",
+      "discovered": false
+    },
+    {
+      "id": "7F",
+      "name": "Pollen",
+      "emoji": "🌼",
+      "discovered": false
+    },
+    {
+      "id": "80",
+      "name": "Ink",
+      "emoji": "✒️",
+      "discovered": false
+    },
+    {
+      "id": "81",
+      "name": "Philosophy",
+      "emoji": "🤔",
+      "discovered": false
+    },
+    {
+      "id": "82",
+      "name": "Science",
+      "emoji": "🔬",
+      "discovered": false
+    },
+    {
+      "id": "83",
+      "name": "Scientist",
+      "emoji": "👩‍🔬",
+      "discovered": false
+    },
+    {
+      "id": "84",
+      "name": "Steam Engine",
+      "emoji": "🚂",
+      "discovered": false
+    },
+    {
+      "id": "85",
+      "name": "Factory",
+      "emoji": "🏭",
+      "discovered": false
+    },
+    {
+      "id": "86",
+      "name": "Smoke",
+      "emoji": "💨",
+      "discovered": false
+    },
+    {
+      "id": "87",
+      "name": "Smog",
+      "emoji": "🌫️",
+      "discovered": false
+    },
+    {
+      "id": "88",
+      "name": "Planet",
+      "emoji": "🪐",
+      "discovered": false
+    },
+    {
+      "id": "89",
+      "name": "Continent",
+      "emoji": "🗺️",
+      "discovered": false
+    },
+    {
+      "id": "8A",
+      "name": "Country",
+      "emoji": "🇺🇳",
+      "discovered": false
+    },
+    {
+      "id": "8B",
+      "name": "Gold",
+      "emoji": "🏆",
+      "discovered": false
+    },
+    {
+      "id": "8C",
+      "name": "Diamond",
+      "emoji": "💎",
+      "discovered": false
+    },
+    {
+      "id": "8D",
+      "name": "Money",
+      "emoji": "💰",
+      "discovered": false
+    },
+    {
+      "id": "8E",
+      "name": "Bank",
+      "emoji": "🏦",
+      "discovered": false
+    },
+    {
+      "id": "8F",
+      "name": "War",
+      "emoji": "💥",
+      "discovered": false
+    },
+    {
+      "id": "90",
+      "name": "Army",
+      "emoji": "💂",
+      "discovered": false
+    },
+    {
+      "id": "91",
+      "name": "Gunpowder",
+      "emoji": "💣",
+      "discovered": false
+    },
+    {
+      "id": "92",
+      "name": "Gun",
+      "emoji": "🔫",
+      "discovered": false
+    },
+    {
+      "id": "93",
+      "name": "Soldier",
+      "emoji": "💂",
+      "discovered": false
+    },
+    {
+      "id": "94",
+      "name": "King",
+      "emoji": "🤴",
+      "discovered": false
+    },
+    {
+      "id": "95",
+      "name": "Queen",
+      "emoji": "👸",
+      "discovered": false
+    },
+    {
+      "id": "96",
+      "name": "Castle",
+      "emoji": "🏰",
+      "discovered": false
+    },
+    {
+      "id": "97",
+      "name": "Knight",
+      "emoji": "🛡️",
+      "discovered": false
+    },
+    {
+      "id": "98",
+      "name": "Vampire",
+      "emoji": "🧛",
+      "discovered": false
+    },
+    {
+      "id": "99",
+      "name": "Werewolf",
+      "emoji": "🐺",
+      "discovered": false
+    },
+    {
+      "id": "9A",
+      "name": "Wolf",
+      "emoji": "🐺",
+      "discovered": false
+    },
+    {
+      "id": "9B",
+      "name": "Sickness",
+      "emoji": "🤢",
+      "discovered": false
+    },
+    {
+      "id": "9C",
+      "name": "Doctor",
+      "emoji": "👨‍⚕️",
+      "discovered": false
+    },
+    {
+      "id": "9D",
+      "name": "Hospital",
+      "emoji": "🏥",
+      "discovered": false
+    },
+    {
+      "id": "9E",
+      "name": "Medicine",
+      "emoji": "💊",
+      "discovered": false
+    },
+    {
+      "id": "9F",
+      "name": "Poison",
+      "emoji": "☠️",
+      "discovered": false
+    },
+    {
+      "id": "A0",
+      "name": "Rust",
+      "emoji": "🟤",
+      "discovered": false
+    },
+    {
+      "id": "A1",
+      "name": "Wave",
+      "emoji": "🌊",
+      "discovered": false
+    },
+    {
+      "id": "A2",
+      "name": "Sound",
+      "emoji": "🔊",
+      "discovered": false
+    },
+    {
+      "id": "A3",
+      "name": "Imagination",
+      "emoji": "💡",
+      "discovered": false
+    },
+    {
+      "id": "A4",
+      "name": "Idea",
+      "emoji": "💡",
+      "discovered": false
+    },
+    {
+      "id": "A5",
+      "name": "Mind",
+      "emoji": "🧠",
+      "discovered": false
+    },
+    {
+      "id": "A6",
+      "name": "Soul",
+      "emoji": "👻",
+      "discovered": false
+    },
+    {
+      "id": "A7",
+      "name": "Happiness",
+      "emoji": "😊",
+      "discovered": false
+    },
+    {
+      "id": "A8",
+      "name": "Sadness",
+      "emoji": "😭",
+      "discovered": false
+    },
+    {
+      "id": "A9",
+      "name": "Joy",
+      "emoji": "😂",
+      "discovered": false
+    },
+    {
+      "id": "AA",
+      "name": "Sleep",
+      "emoji": "😴",
+      "discovered": false
+    },
+    {
+      "id": "AB",
+      "name": "Ruler",
+      "emoji": "👑",
+      "discovered": false
+    },
+    {
+      "id": "AC",
+      "name": "Crown",
+      "emoji": "👑",
+      "discovered": false
+    },
+    {
+      "id": "AD",
+      "name": "Debt",
+      "emoji": "📉",
+      "discovered": false
+    },
+    {
+      "id": "AE",
+      "name": "Peace",
+      "emoji": "🕊️",
+      "discovered": false
+    },
+    {
+      "id": "AF",
+      "name": "Weapon",
+      "emoji": "🗡️",
+      "discovered": false
+    },
+    {
+      "id": "B0",
+      "name": "Explosion",
+      "emoji": "💥",
+      "discovered": false
+    },
+    {
+      "id": "B1",
+      "name": "Treaty",
+      "emoji": "🤝",
+      "discovered": false
+    },
+    {
+      "id": "B2",
+      "name": "Ash",
+      "emoji": "🌫️",
+      "discovered": false
+    },
+    {
+      "id": "B3",
+      "name": "River",
+      "emoji": "🏞️",
+      "discovered": false
+    },
+    {
+      "id": "B4",
+      "name": "Bridge",
+      "emoji": "🌉",
+      "discovered": false
+    },
+    {
+      "id": "B5",
+      "name": "Textile",
+      "emoji": "🧵",
+      "discovered": false
+    },
+    {
+      "id": "B6",
+      "name": "Clothing",
+      "emoji": "👕",
+      "discovered": false
+    },
+    {
+      "id": "B7",
+      "name": "Needle",
+      "emoji": "🪡",
+      "discovered": false
+    },
+    {
+      "id": "B8",
+      "name": "Thread",
+      "emoji": "🧵",
+      "discovered": false
+    },
+    {
+      "id": "B9",
+      "name": "Rope",
+      "emoji": "🪢",
+      "discovered": false
+    },
+    {
+      "id": "BA",
+      "name": "Sail",
+      "emoji": "⛵",
+      "discovered": false
+    },
+    {
+      "id": "BB",
+      "name": "Pyramid",
+      "emoji": "🔺",
+      "discovered": false
+    },
+    {
+      "id": "BC",
+      "name": "Mummy",
+      "emoji": "🧟",
+      "discovered": false
+    },
+    {
+      "id": "BD",
+      "name": "Hieroglyphs",
+      "emoji": "📜",
+      "discovered": false
+    },
+    {
+      "id": "BE",
+      "name": "Papyrus",
+      "emoji": "📜",
+      "discovered": false
+    },
+    {
+      "id": "BF",
+      "name": "Letter",
+      "emoji": "✉️",
+      "discovered": false
+    },
+    {
+      "id": "C0",
+      "name": "Mail",
+      "emoji": "📫",
+      "discovered": false
+    },
+    {
+      "id": "C1",
+      "name": "Email",
+      "emoji": "📧",
+      "discovered": false
+    },
+    {
+      "id": "C2",
+      "name": "Meme",
+      "emoji": "😂",
+      "discovered": false
+    },
+    {
+      "id": "C3",
+      "name": "Sushi",
+      "emoji": "🍣",
+      "discovered": false
+    },
+    {
+      "id": "C4",
+      "name": "Seaweed",
+      "emoji": "🌿",
+      "discovered": false
+    },
+    {
+      "id": "C5",
+      "name": "Pizza",
+      "emoji": "🍕",
+      "discovered": false
+    },
+    {
+      "id": "C6",
+      "name": "Cheese",
+      "emoji": "🧀",
+      "discovered": false
+    },
+    {
+      "id": "C7",
+      "name": "Milk",
+      "emoji": "🥛",
+      "discovered": false
+    },
+    {
+      "id": "C8",
+      "name": "Bread",
+      "emoji": "🍞",
+      "discovered": false
+    },
+    {
+      "id": "C9",
+      "name": "Flour",
+      "emoji": "🌾",
+      "discovered": false
+    },
+    {
+      "id": "CA",
+      "name": "Wheat",
+      "emoji": "🌾",
+      "discovered": false
+    },
+    {
+      "id": "CB",
+      "name": "Alcohol",
+      "emoji": "🍷",
+      "discovered": false
+    },
+    {
+      "id": "CC",
+      "name": "Wine",
+      "emoji": "🍷",
+      "discovered": false
+    },
+    {
+      "id": "CD",
+      "name": "Beer",
+      "emoji": "🍺",
+      "discovered": false
+    },
+    {
+      "id": "CE",
+      "name": "Sake",
+      "emoji": "🍶",
+      "discovered": false
+    },
+    {
+      "id": "CF",
+      "name": "Rice",
+      "emoji": "🍚",
+      "discovered": false
+    },
+    {
+      "id": "D0",
+      "name": "Champagne",
+      "emoji": "🍾",
+      "discovered": false
+    },
+    {
+      "id": "D1",
+      "name": "Gas",
+      "emoji": "💨",
+      "discovered": false
+    },
+    {
+      "id": "D2",
+      "name": "Caviar",
+      "emoji": "🥚",
+      "discovered": false
+    },
+    {
+      "id": "D3",
+      "name": "Sweat",
+      "emoji": "💦",
+      "discovered": false
+    },
+    {
+      "id": "D4",
+      "name": "Steam Cloud",
+      "emoji": "☁️",
+      "discovered": false
+    },
+    {
+      "id": "D5",
+      "name": "Blizzard",
+      "emoji": "❄️",
+      "discovered": false
+    },
+    {
+      "id": "D6",
+      "name": "Snow",
+      "emoji": "❄️",
+      "discovered": false
+    },
+    {
+      "id": "D7",
+      "name": "Robot Dog",
+      "emoji": "🤖🐶",
+      "discovered": false
+    },
+    {
+      "id": "D8",
+      "name": "Dog",
+      "emoji": "🐶",
+      "discovered": false
+    },
+    {
+      "id": "D9",
+      "name": "Cat",
+      "emoji": "🐱",
+      "discovered": false
+    },
+    {
+      "id": "DA",
+      "name": "Mouse",
+      "emoji": "🐭",
+      "discovered": false
+    },
+    {
+      "id": "DB",
+      "name": "Cheese Wheel",
+      "emoji": "🧀🌀",
+      "discovered": false
+    },
+    {
+      "id": "DC",
+      "name": "Wheel",
+      "emoji": "🛞",
+      "discovered": false
+    },
+    {
+      "id": "DD",
+      "name": "Cart",
+      "emoji": "🛒",
+      "discovered": false
+    },
+    {
+      "id": "DE",
+      "name": "Bicycle",
+      "emoji": "🚲",
+      "discovered": false
+    },
+    {
+      "id": "DF",
+      "name": "Train",
+      "emoji": "🚆",
+      "discovered": false
+    },
+    {
+      "id": "E0",
+      "name": "Locomotive",
+      "emoji": "🚂",
+      "discovered": false
+    },
+    {
+      "id": "E1",
+      "name": "Rocket",
+      "emoji": "🚀",
+      "discovered": false
+    },
+    {
+      "id": "E2",
+      "name": "Satellite",
+      "emoji": "🛰️",
+      "discovered": false
+    },
+    {
+      "id": "E3",
+      "name": "Telescope",
+      "emoji": "🔭",
+      "discovered": false
+    },
+    {
+      "id": "E4",
+      "name": "Microscope",
+      "emoji": "🔬",
+      "discovered": false
+    },
+    {
+      "id": "E5",
+      "name": "Virus",
+      "emoji": "🦠",
+      "discovered": false
+    },
+    {
+      "id": "E6",
+      "name": "Bacteria",
+      "emoji": "🧫",
+      "discovered": false
+    },
+    {
+      "id": "E7",
+      "name": "Antibiotic",
+      "emoji": "💊",
+      "discovered": false
+    },
+    {
+      "id": "E8",
+      "name": "Vaccine",
+      "emoji": "💉",
+      "discovered": false
+    },
+    {
+      "id": "E9",
+      "name": "Ant",
+      "emoji": "🐜",
+      "discovered": false
+    },
+    {
+      "id": "EA",
+      "name": "Spider",
+      "emoji": "🕷️",
+      "discovered": false
+    },
+    {
+      "id": "EB",
+      "name": "Web",
+      "emoji": "🕸️",
+      "discovered": false
+    },
+    {
+      "id": "EC",
+      "name": "Honeycomb",
+      "emoji": "🍯🐝",
+      "discovered": false
+    },
+    {
+      "id": "ED",
+      "name": "Hexagon",
+      "emoji": "⬡",
+      "discovered": false
+    },
+    {
+      "id": "EE",
+      "name": "Geometry",
+      "emoji": "📐",
+      "discovered": false
+    },
+    {
+      "id": "EF",
+      "name": "Math",
+      "emoji": "➗",
+      "discovered": false
+    },
+    {
+      "id": "F0",
+      "name": "Number",
+      "emoji": "🔢",
+      "discovered": false
+    },
+    {
+      "id": "F1",
+      "name": "Calendar",
+      "emoji": "📅",
+      "discovered": false
+    },
+    {
+      "id": "F2",
+      "name": "Clock",
+      "emoji": "⏰",
+      "discovered": false
+    },
+    {
+      "id": "F3",
+      "name": "Alarm",
+      "emoji": "🚨",
+      "discovered": false
+    },
+    {
+      "id": "F4",
+      "name": "Music Box",
+      "emoji": "🎼📦",
+      "discovered": false
+    },
+    {
+      "id": "F5",
+      "name": "Box",
+      "emoji": "📦",
+      "discovered": false
+    },
+    {
+      "id": "F6",
+      "name": "Gift",
+      "emoji": "🎁",
+      "discovered": false
+    },
+    {
+      "id": "F7",
+      "name": "Present",
+      "emoji": "🎁",
+      "discovered": false
+    },
+    {
+      "id": "F8",
+      "name": "Camera",
+      "emoji": "📷",
+      "discovered": false
+    },
+    {
+      "id": "F9",
+      "name": "Film",
+      "emoji": "🎞️",
+      "discovered": false
+    },
+    {
+      "id": "FA",
+      "name": "Movie",
+      "emoji": "🎬",
+      "discovered": false
+    },
+    {
+      "id": "FB",
+      "name": "Actor",
+      "emoji": "🎭",
+      "discovered": false
+    },
+    {
+      "id": "FC",
+      "name": "Director",
+      "emoji": "🎬🧑‍💼",
+      "discovered": false
+    },
+    {
+      "id": "FD",
+      "name": "Popcorn",
+      "emoji": "🍿",
+      "discovered": false
+    },
+    {
+      "id": "FE",
+      "name": "Corn",
+      "emoji": "🌽",
+      "discovered": false
+    },
+    {
+      "id": "FF",
+      "name": "Pizza Slice",
+      "emoji": "🍕🔪",
+      "discovered": false
+    },
+    {
+      "id": "100",
+      "name": "Burger",
+      "emoji": "🍔",
+      "discovered": false
+    },
+    {
+      "id": "101",
+      "name": "Meat",
+      "emoji": "🥩",
+      "discovered": false
+    },
+    {
+      "id": "102",
+      "name": "Sausage",
+      "emoji": "🌭",
+      "discovered": false
+    },
+    {
+      "id": "103",
+      "name": "Hotdog",
+      "emoji": "🌭",
+      "discovered": false
+    },
+    {
+      "id": "104",
+      "name": "Soda",
+      "emoji": "🥤",
+      "discovered": false
+    },
+    {
+      "id": "105",
+      "name": "Ice Cream",
+      "emoji": "🍦",
+      "discovered": false
+    },
+    {
+      "id": "106",
+      "name": "Cake",
+      "emoji": "🍰",
+      "discovered": false
+    },
+    {
+      "id": "107",
+      "name": "Cookie",
+      "emoji": "🍪",
+      "discovered": false
+    },
+    {
+      "id": "108",
+      "name": "Chocolate",
+      "emoji": "🍫",
+      "discovered": false
+    },
+    {
+      "id": "109",
+      "name": "Owl",
+      "emoji": "🦉",
+      "discovered": false
+    },
+    {
+      "id": "10A",
+      "name": "Bat",
+      "emoji": "🦇",
+      "discovered": false
+    },
+    {
+      "id": "10B",
+      "name": "Wolfpack",
+      "emoji": "🐺🐺",
+      "discovered": false
+    },
+    {
+      "id": "10C",
+      "name": "Werecat",
+      "emoji": "🐱🌕",
+      "discovered": false
+    },
+    {
+      "id": "10D",
+      "name": "Phoenix Egg",
+      "emoji": "🥚🐦‍🔥",
+      "discovered": false
+    },
+    {
+      "id": "10E",
+      "name": "Griffin",
+      "emoji": "🦅🦁",
+      "discovered": false
+    },
+    {
+      "id": "10F",
+      "name": "Lion",
+      "emoji": "🦁",
+      "discovered": false
+    },
+    {
+      "id": "110",
+      "name": "Tiger",
+      "emoji": "🐯",
+      "discovered": false
+    },
+    {
+      "id": "111",
+      "name": "Bear",
+      "emoji": "🐻",
+      "discovered": false
+    },
+    {
+      "id": "112",
+      "name": "Panda",
+      "emoji": "🐼",
+      "discovered": false
+    },
+    {
+      "id": "113",
+      "name": "Bamboo",
+      "emoji": "🎍",
+      "discovered": false
+    },
+    {
+      "id": "114",
+      "name": "Asia",
+      "emoji": "🗾",
+      "discovered": false
+    },
+    {
+      "id": "115",
+      "name": "Europe",
+      "emoji": "🌍",
+      "discovered": false
+    },
+    {
+      "id": "116",
+      "name": "Africa",
+      "emoji": "🦁",
+      "discovered": false
+    },
+    {
+      "id": "117",
+      "name": "America",
+      "emoji": "🦅",
+      "discovered": false
+    },
+    {
+      "id": "118",
+      "name": "Eagle",
+      "emoji": "🦅",
+      "discovered": false
+    },
+    {
+      "id": "119",
+      "name": "Kangaroo",
+      "emoji": "🦘",
+      "discovered": false
+    },
+    {
+      "id": "11A",
+      "name": "Australia",
+      "emoji": "🇦🇺",
+      "discovered": false
+    },
+    {
+      "id": "11B",
+      "name": "Island",
+      "emoji": "🏝️",
+      "discovered": false
+    },
+    {
+      "id": "11C",
+      "name": "Volcano Island",
+      "emoji": "🌋🏝️",
+      "discovered": false
+    },
+    {
+      "id": "11D",
+      "name": "Lava Lamp",
+      "emoji": "🪔",
+      "discovered": false
+    },
+    {
+      "id": "11E",
+      "name": "Mirror",
+      "emoji": "🪞",
+      "discovered": false
+    },
+    {
+      "id": "11F",
+      "name": "Magnifying Glass",
+      "emoji": "🔍",
+      "discovered": false
+    },
+    {
+      "id": "120",
+      "name": "Prism",
+      "emoji": "🔺",
+      "discovered": false
+    },
+    {
+      "id": "121",
+      "name": "Light",
+      "emoji": "💡",
+      "discovered": false
+    },
+    {
+      "id": "122",
+      "name": "Shadow",
+      "emoji": "🌑",
+      "discovered": false
+    },
+    {
+      "id": "123",
+      "name": "Rainbow",
+      "emoji": "🌈",
+      "discovered": false
+    },
+    {
+      "id": "124",
+      "name": "Storm Cloud",
+      "emoji": "🌩️",
+      "discovered": false
+    },
+    {
+      "id": "125",
+      "name": "Tornado",
+      "emoji": "🌪️",
+      "discovered": false
+    },
+    {
+      "id": "126",
+      "name": "Hurricane",
+      "emoji": "🌀",
+      "discovered": false
+    },
+    {
+      "id": "127",
+      "name": "Tsunami Warning",
+      "emoji": "🚨",
+      "discovered": false
+    },
+    {
+      "id": "128",
+      "name": "Flood",
+      "emoji": "🌊",
+      "discovered": false
+    },
+    {
+      "id": "129",
+      "name": "Drought",
+      "emoji": "🌵",
+      "discovered": false
+    },
+    {
+      "id": "12A",
+      "name": "Cactus",
+      "emoji": "🌵",
+      "discovered": false
+    },
+    {
+      "id": "12B",
+      "name": "Rose",
+      "emoji": "🌹",
+      "discovered": false
+    },
+    {
+      "id": "12C",
+      "name": "Treehouse",
+      "emoji": "🏡",
+      "discovered": false
+    },
+    {
+      "id": "12D",
+      "name": "Log Cabin",
+      "emoji": "🏚️",
+      "discovered": false
+    },
+    {
+      "id": "12E",
+      "name": "Skyscraper",
+      "emoji": "🏢",
+      "discovered": false
+    },
+    {
+      "id": "12F",
+      "name": "Submarine",
+      "emoji": "🚢🌊",
+      "discovered": false
+    },
+    {
+      "id": "130",
+      "name": "Spacesuit",
+      "emoji": "👨‍🚀",
+      "discovered": false
+    },
+    {
+      "id": "131",
+      "name": "Alien Plant",
+      "emoji": "🪐🌱",
+      "discovered": false
+    },
+    {
+      "id": "132",
+      "name": "Alien Animal",
+      "emoji": "👽🐾",
+      "discovered": false
+    },
+    {
+      "id": "133",
+      "name": "Portal",
+      "emoji": "🌀",
+      "discovered": false
+    },
+    {
+      "id": "134",
+      "name": "Wizard Hat",
+      "emoji": "🧙‍♂️🧢",
+      "discovered": false
+    },
+    {
+      "id": "135",
+      "name": "Spellbook",
+      "emoji": "📖🪄",
+      "discovered": false
+    },
+    {
+      "id": "136",
+      "name": "Crystal Ball",
+      "emoji": "🔮",
+      "discovered": false
+    },
+    {
+      "id": "137",
+      "name": "Fairy",
+      "emoji": "🧚",
+      "discovered": false
+    },
+    {
+      "id": "138",
+      "name": "Goblin",
+      "emoji": "👺",
+      "discovered": false
+    },
+    {
+      "id": "139",
+      "name": "Troll",
+      "emoji": "👹",
+      "discovered": false
+    },
+    {
+      "id": "13A",
+      "name": "Unicorn Horn",
+      "emoji": "🦄🦴",
+      "discovered": false
+    },
+    {
+      "id": "13B",
+      "name": "Bone",
+      "emoji": "🦴",
+      "discovered": false
+    }
+  ],
+  "recipes": [
+    {
+      "inputs": [
+        "0",
+        "1"
+      ],
+      "output": "4"
+    },
+    {
+      "inputs": [
+        "2",
+        "0"
+      ],
+      "output": "5"
+    },
+    {
+      "inputs": [
+        "1",
+        "2"
+      ],
+      "output": "6"
+    },
+    {
+      "inputs": [
+        "3",
+        "2"
+      ],
+      "output": "7"
+    },
+    {
+      "inputs": [
+        "1",
+        "3"
+      ],
+      "output": "8"
+    },
+    {
+      "inputs": [
+        "0",
+        "3"
+      ],
+      "output": "9"
+    },
+    {
+      "inputs": [
+        "9",
+        "0"
+      ],
+      "output": "A"
+    },
+    {
+      "inputs": [
+        "8",
+        "9"
+      ],
+      "output": "B"
+    },
+    {
+      "inputs": [
+        "6",
+        "0"
+      ],
+      "output": "C"
+    },
+    {
+      "inputs": [
+        "5",
+        "3"
+      ],
+      "output": "D"
+    },
+    {
+      "inputs": [
+        "0",
+        "0"
+      ],
+      "output": "E"
+    },
+    {
+      "inputs": [
+        "1",
+        "1"
+      ],
+      "output": "F"
+    },
+    {
+      "inputs": [
+        "2",
+        "2"
+      ],
+      "output": "10"
+    },
+    {
+      "inputs": [
+        "3",
+        "3"
+      ],
+      "output": "11"
+    },
+    {
+      "inputs": [
+        "2",
+        "6"
+      ],
+      "output": "12"
+    },
+    {
+      "inputs": [
+        "12",
+        "11"
+      ],
+      "output": "13"
+    },
+    {
+      "inputs": [
+        "13",
+        "1"
+      ],
+      "output": "14"
+    },
+    {
+      "inputs": [
+        "E",
+        "0"
+      ],
+      "output": "15"
+    },
+    {
+      "inputs": [
+        "15",
+        "13"
+      ],
+      "output": "16"
+    },
+    {
+      "inputs": [
+        "D",
+        "5"
+      ],
+      "output": "17"
+    },
+    {
+      "inputs": [
+        "6",
+        "10"
+      ],
+      "output": "18"
+    },
+    {
+      "inputs": [
+        "4",
+        "2"
+      ],
+      "output": "19"
+    },
+    {
+      "inputs": [
+        "9",
+        "2"
+      ],
+      "output": "1A"
+    },
+    {
+      "inputs": [
+        "3",
+        "2"
+      ],
+      "output": "1B"
+    },
+    {
+      "inputs": [
+        "8",
+        "1"
+      ],
+      "output": "1C"
+    },
+    {
+      "inputs": [
+        "2",
+        "1C"
+      ],
+      "output": "1D"
+    },
+    {
+      "inputs": [
+        "15",
+        "1D"
+      ],
+      "output": "1E"
+    },
+    {
+      "inputs": [
+        "3",
+        "9"
+      ],
+      "output": "1F"
+    },
+    {
+      "inputs": [
+        "1F",
+        "1"
+      ],
+      "output": "20"
+    },
+    {
+      "inputs": [
+        "1F",
+        "12"
+      ],
+      "output": "21"
+    },
+    {
+      "inputs": [
+        "1F",
+        "21"
+      ],
+      "output": "22"
+    },
+    {
+      "inputs": [
+        "13",
+        "14"
+      ],
+      "output": "23"
+    },
+    {
+      "inputs": [
+        "D",
+        "23"
+      ],
+      "output": "24"
+    },
+    {
+      "inputs": [
+        "24",
+        "24"
+      ],
+      "output": "25"
+    },
+    {
+      "inputs": [
+        "24",
+        "35"
+      ],
+      "output": "26"
+    },
+    {
+      "inputs": [
+        "15",
+        "1"
+      ],
+      "output": "27"
+    },
+    {
+      "inputs": [
+        "15",
+        "6"
+      ],
+      "output": "28"
+    },
+    {
+      "inputs": [
+        "28",
+        "8"
+      ],
+      "output": "29"
+    },
+    {
+      "inputs": [
+        "29",
+        "12"
+      ],
+      "output": "2A"
+    },
+    {
+      "inputs": [
+        "29",
+        "2"
+      ],
+      "output": "2B"
+    },
+    {
+      "inputs": [
+        "2B",
+        "3"
+      ],
+      "output": "2C"
+    },
+    {
+      "inputs": [
+        "2B",
+        "0"
+      ],
+      "output": "2D"
+    },
+    {
+      "inputs": [
+        "2A",
+        "17"
+      ],
+      "output": "2E"
+    },
+    {
+      "inputs": [
+        "2E",
+        "23"
+      ],
+      "output": "2F"
+    },
+    {
+      "inputs": [
+        "2F",
+        "2"
+      ],
+      "output": "30"
+    },
+    {
+      "inputs": [
+        "D",
+        "20"
+      ],
+      "output": "31"
+    },
+    {
+      "inputs": [
+        "2",
+        "D"
+      ],
+      "output": "32"
+    },
+    {
+      "inputs": [
+        "2B",
+        "31"
+      ],
+      "output": "33"
+    },
+    {
+      "inputs": [
+        "33",
+        "31"
+      ],
+      "output": "34"
+    },
+    {
+      "inputs": [
+        "12",
+        "26"
+      ],
+      "output": "35"
+    },
+    {
+      "inputs": [
+        "29",
+        "35"
+      ],
+      "output": "36"
+    },
+    {
+      "inputs": [
+        "2",
+        "32"
+      ],
+      "output": "37"
+    },
+    {
+      "inputs": [
+        "36",
+        "37"
+      ],
+      "output": "38"
+    },
+    {
+      "inputs": [
+        "2B",
+        "38"
+      ],
+      "output": "39"
+    },
+    {
+      "inputs": [
+        "5",
+        "13"
+      ],
+      "output": "3A"
+    },
+    {
+      "inputs": [
+        "3A",
+        "1"
+      ],
+      "output": "3B"
+    },
+    {
+      "inputs": [
+        "3A",
+        "1"
+      ],
+      "output": "3C"
+    },
+    {
+      "inputs": [
+        "3C",
+        "26"
+      ],
+      "output": "3D"
+    },
+    {
+      "inputs": [
+        "3D",
+        "3D"
+      ],
+      "output": "3E"
+    },
+    {
+      "inputs": [
+        "3E",
+        "3E"
+      ],
+      "output": "3F"
+    },
+    {
+      "inputs": [
+        "1",
+        "26"
+      ],
+      "output": "40"
+    },
+    {
+      "inputs": [
+        "12",
+        "1"
+      ],
+      "output": "41"
+    },
+    {
+      "inputs": [
+        "41",
+        "35"
+      ],
+      "output": "42"
+    },
+    {
+      "inputs": [
+        "42",
+        "26"
+      ],
+      "output": "43"
+    },
+    {
+      "inputs": [
+        "36",
+        "43"
+      ],
+      "output": "44"
+    },
+    {
+      "inputs": [
+        "44",
+        "42"
+      ],
+      "output": "45"
+    },
+    {
+      "inputs": [
+        "26",
+        "1B"
+      ],
+      "output": "46"
+    },
+    {
+      "inputs": [
+        "36",
+        "46"
+      ],
+      "output": "47"
+    },
+    {
+      "inputs": [
+        "46",
+        "47"
+      ],
+      "output": "48"
+    },
+    {
+      "inputs": [
+        "48",
+        "48"
+      ],
+      "output": "49"
+    },
+    {
+      "inputs": [
+        "48",
+        "36"
+      ],
+      "output": "4A"
+    },
+    {
+      "inputs": [
+        "3F",
+        "47"
+      ],
+      "output": "4B"
+    },
+    {
+      "inputs": [
+        "8",
+        "41"
+      ],
+      "output": "4C"
+    },
+    {
+      "inputs": [
+        "4C",
+        "14"
+      ],
+      "output": "4D"
+    },
+    {
+      "inputs": [
+        "4",
+        "41"
+      ],
+      "output": "4E"
+    },
+    {
+      "inputs": [
+        "4E",
+        "41"
+      ],
+      "output": "4F"
+    },
+    {
+      "inputs": [
+        "0",
+        "26"
+      ],
+      "output": "50"
+    },
+    {
+      "inputs": [
+        "50",
+        "41"
+      ],
+      "output": "51"
+    },
+    {
+      "inputs": [
+        "2C",
+        "41"
+      ],
+      "output": "52"
+    },
+    {
+      "inputs": [
+        "4C",
+        "35"
+      ],
+      "output": "53"
+    },
+    {
+      "inputs": [
+        "53",
+        "4A"
+      ],
+      "output": "54"
+    },
+    {
+      "inputs": [
+        "53",
+        "53"
+      ],
+      "output": "55"
+    },
+    {
+      "inputs": [
+        "54",
+        "29"
+      ],
+      "output": "56"
+    },
+    {
+      "inputs": [
+        "56",
+        "41"
+      ],
+      "output": "57"
+    },
+    {
+      "inputs": [
+        "1F",
+        "21"
+      ],
+      "output": "58"
+    },
+    {
+      "inputs": [
+        "52",
+        "58"
+      ],
+      "output": "59"
+    },
+    {
+      "inputs": [
+        "29",
+        "58"
+      ],
+      "output": "5A"
+    },
+    {
+      "inputs": [
+        "5A",
+        "59"
+      ],
+      "output": "5B"
+    },
+    {
+      "inputs": [
+        "36",
+        "48"
+      ],
+      "output": "5C"
+    },
+    {
+      "inputs": [
+        "5C",
+        "23"
+      ],
+      "output": "5D"
+    },
+    {
+      "inputs": [
+        "1C",
+        "5D"
+      ],
+      "output": "5E"
+    },
+    {
+      "inputs": [
+        "36",
+        "5E"
+      ],
+      "output": "5F"
+    },
+    {
+      "inputs": [
+        "5F",
+        "47"
+      ],
+      "output": "60"
+    },
+    {
+      "inputs": [
+        "5E",
+        "0"
+      ],
+      "output": "61"
+    },
+    {
+      "inputs": [
+        "3A",
+        "29"
+      ],
+      "output": "62"
+    },
+    {
+      "inputs": [
+        "2E",
+        "1"
+      ],
+      "output": "63"
+    },
+    {
+      "inputs": [
+        "2C",
+        "1"
+      ],
+      "output": "64"
+    },
+    {
+      "inputs": [
+        "2B",
+        "37"
+      ],
+      "output": "65"
+    },
+    {
+      "inputs": [
+        "65",
+        "5E"
+      ],
+      "output": "66"
+    },
+    {
+      "inputs": [
+        "36",
+        "2D"
+      ],
+      "output": "67"
+    },
+    {
+      "inputs": [
+        "65",
+        "2C"
+      ],
+      "output": "68"
+    },
+    {
+      "inputs": [
+        "29",
+        "23"
+      ],
+      "output": "69"
+    },
+    {
+      "inputs": [
+        "29",
+        "69"
+      ],
+      "output": "6A"
+    },
+    {
+      "inputs": [
+        "6A",
+        "36"
+      ],
+      "output": "6B"
+    },
+    {
+      "inputs": [
+        "6A",
+        "3"
+      ],
+      "output": "6C"
+    },
+    {
+      "inputs": [
+        "36",
+        "23"
+      ],
+      "output": "6D"
+    },
+    {
+      "inputs": [
+        "2C",
+        "6D"
+      ],
+      "output": "6E"
+    },
+    {
+      "inputs": [
+        "2B",
+        "6D"
+      ],
+      "output": "6F"
+    },
+    {
+      "inputs": [
+        "1F",
+        "6D"
+      ],
+      "output": "70"
+    },
+    {
+      "inputs": [
+        "6",
+        "6D"
+      ],
+      "output": "71"
+    },
+    {
+      "inputs": [
+        "36",
+        "31"
+      ],
+      "output": "72"
+    },
+    {
+      "inputs": [
+        "36",
+        "11"
+      ],
+      "output": "73"
+    },
+    {
+      "inputs": [
+        "36",
+        "36"
+      ],
+      "output": "74"
+    },
+    {
+      "inputs": [
+        "36",
+        "22"
+      ],
+      "output": "75"
+    },
+    {
+      "inputs": [
+        "A",
+        "11"
+      ],
+      "output": "76"
+    },
+    {
+      "inputs": [
+        "0",
+        "76"
+      ],
+      "output": "77"
+    },
+    {
+      "inputs": [
+        "10",
+        "77"
+      ],
+      "output": "78"
+    },
+    {
+      "inputs": [
+        "10",
+        "11"
+      ],
+      "output": "79"
+    },
+    {
+      "inputs": [
+        "13",
+        "13"
+      ],
+      "output": "7A"
+    },
+    {
+      "inputs": [
+        "7A",
+        "0"
+      ],
+      "output": "7B"
+    },
+    {
+      "inputs": [
+        "25",
+        "A"
+      ],
+      "output": "7C"
+    },
+    {
+      "inputs": [
+        "24",
+        "20"
+      ],
+      "output": "7D"
+    },
+    {
+      "inputs": [
+        "31",
+        "32"
+      ],
+      "output": "7E"
+    },
+    {
+      "inputs": [
+        "31",
+        "11"
+      ],
+      "output": "7F"
+    },
+    {
+      "inputs": [
+        "40",
+        "0"
+      ],
+      "output": "80"
+    },
+    {
+      "inputs": [
+        "36",
+        "4A"
+      ],
+      "output": "81"
+    },
+    {
+      "inputs": [
+        "4A",
+        "35"
+      ],
+      "output": "82"
+    },
+    {
+      "inputs": [
+        "36",
+        "82"
+      ],
+      "output": "83"
+    },
+    {
+      "inputs": [
+        "4E",
+        "4"
+      ],
+      "output": "84"
+    },
+    {
+      "inputs": [
+        "3D",
+        "35"
+      ],
+      "output": "85"
+    },
+    {
+      "inputs": [
+        "1",
+        "26"
+      ],
+      "output": "86"
+    },
+    {
+      "inputs": [
+        "86",
+        "1A"
+      ],
+      "output": "87"
+    },
+    {
+      "inputs": [
+        "2",
+        "58"
+      ],
+      "output": "88"
+    },
+    {
+      "inputs": [
+        "2",
+        "2"
+      ],
+      "output": "89"
+    },
+    {
+      "inputs": [
+        "4B",
+        "89"
+      ],
+      "output": "8A"
+    },
+    {
+      "inputs": [
+        "20",
+        "41"
+      ],
+      "output": "8B"
+    },
+    {
+      "inputs": [
+        "1B",
+        "40"
+      ],
+      "output": "8C"
+    },
+    {
+      "inputs": [
+        "8B",
+        "46"
+      ],
+      "output": "8D"
+    },
+    {
+      "inputs": [
+        "3D",
+        "8D"
+      ],
+      "output": "8E"
+    },
+    {
+      "inputs": [
+        "8A",
+        "8A"
+      ],
+      "output": "8F"
+    },
+    {
+      "inputs": [
+        "44",
+        "44"
+      ],
+      "output": "90"
+    },
+    {
+      "inputs": [
+        "7",
+        "1"
+      ],
+      "output": "91"
+    },
+    {
+      "inputs": [
+        "91",
+        "41"
+      ],
+      "output": "92"
+    },
+    {
+      "inputs": [
+        "36",
+        "92"
+      ],
+      "output": "93"
+    },
+    {
+      "inputs": [
+        "36",
+        "4B"
+      ],
+      "output": "94"
+    },
+    {
+      "inputs": [
+        "94",
+        "74"
+      ],
+      "output": "95"
+    },
+    {
+      "inputs": [
+        "3D",
+        "94"
+      ],
+      "output": "96"
+    },
+    {
+      "inputs": [
+        "44",
+        "65"
+      ],
+      "output": "97"
+    },
+    {
+      "inputs": [
+        "36",
+        "45"
+      ],
+      "output": "98"
+    },
+    {
+      "inputs": [
+        "36",
+        "9A"
+      ],
+      "output": "99"
+    },
+    {
+      "inputs": [
+        "2B",
+        "21"
+      ],
+      "output": "9A"
+    },
+    {
+      "inputs": [
+        "36",
+        "A"
+      ],
+      "output": "9B"
+    },
+    {
+      "inputs": [
+        "36",
+        "9B"
+      ],
+      "output": "9C"
+    },
+    {
+      "inputs": [
+        "3D",
+        "9C"
+      ],
+      "output": "9D"
+    },
+    {
+      "inputs": [
+        "9C",
+        "D"
+      ],
+      "output": "9E"
+    },
+    {
+      "inputs": [
+        "D",
+        "35"
+      ],
+      "output": "9F"
+    },
+    {
+      "inputs": [
+        "41",
+        "0"
+      ],
+      "output": "A0"
+    },
+    {
+      "inputs": [
+        "11",
+        "E"
+      ],
+      "output": "A1"
+    },
+    {
+      "inputs": [
+        "3",
+        "A1"
+      ],
+      "output": "A2"
+    },
+    {
+      "inputs": [
+        "36",
+        "A4"
+      ],
+      "output": "A3"
+    },
+    {
+      "inputs": [
+        "36",
+        "1C"
+      ],
+      "output": "A4"
+    },
+    {
+      "inputs": [
+        "36",
+        "A6"
+      ],
+      "output": "A5"
+    },
+    {
+      "inputs": [
+        "36",
+        "1C"
+      ],
+      "output": "A6"
+    },
+    {
+      "inputs": [
+        "36",
+        "74"
+      ],
+      "output": "A7"
+    },
+    {
+      "inputs": [
+        "36",
+        "A"
+      ],
+      "output": "A8"
+    },
+    {
+      "inputs": [
+        "36",
+        "20"
+      ],
+      "output": "A9"
+    },
+    {
+      "inputs": [
+        "36",
+        "22"
+      ],
+      "output": "AA"
+    },
+    {
+      "inputs": [
+        "36",
+        "8A"
+      ],
+      "output": "AB"
+    },
+    {
+      "inputs": [
+        "41",
+        "8B"
+      ],
+      "output": "AC"
+    },
+    {
+      "inputs": [
+        "8E",
+        "8D"
+      ],
+      "output": "AD"
+    },
+    {
+      "inputs": [
+        "8F",
+        "36"
+      ],
+      "output": "AE"
+    },
+    {
+      "inputs": [
+        "35",
+        "42"
+      ],
+      "output": "AF"
+    },
+    {
+      "inputs": [
+        "91",
+        "1"
+      ],
+      "output": "B0"
+    },
+    {
+      "inputs": [
+        "8A",
+        "46"
+      ],
+      "output": "B1"
+    },
+    {
+      "inputs": [
+        "1",
+        "D"
+      ],
+      "output": "B2"
+    },
+    {
+      "inputs": [
+        "10",
+        "0"
+      ],
+      "output": "B3"
+    },
+    {
+      "inputs": [
+        "B3",
+        "26"
+      ],
+      "output": "B4"
+    },
+    {
+      "inputs": [
+        "35",
+        "D"
+      ],
+      "output": "B5"
+    },
+    {
+      "inputs": [
+        "B5",
+        "36"
+      ],
+      "output": "B6"
+    },
+    {
+      "inputs": [
+        "41",
+        "B5"
+      ],
+      "output": "B7"
+    },
+    {
+      "inputs": [
+        "B5",
+        "35"
+      ],
+      "output": "B8"
+    },
+    {
+      "inputs": [
+        "B8",
+        "B8"
+      ],
+      "output": "B9"
+    },
+    {
+      "inputs": [
+        "50",
+        "B5"
+      ],
+      "output": "BA"
+    },
+    {
+      "inputs": [
+        "7A",
+        "12"
+      ],
+      "output": "BB"
+    },
+    {
+      "inputs": [
+        "36",
+        "BB"
+      ],
+      "output": "BC"
+    },
+    {
+      "inputs": [
+        "47",
+        "BB"
+      ],
+      "output": "BD"
+    },
+    {
+      "inputs": [
+        "D",
+        "B3"
+      ],
+      "output": "BE"
+    },
+    {
+      "inputs": [
+        "46",
+        "80"
+      ],
+      "output": "BF"
+    },
+    {
+      "inputs": [
+        "BF",
+        "BF"
+      ],
+      "output": "C0"
+    },
+    {
+      "inputs": [
+        "55",
+        "C0"
+      ],
+      "output": "C1"
+    },
+    {
+      "inputs": [
+        "55",
+        "A4"
+      ],
+      "output": "C2"
+    },
+    {
+      "inputs": [
+        "2D",
+        "C4"
+      ],
+      "output": "C3"
+    },
+    {
+      "inputs": [
+        "D",
+        "15"
+      ],
+      "output": "C4"
+    },
+    {
+      "inputs": [
+        "C6",
+        "C8"
+      ],
+      "output": "C5"
+    },
+    {
+      "inputs": [
+        "C7",
+        "23"
+      ],
+      "output": "C6"
+    },
+    {
+      "inputs": [
+        "39",
+        "32"
+      ],
+      "output": "C7"
+    },
+    {
+      "inputs": [
+        "C9",
+        "0"
+      ],
+      "output": "C8"
+    },
+    {
+      "inputs": [
+        "CA",
+        "12"
+      ],
+      "output": "C9"
+    },
+    {
+      "inputs": [
+        "32",
+        "38"
+      ],
+      "output": "CA"
+    },
+    {
+      "inputs": [
+        "7D",
+        "23"
+      ],
+      "output": "CB"
+    },
+    {
+      "inputs": [
+        "7D",
+        "CB"
+      ],
+      "output": "CC"
+    },
+    {
+      "inputs": [
+        "CA",
+        "CB"
+      ],
+      "output": "CD"
+    },
+    {
+      "inputs": [
+        "CF",
+        "CB"
+      ],
+      "output": "CE"
+    },
+    {
+      "inputs": [
+        "CA",
+        "0"
+      ],
+      "output": "CF"
+    },
+    {
+      "inputs": [
+        "CC",
+        "D1"
+      ],
+      "output": "D0"
+    },
+    {
+      "inputs": [
+        "3",
+        "1C"
+      ],
+      "output": "D1"
+    },
+    {
+      "inputs": [
+        "2D",
+        "2A"
+      ],
+      "output": "D2"
+    },
+    {
+      "inputs": [
+        "36",
+        "20"
+      ],
+      "output": "D3"
+    },
+    {
+      "inputs": [
+        "4",
+        "4"
+      ],
+      "output": "D4"
+    },
+    {
+      "inputs": [
+        "D6",
+        "11"
+      ],
+      "output": "D5"
+    },
+    {
+      "inputs": [
+        "77",
+        "3"
+      ],
+      "output": "D6"
+    },
+    {
+      "inputs": [
+        "57",
+        "D8"
+      ],
+      "output": "D7"
+    },
+    {
+      "inputs": [
+        "2B",
+        "36"
+      ],
+      "output": "D8"
+    },
+    {
+      "inputs": [
+        "2B",
+        "22"
+      ],
+      "output": "D9"
+    },
+    {
+      "inputs": [
+        "2B",
+        "32"
+      ],
+      "output": "DA"
+    },
+    {
+      "inputs": [
+        "C6",
+        "DC"
+      ],
+      "output": "DB"
+    },
+    {
+      "inputs": [
+        "35",
+        "26"
+      ],
+      "output": "DC"
+    },
+    {
+      "inputs": [
+        "DC",
+        "26"
+      ],
+      "output": "DD"
+    },
+    {
+      "inputs": [
+        "DC",
+        "41"
+      ],
+      "output": "DE"
+    },
+    {
+      "inputs": [
+        "84",
+        "41"
+      ],
+      "output": "DF"
+    },
+    {
+      "inputs": [
+        "DF",
+        "4"
+      ],
+      "output": "E0"
+    },
+    {
+      "inputs": [
+        "1",
+        "41"
+      ],
+      "output": "E1"
+    },
+    {
+      "inputs": [
+        "41",
+        "58"
+      ],
+      "output": "E2"
+    },
+    {
+      "inputs": [
+        "14",
+        "35"
+      ],
+      "output": "E3"
+    },
+    {
+      "inputs": [
+        "14",
+        "82"
+      ],
+      "output": "E4"
+    },
+    {
+      "inputs": [
+        "29",
+        "9F"
+      ],
+      "output": "E5"
+    },
+    {
+      "inputs": [
+        "29",
+        "5"
+      ],
+      "output": "E6"
+    },
+    {
+      "inputs": [
+        "E6",
+        "9E"
+      ],
+      "output": "E7"
+    },
+    {
+      "inputs": [
+        "E5",
+        "9E"
+      ],
+      "output": "E8"
+    },
+    {
+      "inputs": [
+        "E6",
+        "32"
+      ],
+      "output": "E9"
+    },
+    {
+      "inputs": [
+        "2B",
+        "B8"
+      ],
+      "output": "EA"
+    },
+    {
+      "inputs": [
+        "EA",
+        "B8"
+      ],
+      "output": "EB"
+    },
+    {
+      "inputs": [
+        "33",
+        "ED"
+      ],
+      "output": "EC"
+    },
+    {
+      "inputs": [
+        "35",
+        "EE"
+      ],
+      "output": "ED"
+    },
+    {
+      "inputs": [
+        "82",
+        "EF"
+      ],
+      "output": "EE"
+    },
+    {
+      "inputs": [
+        "82",
+        "F0"
+      ],
+      "output": "EF"
+    },
+    {
+      "inputs": [
+        "35",
+        "46"
+      ],
+      "output": "F0"
+    },
+    {
+      "inputs": [
+        "23",
+        "46"
+      ],
+      "output": "F1"
+    },
+    {
+      "inputs": [
+        "23",
+        "35"
+      ],
+      "output": "F2"
+    },
+    {
+      "inputs": [
+        "F2",
+        "A2"
+      ],
+      "output": "F3"
+    },
+    {
+      "inputs": [
+        "73",
+        "F5"
+      ],
+      "output": "F4"
+    },
+    {
+      "inputs": [
+        "26",
+        "35"
+      ],
+      "output": "F5"
+    },
+    {
+      "inputs": [
+        "F5",
+        "74"
+      ],
+      "output": "F6"
+    },
+    {
+      "inputs": [
+        "F6",
+        "23"
+      ],
+      "output": "F7"
+    },
+    {
+      "inputs": [
+        "14",
+        "F5"
+      ],
+      "output": "F8"
+    },
+    {
+      "inputs": [
+        "F8",
+        "46"
+      ],
+      "output": "F9"
+    },
+    {
+      "inputs": [
+        "F9",
+        "5C"
+      ],
+      "output": "FA"
+    },
+    {
+      "inputs": [
+        "36",
+        "FA"
+      ],
+      "output": "FB"
+    },
+    {
+      "inputs": [
+        "36",
+        "FA"
+      ],
+      "output": "FC"
+    },
+    {
+      "inputs": [
+        "FE",
+        "1"
+      ],
+      "output": "FD"
+    },
+    {
+      "inputs": [
+        "D",
+        "20"
+      ],
+      "output": "FE"
+    },
+    {
+      "inputs": [
+        "C5",
+        "42"
+      ],
+      "output": "FF"
+    },
+    {
+      "inputs": [
+        "C8",
+        "101"
+      ],
+      "output": "100"
+    },
+    {
+      "inputs": [
+        "2B",
+        "42"
+      ],
+      "output": "101"
+    },
+    {
+      "inputs": [
+        "101",
+        "1"
+      ],
+      "output": "102"
+    },
+    {
+      "inputs": [
+        "C8",
+        "102"
+      ],
+      "output": "103"
+    },
+    {
+      "inputs": [
+        "0",
+        "D1"
+      ],
+      "output": "104"
+    },
+    {
+      "inputs": [
+        "C7",
+        "77"
+      ],
+      "output": "105"
+    },
+    {
+      "inputs": [
+        "C8",
+        "7D"
+      ],
+      "output": "106"
+    },
+    {
+      "inputs": [
+        "C8",
+        "108"
+      ],
+      "output": "107"
+    },
+    {
+      "inputs": [
+        "D",
+        "1"
+      ],
+      "output": "108"
+    },
+    {
+      "inputs": [
+        "2C",
+        "22"
+      ],
+      "output": "109"
+    },
+    {
+      "inputs": [
+        "DA",
+        "22"
+      ],
+      "output": "10A"
+    },
+    {
+      "inputs": [
+        "9A",
+        "9A"
+      ],
+      "output": "10B"
+    },
+    {
+      "inputs": [
+        "D9",
+        "21"
+      ],
+      "output": "10C"
+    },
+    {
+      "inputs": [
+        "64",
+        "2A"
+      ],
+      "output": "10D"
+    },
+    {
+      "inputs": [
+        "2C",
+        "10F"
+      ],
+      "output": "10E"
+    },
+    {
+      "inputs": [
+        "D9",
+        "20"
+      ],
+      "output": "10F"
+    },
+    {
+      "inputs": [
+        "D9",
+        "7C"
+      ],
+      "output": "110"
+    },
+    {
+      "inputs": [
+        "2B",
+        "25"
+      ],
+      "output": "111"
+    },
+    {
+      "inputs": [
+        "111",
+        "113"
+      ],
+      "output": "112"
+    },
+    {
+      "inputs": [
+        "D",
+        "114"
+      ],
+      "output": "113"
+    },
+    {
+      "inputs": [
+        "89",
+        "10"
+      ],
+      "output": "114"
+    },
+    {
+      "inputs": [
+        "89",
+        "96"
+      ],
+      "output": "115"
+    },
+    {
+      "inputs": [
+        "89",
+        "7A"
+      ],
+      "output": "116"
+    },
+    {
+      "inputs": [
+        "89",
+        "118"
+      ],
+      "output": "117"
+    },
+    {
+      "inputs": [
+        "2C",
+        "10"
+      ],
+      "output": "118"
+    },
+    {
+      "inputs": [
+        "2B",
+        "11A"
+      ],
+      "output": "119"
+    },
+    {
+      "inputs": [
+        "89",
+        "11B"
+      ],
+      "output": "11A"
+    },
+    {
+      "inputs": [
+        "15",
+        "10"
+      ],
+      "output": "11B"
+    },
+    {
+      "inputs": [
+        "18",
+        "11B"
+      ],
+      "output": "11C"
+    },
+    {
+      "inputs": [
+        "6",
+        "14"
+      ],
+      "output": "11D"
+    },
+    {
+      "inputs": [
+        "14",
+        "41"
+      ],
+      "output": "11E"
+    },
+    {
+      "inputs": [
+        "14",
+        "35"
+      ],
+      "output": "11F"
+    },
+    {
+      "inputs": [
+        "14",
+        "121"
+      ],
+      "output": "120"
+    },
+    {
+      "inputs": [
+        "20",
+        "1C"
+      ],
+      "output": "121"
+    },
+    {
+      "inputs": [
+        "121",
+        "22"
+      ],
+      "output": "122"
+    },
+    {
+      "inputs": [
+        "121",
+        "A"
+      ],
+      "output": "123"
+    },
+    {
+      "inputs": [
+        "B",
+        "9"
+      ],
+      "output": "124"
+    },
+    {
+      "inputs": [
+        "11",
+        "B"
+      ],
+      "output": "125"
+    },
+    {
+      "inputs": [
+        "11",
+        "15"
+      ],
+      "output": "126"
+    },
+    {
+      "inputs": [
+        "1E",
+        "F3"
+      ],
+      "output": "127"
+    },
+    {
+      "inputs": [
+        "A",
+        "B3"
+      ],
+      "output": "128"
+    },
+    {
+      "inputs": [
+        "20",
+        "7A"
+      ],
+      "output": "129"
+    },
+    {
+      "inputs": [
+        "D",
+        "7A"
+      ],
+      "output": "12A"
+    },
+    {
+      "inputs": [
+        "31",
+        "74"
+      ],
+      "output": "12B"
+    },
+    {
+      "inputs": [
+        "24",
+        "3D"
+      ],
+      "output": "12C"
+    },
+    {
+      "inputs": [
+        "26",
+        "3D"
+      ],
+      "output": "12D"
+    },
+    {
+      "inputs": [
+        "3D",
+        "3F"
+      ],
+      "output": "12E"
+    },
+    {
+      "inputs": [
+        "51",
+        "15"
+      ],
+      "output": "12F"
+    },
+    {
+      "inputs": [
+        "58",
+        "B6"
+      ],
+      "output": "130"
+    },
+    {
+      "inputs": [
+        "D",
+        "5A"
+      ],
+      "output": "131"
+    },
+    {
+      "inputs": [
+        "2B",
+        "5A"
+      ],
+      "output": "132"
+    },
+    {
+      "inputs": [
+        "5E",
+        "58"
+      ],
+      "output": "133"
+    },
+    {
+      "inputs": [
+        "5F",
+        "B6"
+      ],
+      "output": "134"
+    },
+    {
+      "inputs": [
+        "48",
+        "60"
+      ],
+      "output": "135"
+    },
+    {
+      "inputs": [
+        "14",
+        "5E"
+      ],
+      "output": "136"
+    },
+    {
+      "inputs": [
+        "6E",
+        "D"
+      ],
+      "output": "137"
+    },
+    {
+      "inputs": [
+        "36",
+        "5E"
+      ],
+      "output": "138"
+    },
+    {
+      "inputs": [
+        "36",
+        "10"
+      ],
+      "output": "139"
+    },
+    {
+      "inputs": [
+        "66",
+        "13B"
+      ],
+      "output": "13A"
+    },
+    {
+      "inputs": [
+        "2B",
+        "35"
+      ],
+      "output": "13B"
+    }
+  ],
+  "idMapping": {
+    "water": "0",
+    "fire": "1",
+    "earth": "2",
+    "air": "3",
+    "steam": "4",
+    "mud": "5",
+    "lava": "6",
+    "dust": "7",
+    "lightning": "8",
+    "cloud": "9",
+    "rain": "A",
+    "storm": "B",
+    "obsidian": "C",
+    "plant": "D",
+    "lake": "E",
+    "inferno": "F",
+    "mountain": "10",
+    "wind": "11",
+    "stone": "12",
+    "sand": "13",
+    "glass": "14",
+    "sea": "15",
+    "beach": "16",
+    "swamp": "17",
+    "volcano": "18",
+    "geyser": "19",
+    "mist": "1A",
+    "pressure": "1B",
+    "energy": "1C",
+    "earthquake": "1D",
+    "tsunami": "1E",
+    "sky": "1F",
+    "sun": "20",
+    "moon": "21",
+    "night": "22",
+    "time": "23",
+    "tree": "24",
+    "forest": "25",
+    "wood": "26",
+    "salt": "27",
+    "primordial_soup": "28",
+    "life": "29",
+    "egg": "2A",
+    "animal": "2B",
+    "bird": "2C",
+    "fish": "2D",
+    "lizard": "2E",
+    "dinosaur": "2F",
+    "fossil": "30",
+    "flower": "31",
+    "grass": "32",
+    "bee": "33",
+    "honey": "34",
+    "tool": "35",
+    "human": "36",
+    "field": "37",
+    "farmer": "38",
+    "livestock": "39",
+    "clay": "3A",
+    "pottery": "3B",
+    "bricks": "3C",
+    "house": "3D",
+    "village": "3E",
+    "city": "3F",
+    "charcoal": "40",
+    "metal": "41",
+    "blade": "42",
+    "sword": "43",
+    "warrior": "44",
+    "blood": "45",
+    "paper": "46",
+    "writing": "47",
+    "book": "48",
+    "library": "49",
+    "knowledge": "4A",
+    "civilization": "4B",
+    "electricity": "4C",
+    "lightbulb": "4D",
+    "engine": "4E",
+    "car": "4F",
+    "boat": "50",
+    "ship": "51",
+    "airplane": "52",
+    "computer": "53",
+    "software": "54",
+    "internet": "55",
+    "ai": "56",
+    "robot": "57",
+    "space": "58",
+    "spaceship": "59",
+    "alien": "5A",
+    "ufo": "5B",
+    "story": "5C",
+    "myth": "5D",
+    "magic": "5E",
+    "wizard": "5F",
+    "spell": "60",
+    "potion": "61",
+    "golem": "62",
+    "dragon": "63",
+    "phoenix": "64",
+    "horse": "65",
+    "unicorn": "66",
+    "mermaid": "67",
+    "pegasus": "68",
+    "death": "69",
+    "undead": "6A",
+    "zombie": "6B",
+    "ghost": "6C",
+    "god": "6D",
+    "angel": "6E",
+    "demon": "6F",
+    "heaven": "70",
+    "hell": "71",
+    "art": "72",
+    "music": "73",
+    "love": "74",
+    "dream": "75",
+    "cold": "76",
+    "ice": "77",
+    "glacier": "78",
+    "avalanche": "79",
+    "desert": "7A",
+    "oasis": "7B",
+    "jungle": "7C",
+    "fruit": "7D",
+    "garden": "7E",
+    "pollen": "7F",
+    "ink": "80",
+    "philosophy": "81",
+    "science": "82",
+    "scientist": "83",
+    "steam_engine": "84",
+    "factory": "85",
+    "smoke": "86",
+    "smog": "87",
+    "planet": "88",
+    "continent": "89",
+    "country": "8A",
+    "gold": "8B",
+    "diamond": "8C",
+    "money": "8D",
+    "bank": "8E",
+    "war": "8F",
+    "army": "90",
+    "gunpowder": "91",
+    "gun": "92",
+    "soldier": "93",
+    "king": "94",
+    "queen": "95",
+    "castle": "96",
+    "knight": "97",
+    "vampire": "98",
+    "werewolf": "99",
+    "wolf": "9A",
+    "sickness": "9B",
+    "doctor": "9C",
+    "hospital": "9D",
+    "medicine": "9E",
+    "poison": "9F",
+    "rust": "A0",
+    "wave": "A1",
+    "sound": "A2",
+    "imagination": "A3",
+    "idea": "A4",
+    "mind": "A5",
+    "soul": "A6",
+    "happiness": "A7",
+    "sadness": "A8",
+    "joy": "A9",
+    "sleep": "AA",
+    "ruler": "AB",
+    "crown": "AC",
+    "debt": "AD",
+    "peace": "AE",
+    "weapon": "AF",
+    "explosion": "B0",
+    "treaty": "B1",
+    "ash": "B2",
+    "river": "B3",
+    "bridge": "B4",
+    "textile": "B5",
+    "clothing": "B6",
+    "needle": "B7",
+    "thread": "B8",
+    "rope": "B9",
+    "sail": "BA",
+    "pyramid": "BB",
+    "mummy": "BC",
+    "hieroglyphs": "BD",
+    "papyrus": "BE",
+    "letter": "BF",
+    "mail": "C0",
+    "email": "C1",
+    "meme": "C2",
+    "sushi": "C3",
+    "seaweed": "C4",
+    "pizza": "C5",
+    "cheese": "C6",
+    "milk": "C7",
+    "bread": "C8",
+    "flour": "C9",
+    "wheat": "CA",
+    "alcohol": "CB",
+    "wine": "CC",
+    "beer": "CD",
+    "sake": "CE",
+    "rice": "CF",
+    "champagne": "D0",
+    "gas": "D1",
+    "caviar": "D2",
+    "sweat": "D3",
+    "steam_cloud": "D4",
+    "blizzard": "D5",
+    "snow": "D6",
+    "robot_dog": "D7",
+    "dog": "D8",
+    "cat": "D9",
+    "mouse": "DA",
+    "cheese_wheel": "DB",
+    "wheel": "DC",
+    "cart": "DD",
+    "bicycle": "DE",
+    "train": "DF",
+    "locomotive": "E0",
+    "rocket": "E1",
+    "satellite": "E2",
+    "telescope": "E3",
+    "microscope": "E4",
+    "virus": "E5",
+    "bacteria": "E6",
+    "antibiotic": "E7",
+    "vaccine": "E8",
+    "ant": "E9",
+    "spider": "EA",
+    "web": "EB",
+    "honeycomb": "EC",
+    "hexagon": "ED",
+    "geometry": "EE",
+    "math": "EF",
+    "number": "F0",
+    "calendar": "F1",
+    "clock": "F2",
+    "alarm": "F3",
+    "music_box": "F4",
+    "box": "F5",
+    "gift": "F6",
+    "present": "F7",
+    "camera": "F8",
+    "film": "F9",
+    "movie": "FA",
+    "actor": "FB",
+    "director": "FC",
+    "popcorn": "FD",
+    "corn": "FE",
+    "pizza_slice": "FF",
+    "burger": "100",
+    "meat": "101",
+    "sausage": "102",
+    "hotdog": "103",
+    "soda": "104",
+    "ice_cream": "105",
+    "cake": "106",
+    "cookie": "107",
+    "chocolate": "108",
+    "owl": "109",
+    "bat": "10A",
+    "wolfpack": "10B",
+    "werecat": "10C",
+    "phoenix_egg": "10D",
+    "griffin": "10E",
+    "lion": "10F",
+    "tiger": "110",
+    "bear": "111",
+    "panda": "112",
+    "bamboo": "113",
+    "asia": "114",
+    "europe": "115",
+    "africa": "116",
+    "america": "117",
+    "eagle": "118",
+    "kangaroo": "119",
+    "australia": "11A",
+    "island": "11B",
+    "volcano_island": "11C",
+    "lava_lamp": "11D",
+    "mirror": "11E",
+    "magnifying_glass": "11F",
+    "prism": "120",
+    "light": "121",
+    "shadow": "122",
+    "rainbow": "123",
+    "storm_cloud": "124",
+    "tornado": "125",
+    "hurricane": "126",
+    "tsunami_warning": "127",
+    "flood": "128",
+    "drought": "129",
+    "cactus": "12A",
+    "rose": "12B",
+    "treehouse": "12C",
+    "log_cabin": "12D",
+    "skyscraper": "12E",
+    "submarine": "12F",
+    "spacesuit": "130",
+    "alien_plant": "131",
+    "alien_animal": "132",
+    "portal": "133",
+    "wizard_hat": "134",
+    "spellbook": "135",
+    "crystal_ball": "136",
+    "fairy": "137",
+    "goblin": "138",
+    "troll": "139",
+    "unicorn_horn": "13A",
+    "bone": "13B"
+  }
+}

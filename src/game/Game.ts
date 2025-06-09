@@ -402,12 +402,20 @@ export class Game {
     
     // Emit event for UI updates
     const progress = this.elementManager.getDiscoveryProgress();
+    const discoveredElements = this.elementManager.getDiscoveredElements();
+    
+    console.log('🎮 Game state changed:');
+    console.log('   📊 Progress:', progress);
+    console.log('   🔍 Discovered elements:', discoveredElements);
+    
     window.dispatchEvent(new CustomEvent('gameStateChanged', {
       detail: {
-        discoveredElements: this.elementManager.getDiscoveredElements(),
+        discoveredElements: discoveredElements,
         progress
       }
     }));
+    
+    console.log('   📡 Event dispatched to UI');
   }
   
   private saveGameProgress(): void {
@@ -479,6 +487,9 @@ export class Game {
     // Reset discovered elements to only basic 4 elements 
     this.elementManager.resetToBasicElements();
     localStorage.removeItem('idle-alchemy-save');
+    
+    // Reset help tooltip visibility so it shows again for new players
+    localStorage.removeItem('idle-alchemy-hide-help');
     
     // Reset camera position
     this.resetCamera();

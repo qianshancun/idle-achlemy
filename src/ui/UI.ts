@@ -1,10 +1,10 @@
 import { Game } from '@/game/Game';
 import { showConfirm } from '@/ui/Dialog';
+import { configLoader } from '@/config/ConfigLoader';
 
 export class UI {
   private game: Game;
   private uiContainer: HTMLElement;
-  private discoveryPanel!: HTMLElement;
   private elementGrid!: HTMLElement;
   
   constructor(game: Game) {
@@ -14,6 +14,9 @@ export class UI {
     this.createUI();
     this.setupEventListeners();
     this.updateUI();
+    
+    // Check if help should be shown based on progress
+    this.hideInstructionsIfNeeded();
   }
   
   private createUI(): void {
@@ -48,7 +51,6 @@ export class UI {
     `;
     
     // Get references
-    this.discoveryPanel = document.getElementById('discovery-panel')!;
     this.elementGrid = document.getElementById('element-grid')!;
     
     this.addStyles();
@@ -385,6 +387,7 @@ export class UI {
   }
   
   private updateElementGrid(): void {
+    console.log('🎨 updateElementGrid() called');
     this.elementGrid.innerHTML = '';
     
     // Get discovered elements from the game's event data
@@ -392,19 +395,27 @@ export class UI {
     
     // Listen for game state changes to get discovered elements
     const gameStateEvent = (window as any).lastGameState;
+    console.log('🎮 gameStateEvent:', gameStateEvent);
+    
     if (gameStateEvent?.detail?.discoveredElements) {
       discoveredElements = gameStateEvent.detail.discoveredElements;
+      console.log('✅ Using game state elements:', discoveredElements);
     } else {
-      // Fallback to basic elements if no game state available yet
+      // Fallback to basic elements using HEX IDs
       discoveredElements = [
-        { id: 'water', name: 'Water', emoji: '💧', rarity: 'common' },
-        { id: 'fire', name: 'Fire', emoji: '🔥', rarity: 'common' },
-        { id: 'earth', name: 'Earth', emoji: '🌍', rarity: 'common' },
-        { id: 'air', name: 'Air', emoji: '🌬️', rarity: 'common' },
+        { id: '0', name: 'Water', emoji: '💧', rarity: 'common' },
+        { id: '1', name: 'Fire', emoji: '🔥', rarity: 'common' },
+        { id: '2', name: 'Earth', emoji: '🌍', rarity: 'common' },
+        { id: '3', name: 'Air', emoji: '🌬️', rarity: 'common' },
       ];
+      console.log('⚠️ Using fallback hex ID elements:', discoveredElements);
     }
     
-    discoveredElements.forEach(element => {
+    console.log(`🏗️ Creating ${discoveredElements.length} element cards`);
+    
+    discoveredElements.forEach((element, index) => {
+      console.log(`🃏 Creating card ${index}: ${element.id} = ${element.name} ${element.emoji}`);
+      
       const elementCard = document.createElement('div');
       elementCard.className = `element-card`;
       elementCard.draggable = true;
@@ -436,6 +447,8 @@ export class UI {
       
       this.elementGrid.appendChild(elementCard);
     });
+    
+    console.log(`✅ Element grid updated with ${this.elementGrid.children.length} cards`);
   }
   
   private addElementToCanvas(elementId: string): void {
@@ -461,17 +474,31 @@ export class UI {
     const success = this.game.addElementFromPanel(elementId, globalX, globalY);
     
     if (success) {
-      // Show a subtle toast for feedback
-      this.showToast(`Added ${elementId}!`);
+      // Get element name from config for display
+      const element = configLoader.getElements().get(elementId);
+      const elementName = element ? element.name : elementId;
+      this.showToast(`Added ${elementName}!`);
     }
   }
 
   private hideInstructionsIfNeeded(): void {
-    // Check if help should be hidden based on user preference
-    const shouldHideHelp = localStorage.getItem('idle-alchemy-hide-help');
     const helpTooltip = document.getElementById('help-tooltip');
+    if (!helpTooltip) return;
+
+    // Check if user manually closed the tooltip
+    const manuallyHidden = localStorage.getItem('idle-alchemy-hide-help') === 'true';
     
-    if (helpTooltip && shouldHideHelp === 'true') {
+    // Get current progress to determine if help should be shown
+    const progress = this.game.getProgress();
+    
+    // Show help if:
+    // 1. User hasn't manually closed it AND
+    // 2. User has discovered 5 or fewer elements (basic 4 + at most 1 more)
+    const shouldShowHelp = !manuallyHidden && progress.discovered <= 5;
+    
+    if (shouldShowHelp) {
+      helpTooltip.classList.remove('hidden');
+    } else {
       helpTooltip.classList.add('hidden');
     }
   }

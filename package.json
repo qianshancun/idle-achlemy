@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm run compile && tsc && vite build",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "compile": "node scripts/compile-elements.js",
+    "test-optimization": "node scripts/test-storage-optimization.js"
   },
   "keywords": ["game", "alchemy", "idle", "typescript", "pixijs"],
   "author": "",

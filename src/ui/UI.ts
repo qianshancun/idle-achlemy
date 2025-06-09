@@ -32,6 +32,7 @@ export class UI {
         </div>
         <div class="header-buttons">
           <button class="ui-button hint-button" id="hint-button">💡 Hint</button>
+          <button class="ui-button clear-button" id="clear-button">🗑️ Clear</button>
           <button class="ui-button menu-toggle" id="menu-toggle">☰</button>
         </div>
       </div>
@@ -49,7 +50,6 @@ export class UI {
         <div class="panel-header">
           <h3>🧪 Elements</h3>
           <div class="panel-info">Drag to canvas</div>
-          <button class="panel-toggle" id="panel-toggle">−</button>
         </div>
         <div class="element-grid" id="element-grid"></div>
       </div>
@@ -90,10 +90,11 @@ export class UI {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 8px;
         padding: 8px 12px;
         backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
       }
       
       .progress-container {
@@ -104,7 +105,7 @@ export class UI {
       }
       
       .progress-text {
-        color: white;
+        color: #333;
         font-weight: bold;
         font-size: 14px;
         min-width: 80px;
@@ -113,7 +114,7 @@ export class UI {
       .progress-bar {
         flex: 1;
         height: 6px;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.1);
         border-radius: 3px;
         overflow: hidden;
         max-width: 150px;
@@ -132,9 +133,9 @@ export class UI {
       }
       
       .ui-button {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: white;
+        background: white;
+        border: 1px solid #ddd;
+        color: #333;
         padding: 6px 12px;
         border-radius: 6px;
         cursor: pointer;
@@ -145,8 +146,9 @@ export class UI {
       }
       
       .ui-button:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
+        background: #f5f5f5;
+        border-color: #bbb;
+        transform: translateY(-1px);
       }
       
       .ui-button:active {
@@ -157,12 +159,13 @@ export class UI {
         position: absolute;
         top: 50px;
         right: 10px;
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 8px;
         padding: 12px;
         min-width: 150px;
         display: none;
         backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
       }
       
       .mobile-menu.active {
@@ -170,7 +173,7 @@ export class UI {
       }
       
       .menu-content h3 {
-        color: white;
+        color: #333;
         margin: 0 0 8px 0;
         text-align: center;
         font-size: 14px;
@@ -191,17 +194,15 @@ export class UI {
         bottom: 10px;
         width: 240px;
         background: rgba(255, 255, 255, 0.95);
-        border-radius: 8px;
+        border-radius: 0;
         padding: 12px;
         backdrop-filter: blur(10px);
         overflow: hidden;
         transition: all 0.3s ease;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-left: 1px solid rgba(0, 0, 0, 0.15);
       }
       
-      .discovery-panel.collapsed {
-        width: 60px;
-      }
+
       
       .panel-header {
         display: flex;
@@ -223,75 +224,62 @@ export class UI {
         font-style: italic;
       }
       
-      .panel-toggle {
-        background: none;
-        border: none;
-        color: #666;
-        font-size: 16px;
-        cursor: pointer;
-        padding: 4px;
-        border-radius: 4px;
-        transition: background 0.2s ease;
-      }
-      
-      .panel-toggle:hover {
-        background: rgba(0, 0, 0, 0.1);
-      }
+
       
       .element-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 4px;
         height: calc(100% - 40px);
         overflow-y: auto;
+        align-content: flex-start;
       }
       
       .element-card {
-        background: white;
-        border-radius: 6px;
-        padding: 6px 4px;
-        text-align: center;
+        border-radius: 4px;
+        padding: 2px 4px;
         cursor: pointer;
         transition: all 0.15s ease;
         border: 1px solid #e0e0e0;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 4px;
-        min-height: 32px;
+        gap: 3px;
+        background: white;
       }
       
       .element-card:hover {
-        background: #f5f5f5;
-        border-color: #ccc;
+        background: #f0f0f0;
+        border-color: #bbb;
       }
       
       .element-card:active {
-        transform: scale(0.98);
+        transform: scale(0.95);
       }
       
       .element-emoji {
-        font-size: 14px;
+        font-size: 12px;
         line-height: 1;
       }
       
       .element-name {
         color: #333;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 500;
         line-height: 1;
+        white-space: nowrap;
       }
       
       .help-tooltip {
         position: absolute;
         top: 60px;
         right: 10px;
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 8px;
         padding: 12px;
         max-width: 200px;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         transition: opacity 0.3s ease;
       }
       
@@ -301,7 +289,7 @@ export class UI {
       }
       
       .tooltip-content {
-        color: white;
+        color: #333;
         font-size: 11px;
         line-height: 1.3;
       }
@@ -320,7 +308,7 @@ export class UI {
         right: 4px;
         background: none;
         border: none;
-        color: rgba(255, 255, 255, 0.7);
+        color: #666;
         font-size: 14px;
         cursor: pointer;
         padding: 2px;
@@ -329,8 +317,8 @@ export class UI {
       }
       
       .close-tooltip:hover {
-        color: white;
-        background: rgba(255, 255, 255, 0.1);
+        color: #333;
+        background: rgba(0, 0, 0, 0.1);
       }
       
       /* Mobile optimizations */
@@ -358,15 +346,11 @@ export class UI {
           right: 10px;
           width: auto;
           height: 180px;
-        }
-        
-        .discovery-panel.collapsed {
-          width: auto;
-          height: 50px;
+          border-left: none;
+          border-top: 1px solid rgba(0, 0, 0, 0.15);
         }
         
         .element-grid {
-          grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
           height: calc(100% - 40px);
         }
         
@@ -406,13 +390,7 @@ export class UI {
   }
   
   private setupEventListeners(): void {
-    // Panel toggle
-    const panelToggle = document.getElementById('panel-toggle')!;
-    panelToggle.addEventListener('click', () => {
-      this.discoveryPanel.classList.toggle('collapsed');
-      const isCollapsed = this.discoveryPanel.classList.contains('collapsed');
-      panelToggle.textContent = isCollapsed ? '+' : '−';
-    });
+
     
     // Mobile menu toggle
     this.menuToggle.addEventListener('click', () => {
@@ -440,6 +418,15 @@ export class UI {
       const hint = this.game.getHint();
       if (hint) {
         this.showToast(hint);
+      }
+    });
+    
+    // Clear button
+    const clearButton = document.getElementById('clear-button')!;
+    clearButton.addEventListener('click', () => {
+      if (confirm('Clear all elements from the canvas?')) {
+        this.game.clearCanvas();
+        this.showToast('Canvas cleared!');
       }
     });
     

@@ -21,15 +21,15 @@ export class Element extends PIXI.Container {
   }
   
   private setupGraphics(): void {
-    // Background circle
+    // Clickable background area
     this.background = new PIXI.Graphics();
-    this.background.beginFill(this.definition.color, 0.8);
-    this.background.drawRoundedRect(-50, -50, 100, 100, 20);
+    this.background.beginFill(0xffffff, 0.9);
+    this.background.drawRoundedRect(-50, -50, 100, 100, 8);
     this.background.endFill();
     
-    // Border
-    this.background.lineStyle(3, 0xffffff, 0.3);
-    this.background.drawRoundedRect(-50, -50, 100, 100, 20);
+    // Subtle border
+    this.background.lineStyle(1, 0xdddddd, 0.8);
+    this.background.drawRoundedRect(-50, -50, 100, 100, 8);
     
     this.addChild(this.background);
     
@@ -45,22 +45,13 @@ export class Element extends PIXI.Container {
     // Name
     this.nameText = new PIXI.Text(this.definition.name, {
       fontSize: 12,
-      fill: 0xffffff,
+      fill: 0x333333,
       align: 'center',
       fontWeight: 'bold'
     });
     this.nameText.anchor.set(0.5, 0.5);
     this.nameText.y = 30;
     this.addChild(this.nameText);
-    
-    // Add visual effect for rare elements (using tint instead of glow filter)
-    if (this.definition.rarity !== 'common') {
-      // Add a subtle border glow effect for rare elements
-      const glowGraphics = new PIXI.Graphics();
-      glowGraphics.lineStyle(4, this.getRarityColor(), 0.6);
-      glowGraphics.drawRoundedRect(-52, -52, 104, 104, 22);
-      this.addChildAt(glowGraphics, 0);
-    }
   }
   
   private setupInteraction(): void {
@@ -221,15 +212,7 @@ export class Element extends PIXI.Container {
     this.lastTapTime = currentTime;
   }
   
-  private getRarityColor(): number {
-    switch (this.definition.rarity) {
-      case 'uncommon': return 0x00ff00;
-      case 'rare': return 0x0080ff;
-      case 'epic': return 0x8000ff;
-      case 'legendary': return 0xff8000;
-      default: return 0xffffff;
-    }
-  }
+
   
   public highlight(color: number = 0xffff00): void {
     this.background.tint = color;

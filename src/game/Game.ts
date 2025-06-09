@@ -14,7 +14,7 @@ export class Game {
     this.app = new PIXI.Application({
       width: container.clientWidth,
       height: container.clientHeight,
-      backgroundColor: 0x1a1a2e,
+      backgroundColor: 0xf8f8f8,
       antialias: true,
       autoDensity: true,
       resolution: window.devicePixelRatio || 1
@@ -343,6 +343,14 @@ export class Game {
   
   public getProgress(): ReturnType<ElementManager['getDiscoveryProgress']> {
     return this.elementManager.getDiscoveryProgress();
+  }
+  
+  public clearCanvas(): void {
+    // Clear all elements from canvas
+    this.elements.forEach(element => {
+      this.removeElement(element);
+    });
+    this.onGameStateChanged();
   }
   
   public reset(): void {

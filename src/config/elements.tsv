@@ -1,220 +1,226 @@
 # Elements Configuration File
 # Format: TSV for simplicity and human-readable maintenance
-# Columns: id, name, emoji, description, recipe (recipe as two IDs, e.g., id1+id2; empty for base elements)
-id	name	emoji	description	recipe
-water	Water	💧	The essence of life, fluid and adaptable	
-fire	Fire	🔥	Pure energy, destructive yet creative	
-earth	Earth	🌍	Solid foundation, stable and enduring	
-air	Air	🌬️	Invisible force, ever-moving and free	
-steam	Steam	💨	Water transformed by fire	water+fire
-mud	Mud	🟫	Earth mixed with water	earth+water
-lava	Lava	🌋	Earth melted by fire	fire+earth
-dust	Dust	💨	Earth scattered by air	air+earth
-lightning	Lightning	⚡	Fire channeled through air	fire+air
-cloud	Cloud	☁️	Water suspended in air	water+air
-rain	Rain	🌧️	Water falling from clouds	cloud+water
-storm	Storm	⛈️	Lightning and clouds combined	lightning+cloud
-obsidian	Obsidian	⬛	Lava cooled rapidly	lava+water
-plant	Plant	🌱	Life sprouting from mud	mud+air
-lake	Lake	🏞️	A large body of still water	water+water
-inferno	Inferno	🔥	An intense, destructive fire	fire+fire
-mountain	Mountain	⛰️	A towering peak of earth and stone	earth+earth
-wind	Wind	💨	Moving air with great force	air+air
+# Columns: id, name, emoji, recipe (recipe as two IDs, e.g., id1+id2; empty for base elements)
+id	name	emoji	recipe
+water	Water	💧	
+fire	Fire	🔥	
+earth	Earth	🌍	
+air	Air	🌬️	
+steam	Steam	💨	water+fire
+mud	Mud	🟫	earth+water
+lava	Lava	🌋	fire+earth
+dust	Dust	🌫️	air+earth
+lightning	Lightning	⚡	fire+air
+cloud	Cloud	☁️	water+air
+rain	Rain	🌧️	cloud+water
+storm	Storm	⛈️	lightning+cloud
+obsidian	Obsidian	⬛	lava+water
+plant	Plant	🌱	mud+air
+lake	Lake	🏞️	water+water
+inferno	Inferno	🔥	fire+fire
+mountain	Mountain	⛰️	earth+earth
+wind	Wind	💨	air+air
 # --- Stage 2: Basic Nature & Materials ---
-stone	Stone	🪨	A solid piece of rock	earth+lava
-sand	Sand	🏖️	Tiny grains of rock and minerals	stone+wind
-glass	Glass	🥃	A transparent material made from sand	sand+fire
-sea	Sea	🌊	A vast expanse of saltwater	lake+water
-beach	Beach	🏝️	A sandy or pebbly shore	sea+sand
-swamp	Swamp	🏞️	Wet, spongy land; a bog	plant+mud
-volcano	Volcano	🌋	A mountain that erupts with lava	lava+mountain
-geyser	Geyser	🌋	Steam erupting from the earth	steam+earth
-mist	Mist	🌫️	A cloud of tiny water droplets	cloud+earth
-pressure	Pressure	💨	Continuous physical force exerted on an object	air+air
-energy	Energy	⚡	The power to do work	fire+air
-earthquake	Earthquake	🌋	A sudden shaking of the ground	earth+energy
-tsunami	Tsunami	🌊	A giant wave from an earthquake	sea+earthquake
-sky	Sky	🌌	The atmosphere and outer space seen from earth	air+cloud
-sun	Sun	☀️	The star at the center of our solar system	sky+fire
-moon	Moon	🌕	The natural satellite of the Earth	sky+stone
-night	Night	🌃	The period from sunset to sunrise	sky+moon
-time	Time	⏳	The indefinite continued progress of existence	sand+glass
-tree	Tree	🌳	A large woody plant	plant+time
-forest	Forest	🌲	A large area covered with trees	tree+tree
-wood	Wood	🪵	The hard fibrous material from a tree	tree+tool
+stone	Stone	🪨	earth+lava
+sand	Sand	🏜️	stone+wind
+glass	Glass	🪟	sand+fire
+sea	Sea	🌊	lake+water
+beach	Beach	🏖️	sea+sand
+swamp	Swamp	🏞️	plant+mud
+volcano	Volcano	🌋	lava+mountain
+geyser	Geyser	⛲	steam+earth
+mist	Mist	🌫️	cloud+earth
+pressure	Pressure	🗜️	air+earth
+energy	Energy	⚡	lightning+fire
+earthquake	Earthquake	🌋	earth+energy
+tsunami	Tsunami	🌊	sea+earthquake
+sky	Sky	🌌	air+cloud
+sun	Sun	☀️	sky+fire
+moon	Moon	🌕	sky+stone
+night	Night	🌃	sky+moon
+time	Time	⏳	sand+glass
+tree	Tree	🌳	plant+time
+forest	Forest	🌲	tree+tree
+wood	Wood	🪵	tree+tool
+salt	Salt	🧂	sea+fire
 # --- Stage 3: Life Forms ---
-primordial_soup	Primordial Soup	🥣	Ancient ocean full of organic molecules	sea+lava
-life	Life	🧬	The condition that distinguishes organisms from inorganic matter	primordial_soup+lightning
-egg	Egg	🥚	An oval object laid by female birds	life+stone
-animal	Animal	🐾	A living organism that feeds on organic matter	life+earth
-bird	Bird	🐦	An animal that can fly	animal+air
-fish	Fish	🐟	An animal that lives in water	animal+water
-lizard	Lizard	🦎	A reptile with a long body	egg+swamp
-dinosaur	Dinosaur	🦖	An ancient reptile	lizard+time
-fossil	Fossil	🦴	The remains of a prehistoric organism	dinosaur+earth
-flower	Flower	🌸	The reproductive part of a plant	plant+sun
-grass	Grass	🌿	Vegetation consisting of short plants	earth+plant
-bee	Bee	🐝	A flying insect that makes honey	animal+flower
-honey	Honey	🍯	A sweet, sticky substance made by bees	bee+flower
-# --- Stage 4: Humanity & Civilization ---
-human	Human	🧑	A sentient bipedal primate	life+tool
-tool	Tool	🔧	A device used to carry out a particular function	human+stone
-field	Field	🌾	An area of open land	earth+grass
-farmer	Farmer	👨‍🌾	A person who cultivates land	human+field
-livestock	Livestock	🐄	Domesticated farm animals	animal+farmer
-clay	Clay	🏺	A stiff, sticky earth material	mud+sand
-pottery	Pottery	🏺	Pots and other articles made from clay	clay+fire
-bricks	Bricks	🧱	Blocks of fired clay for building	clay+fire
-house	House	🏠	A building for human habitation	bricks+wood
-village	Village	🏘️	A group of houses in a rural area	house+house
-city	City	🏙️	A large town	village+village
-charcoal	Charcoal	숯	Black carbon residue from heating wood	fire+wood
-metal	Metal	⚙️	A solid material which is typically hard and shiny	stone+fire
-blade	Blade	🔪	The cutting edge of a tool or weapon	metal+tool
-sword	Sword	⚔️	A weapon with a long metal blade	blade+wood
-warrior	Warrior	🛡️	A brave or experienced soldier	human+sword
-blood	Blood	🩸	The red liquid that circulates in the body	warrior+blade
-paper	Paper	📜	Material made from wood pulp for writing on	wood+pressure
-writing	Writing	✍️	Marking coherent words on paper	human+paper
-book	Book	📖	A written work of fiction or nonfiction	paper+writing
-library	Library	📚	A building containing a collection of books	book+book
-knowledge	Knowledge	🧠	Facts and information acquired through experience	book+human
-civilization	Civilization	🏛️	An advanced state of human society	city+writing
+primordial_soup	Primordial Soup	🥣	sea+lava
+life	Life	🧬	primordial_soup+lightning
+egg	Egg	🥚	life+stone
+animal	Animal	🐾	life+earth
+bird	Bird	🐦	animal+air
+fish	Fish	🐟	animal+water
+lizard	Lizard	🦎	egg+swamp
+dinosaur	Dinosaur	🦖	lizard+time
+fossil	Fossil	🦴	dinosaur+earth
+flower	Flower	🌸	plant+sun
+grass	Grass	🌿	earth+plant
+bee	Bee	🐝	animal+flower
+honey	Honey	🍯	bee+flower
+# --- Stage 4: Tools & Humanity ---
+tool	Tool	🔧	stone+wood
+human	Human	🧑	life+tool
+field	Field	🌾	earth+grass
+farmer	Farmer	👨‍🌾	human+field
+livestock	Livestock	🐄	animal+farmer
+clay	Clay	🏺	mud+sand
+pottery	Pottery	🏺	clay+fire
+bricks	Bricks	🧱	clay+fire
+house	House	🏠	bricks+wood
+village	Village	🏘️	house+house
+city	City	🏙️	village+village
+charcoal	Charcoal	⚫	fire+wood
+metal	Metal	⚙️	stone+fire
+blade	Blade	🔪	metal+tool
+sword	Sword	⚔️	blade+wood
+warrior	Warrior	🛡️	human+sword
+blood	Blood	🩸	warrior+blade
+paper	Paper	📜	wood+pressure
+writing	Writing	✍️	human+paper
+book	Book	📖	paper+writing
+library	Library	📚	book+book
+knowledge	Knowledge	🧠	book+human
+civilization	Civilization	🏛️	city+writing
 # --- Stage 5: Technology ---
-electricity	Electricity	⚡	Energy from charged particles	lightning+metal
-lightbulb	Light Bulb	💡	An electric lamp	electricity+glass
-engine	Engine	⚙️	A machine that converts power into motion	steam+metal
-car	Car	🚗	A road vehicle with four wheels	engine+metal
-boat	Boat	⛵	A vessel for travel on water	water+wood
-ship	Ship	🚢	A large boat for transporting goods by sea	boat+metal
-airplane	Airplane	✈️	A powered flying vehicle with fixed wings	bird+metal
-computer	Computer	💻	An electronic device for processing data	electricity+tool
-software	Software	💾	The programs used by a computer	computer+knowledge
-internet	Internet	🌐	A global computer network	computer+computer
-ai	AI	🤖	Artificial intelligence	software+life
-robot	Robot	🤖	A machine that can carry out complex actions automatically	ai+metal
-space	Space	🚀	The boundless three-dimensional extent	sky+moon
-spaceship	Spaceship	🚀	A vehicle used for travel in space	airplane+space
-alien	Alien	👽	A being from another world	life+space
-ufo	UFO	🛸	An unidentified flying object	alien+spaceship
+electricity	Electricity	⚡	lightning+metal
+lightbulb	Light Bulb	💡	electricity+glass
+engine	Engine	⚙️	steam+metal
+car	Car	🚗	engine+metal
+boat	Boat	⛵	water+wood
+ship	Ship	🚢	boat+metal
+airplane	Airplane	✈️	bird+metal
+computer	Computer	💻	electricity+tool
+software	Software	💾	computer+knowledge
+internet	Internet	🌐	computer+computer
+ai	AI	🤖	software+life
+robot	Robot	🤖	ai+metal
+space	Space	🚀	sky+moon
+spaceship	Spaceship	🚀	airplane+space
+alien	Alien	👽	life+space
+ufo	UFO	🛸	alien+spaceship
 # --- Stage 6: Abstract & Mythical ---
-story	Story	📖	An account of imaginary or real people and events	human+book
-myth	Myth	📜	A traditional story of early history	story+time
-magic	Magic	✨	The power of influencing events by using mysterious forces	energy+myth
-wizard	Wizard	🧙	A man who has magical powers	human+magic
-spell	Spell	🪄	A form of words used as a magical charm	wizard+writing
-potion	Potion	🧪	A liquid with magical or poisonous properties	magic+water
-golem	Golem	🗿	An automaton created from inanimate matter	clay+life
-dragon	Dragon	🐉	A mythical monster like a giant reptile	lizard+fire
-phoenix	Phoenix	🔥	A mythical bird reborn from ashes	bird+fire
-horse	Horse	🐴	A domesticated plant-eating mammal	animal+field
-unicorn	Unicorn	🦄	A mythical horse with a single horn	horse+magic
-mermaid	Mermaid	🧜‍♀️	A mythical sea creature, half-human, half-fish	human+fish
-pegasus	Pegasus	🐎	A mythical winged horse	horse+bird
-death	Death	💀	The action or fact of dying	life+time
-undead	Undead	🧟	A corpse that has been revived	life+death
-zombie	Zombie	🧟‍♂️	A corpse revived by witchcraft	undead+human
-ghost	Ghost	👻	An apparition of a dead person	undead+air
-god	God	👑	A superhuman being worshiped for having power over nature	human+time
-angel	Angel	😇	A spiritual being believed to be a messenger of God	bird+god
-demon	Demon	😈	An evil spirit or devil	animal+god
-heaven	Heaven	☁️	The abode of God and angels	sky+god
-hell	Hell	🔥	A spiritual realm of evil and suffering	lava+god
-art	Art	🎨	The expression of human creative skill	human+flower
-music	Music	🎵	Vocal or instrumental sounds combined to produce beauty	human+wind
-love	Love	❤️	An intense feeling of deep affection	human+human
-dream	Dream	💭	A series of thoughts and images occurring in a person's mind during sleep	human+night
+story	Story	📖	human+book
+myth	Myth	📜	story+time
+magic	Magic	✨	energy+myth
+wizard	Wizard	🧙	human+magic
+spell	Spell	🪄	wizard+writing
+potion	Potion	🧪	magic+water
+golem	Golem	🗿	clay+life
+dragon	Dragon	🐉	lizard+fire
+phoenix	Phoenix	🐦‍🔥	bird+fire
+horse	Horse	🐴	animal+field
+unicorn	Unicorn	🦄	horse+magic
+mermaid	Mermaid	🧜‍♀️	human+fish
+pegasus	Pegasus	🐎	horse+bird
+death	Death	💀	life+time
+undead	Undead	🧟	life+death
+zombie	Zombie	🧟‍♂️	undead+human
+ghost	Ghost	👻	undead+air
+god	God	👑	human+time
+angel	Angel	😇	bird+god
+demon	Demon	😈	animal+god
+heaven	Heaven	☁️	sky+god
+hell	Hell	🔥	lava+god
+art	Art	🎨	human+flower
+music	Music	🎵	human+wind
+love	Love	❤️	human+human
+dream	Dream	💭	human+night
 # --- Stage 7: Advanced Concepts ---
-cold	Cold	🥶	Of or at a low or relatively low temperature	rain+wind
-ice	Ice	🧊	Frozen water	water+cold
-glacier	Glacier	🏔️	A slow-moving mass of ice	mountain+ice
-avalanche	Avalanche	🌨️	Snow or rock sliding down a mountain	mountain+wind
-desert	Desert	🏜️	A barren, arid region	sand+sand
-oasis	Oasis	🏝️	A fertile spot in a desert	desert+water
-jungle	Jungle	🌴	A dense forest in a tropical climate	forest+rain
-fruit	Fruit	🍎	The sweet, fleshy product of a tree	tree+sun
-garden	Garden	🏡	A piece of ground for growing flowers or vegetables	flower+grass
-pollen	Pollen	🌼	A fine powder that fertilizes plants	flower+wind
-ink	Ink	✒️	A colored fluid used for writing	charcoal+water
-philosophy	Philosophy	🤔	The study of the fundamental nature of knowledge	human+knowledge
-science	Science	🔬	The systematic study of the physical world	knowledge+tool
-scientist	Scientist	👩‍🔬	A person who studies science	human+science
-steam_engine	Steam Engine	🚂	An engine using steam power	engine+steam
-factory	Factory	🏭	A building where goods are manufactured	house+tool
-smoke	Smoke	💨	Visible particles in air from combustion	fire+wood
-smog	Smog	🌫️	Fog or haze combined with smoke	smoke+mist
-planet	Planet	🪐	A celestial body orbiting a star	earth+space
-continent	Continent	🗺️	Any of the world's main continuous expanses of land	earth+earth
-country	Country	🇺🇳	A nation with its own government	civilization+continent
-gold	Gold	🏆	A yellow precious metal	sun+metal
-diamond	Diamond	💎	A precious stone of pure carbon	pressure+charcoal
-money	Money	💰	A medium of exchange in the form of coins and banknotes	gold+paper
-bank	Bank	🏦	A financial institution for deposits and loans	house+money
-war	War	💥	A state of armed conflict between nations	country+country
-army	Army	💂	An organized military force for fighting on land	warrior+warrior
-gunpowder	Gunpowder	💣	An explosive powdered mixture	dust+fire
-gun	Gun	🔫	A weapon with a metal tube for firing projectiles	gunpowder+metal
-soldier	Soldier	💂	A person who serves in an army	human+gun
-king	King	🤴	The male ruler of an independent state	human+civilization
-queen	Queen	👸	The female ruler of an independent state	king+love
-castle	Castle	🏰	A large building fortified against attack	house+king
-knight	Knight	🛡️	A man who served his sovereign as a mounted soldier in armor	warrior+horse
-vampire	Vampire	🧛	A corpse that drinks the blood of the living	human+blood
-werewolf	Werewolf	🐺	A person who changes into a wolf at the full moon	human+wolf
-wolf	Wolf	🐺	A wild carnivorous mammal	animal+moon
-sickness	Sickness	🤢	The state of being ill	human+rain
-doctor	Doctor	👨‍⚕️	A person qualified to treat people who are ill	human+sickness
-hospital	Hospital	🏥	An institution providing medical treatment	house+doctor
-medicine	Medicine	💊	A drug for the treatment of disease	doctor+plant
-poison	Poison	☠️	A substance capable of causing illness or death	plant+tool
+cold	Cold	🥶	rain+wind
+ice	Ice	🧊	water+cold
+glacier	Glacier	🏔️	mountain+ice
+avalanche	Avalanche	🌨️	mountain+wind
+desert	Desert	🏜️	sand+sand
+oasis	Oasis	🏝️	desert+water
+jungle	Jungle	🌴	forest+rain
+fruit	Fruit	🍎	tree+sun
+garden	Garden	🏡	flower+grass
+pollen	Pollen	🌼	flower+wind
+ink	Ink	✒️	charcoal+water
+philosophy	Philosophy	🤔	human+knowledge
+science	Science	🔬	knowledge+tool
+scientist	Scientist	👩‍🔬	human+science
+steam_engine	Steam Engine	🚂	engine+steam
+factory	Factory	🏭	house+tool
+smoke	Smoke	💨	fire+wood
+smog	Smog	🌫️	smoke+mist
+planet	Planet	🪐	earth+space
+continent	Continent	🗺️	earth+earth
+country	Country	🇺🇳	civilization+continent
+gold	Gold	🏆	sun+metal
+diamond	Diamond	💎	pressure+charcoal
+money	Money	💰	gold+paper
+bank	Bank	🏦	house+money
+war	War	💥	country+country
+army	Army	💂	warrior+warrior
+gunpowder	Gunpowder	💣	dust+fire
+gun	Gun	🔫	gunpowder+metal
+soldier	Soldier	💂	human+gun
+king	King	🤴	human+civilization
+queen	Queen	👸	king+love
+castle	Castle	🏰	house+king
+knight	Knight	🛡️	warrior+horse
+vampire	Vampire	🧛	human+blood
+werewolf	Werewolf	🐺	human+wolf
+wolf	Wolf	🐺	animal+moon
+sickness	Sickness	🤢	human+rain
+doctor	Doctor	👨‍⚕️	human+sickness
+hospital	Hospital	🏥	house+doctor
+medicine	Medicine	💊	doctor+plant
+poison	Poison	☠️	plant+tool
+rust	Rust	🟤	metal+water
 # --- Stage 8: Deeper Concepts ---
-wave	Wave	🌊	A disturbance on the surface of a liquid body	wind+lake
-sound	Sound	🔊	Vibrations that travel through the air	air+wave
-imagination	Imagination	💡	Forming new ideas or images	human+idea
-idea	Idea	💡	A thought or suggestion	human+energy
-mind	Mind	🧠	The element of a person that enables them to be aware	human+soul
-soul	Soul	👻	The spiritual or immaterial part of a human being	human+energy
-happiness	Happiness	😊	The state of being happy	human+love
-sadness	Sadness	😭	The condition of being sad	human+rain
-joy	Joy	😂	A feeling of great pleasure and happiness	human+sun
-sleep	Sleep	😴	A condition of body and mind that recurs every night	human+night
-ruler	Ruler	👑	A person exercising government or dominion	human+country
-crown	Crown	👑	An ornamental headdress worn by monarchs	metal+gold
-debt	Debt	📉	A sum of money that is owed or due	bank+money
-peace	Peace	🕊️	Freedom from disturbance; tranquility	war+human
-weapon	Weapon	🗡️	A thing designed for inflicting bodily harm	tool+blade
-explosion	Explosion	💥	A violent and destructive shattering	gunpowder+fire
-treaty	Treaty	🤝	A formally concluded agreement between countries	country+paper
-ash	Ash	잿더미	The powdery residue left after burning	fire+plant
-river	River	🏞️	A natural flowing watercourse	mountain+water
-bridge	Bridge	🌉	A structure carrying a road over a river or obstacle	river+wood
-textile	Textile	🧵	A type of cloth or woven fabric	tool+plant
-clothing	Clothing	👕	Items worn on the body	textile+human
-needle	Needle	🪡	A small slender tool with a pointed end	metal+textile
-thread	Thread	🧵	A long, thin strand of cotton, nylon, or other fibers	textile+tool
-rope	Rope	 रस्सी	A length of strong cord made by twisting together strands of natural or artificial fibers	thread+thread
-sail	Sail	⛵	A piece of material extended on a mast to catch the wind	boat+textile
-pyramid	Pyramid	🔺	A monumental structure with a square or triangular base and sloping sides that meet in a point at the top	desert+stone
-mummy	Mummy	🧟	A body of a human being or animal that has been ceremonially preserved	human+pyramid
-hieroglyphs	Hieroglyphs	📜	Writing consisting of hieroglyphs	writing+pyramid
-papyrus	Papyrus	📜	A material prepared in ancient Egypt from the pithy stem of a water plant	plant+river
-letter	Letter	✉️	A written, typed, or printed communication	paper+ink
-mail	Mail	📫	Letters and parcels sent by post	letter+letter
-email	Email	📧	Messages distributed by electronic means from one computer user to one or more recipients via a network	internet+mail
-meme	Meme	😂	An element of a culture or system of behavior that may be considered to be passed from one individual to another by nongenetic means	internet+idea
-sushi	Sushi	🍣	A Japanese dish of prepared vinegared rice, accompanying a variety of ingredients, such as seafood and vegetables	fish+seaweed
-seaweed	Seaweed	🌿	Large algae growing in the sea or on rocks below the high-water mark	plant+sea
-pizza	Pizza	🍕	A dish of Italian origin consisting of a usually round, flat base of leavened wheat-based dough topped with tomatoes, cheese, and often various other ingredients	cheese+bread
-cheese	Cheese	🧀	A food made from the pressed curds of milk	milk+time
-milk	Milk	🥛	An opaque white fluid rich in fat and protein, secreted by female mammals for the nourishment of their young	livestock+grass
-bread	Bread	🍞	Food made of flour, water, and yeast mixed together and baked	flour+water
-flour	Flour	🌾	A powder obtained by grinding grain, typically wheat, and used to make bread, cakes, and pastry	wheat+stone
-wheat	Wheat	🌾	A cereal which is the most important kind grown in temperate countries	grass+farmer
-alcohol	Alcohol	🍷	A colorless volatile flammable liquid which is produced by the natural fermentation of sugars	fruit+time
-wine	Wine	🍷	An alcoholic drink made from fermented grape juice	fruit+alcohol
-beer	Beer	🍺	An alcoholic drink made from yeast-fermented malt flavored with hops	wheat+alcohol
-sake	Sake	🍶	A Japanese alcoholic drink made from fermented rice	rice+alcohol
-rice	Rice	🍚	A swamp grass which is widely cultivated as a source of food, especially in Asia	wheat+water
-champagne	Champagne	🍾	A white sparkling wine from Champagne, France	wine+gas
-gas	Gas	💨	An airlike fluid substance which expands freely to fill any space available, irrespective of its quantity	air+energy
-caviar	Caviar	🐟	The pickled roe of sturgeon or other large fish, eaten as a delicacy	fish+egg 
+wave	Wave	🌊	wind+lake
+sound	Sound	🔊	air+wave
+imagination	Imagination	💡	human+idea
+idea	Idea	💡	human+energy
+mind	Mind	🧠	human+soul
+soul	Soul	👻	human+energy
+happiness	Happiness	😊	human+love
+sadness	Sadness	😭	human+rain
+joy	Joy	😂	human+sun
+sleep	Sleep	😴	human+night
+ruler	Ruler	👑	human+country
+crown	Crown	👑	metal+gold
+debt	Debt	📉	bank+money
+peace	Peace	🕊️	war+human
+weapon	Weapon	🗡️	tool+blade
+explosion	Explosion	💥	gunpowder+fire
+treaty	Treaty	🤝	country+paper
+ash	Ash	🌫️	fire+plant
+river	River	🏞️	mountain+water
+bridge	Bridge	🌉	river+wood
+textile	Textile	🧵	tool+plant
+clothing	Clothing	👕	textile+human
+needle	Needle	🪡	metal+textile
+thread	Thread	🧵	textile+tool
+rope	Rope	🪢	thread+thread
+sail	Sail	⛵	boat+textile
+pyramid	Pyramid	🔺	desert+stone
+mummy	Mummy	🧟	human+pyramid
+hieroglyphs	Hieroglyphs	📜	writing+pyramid
+papyrus	Papyrus	📜	plant+river
+letter	Letter	✉️	paper+ink
+mail	Mail	📫	letter+letter
+email	Email	📧	internet+mail
+meme	Meme	😂	internet+idea
+sushi	Sushi	🍣	fish+seaweed
+seaweed	Seaweed	🌿	plant+sea
+pizza	Pizza	🍕	cheese+bread
+cheese	Cheese	🧀	milk+time
+milk	Milk	🥛	livestock+grass
+bread	Bread	🍞	flour+water
+flour	Flour	🌾	wheat+stone
+wheat	Wheat	🌾	grass+farmer
+alcohol	Alcohol	🍷	fruit+time
+wine	Wine	🍷	fruit+alcohol
+beer	Beer	🍺	wheat+alcohol
+sake	Sake	🍶	rice+alcohol
+rice	Rice	🍚	wheat+water
+champagne	Champagne	🍾	wine+gas
+gas	Gas	💨	air+energy
+caviar	Caviar	🥚	fish+egg
+sweat	Sweat	💦	human+sun
+steam_cloud	Steam Cloud	☁️	steam+steam
+blizzard	Blizzard	❄️	snow+wind
+snow	Snow	❄️	ice+air 

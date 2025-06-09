@@ -3,7 +3,6 @@ export interface ElementDefinition {
   name: string;
   emoji: string;
   color: number;
-  description: string;
   category: 'basic' | 'nature' | 'human' | 'abstract' | 'advanced';
   discovered: boolean;
   rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
@@ -20,7 +19,6 @@ interface TSVElement {
   id: string;
   name: string;
   emoji: string;
-  description: string;
   recipe: string;
 }
 
@@ -97,13 +95,12 @@ class ConfigLoader {
         }
         
         const columns = trimmedLine.split('\t');
-        if (columns.length >= 4) {
+        if (columns.length >= 3) {
           tsvElements.push({
             id: columns[0],
             name: columns[1],
             emoji: columns[2],
-            description: columns[3],
-            recipe: columns[4] || ''
+            recipe: columns[3] || ''
           });
         }
       }
@@ -126,7 +123,6 @@ class ConfigLoader {
         name: tsvElement.name,
         emoji: tsvElement.emoji,
         color: this.getElementColor(tsvElement.id, tsvElement.emoji),
-        description: tsvElement.description,
         category: this.getElementCategory(tsvElement.recipe),
         discovered: !tsvElement.recipe, // Base elements are discovered by default
         rarity: this.getElementRarity(tsvElement.recipe)
@@ -144,7 +140,7 @@ class ConfigLoader {
           id: `${input1}_${input2}`,
           inputs: [input1.trim(), input2.trim()] as [string, string],
           output: tsvElement.id,
-          discoveryMessage: `${tsvElement.name} discovered! ${tsvElement.description}`
+          discoveryMessage: `${tsvElement.name} discovered!`
         };
         
         this.recipes.push(recipe);
@@ -155,10 +151,10 @@ class ConfigLoader {
   private loadFallbackElements(): void {
     // Minimal fallback if TSV loading fails
     const fallbackElements = [
-      { id: 'water', name: 'Water', emoji: '💧', description: 'The essence of life' },
-      { id: 'fire', name: 'Fire', emoji: '🔥', description: 'Pure energy' },
-      { id: 'earth', name: 'Earth', emoji: '🌍', description: 'Solid foundation' },
-      { id: 'air', name: 'Air', emoji: '🌬️', description: 'Invisible force' }
+      { id: 'water', name: 'Water', emoji: '💧' },
+      { id: 'fire', name: 'Fire', emoji: '🔥' },
+      { id: 'earth', name: 'Earth', emoji: '🌍' },
+      { id: 'air', name: 'Air', emoji: '🌬️' }
     ];
     
     for (const elem of fallbackElements) {

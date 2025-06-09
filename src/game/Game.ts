@@ -513,6 +513,10 @@ export class Game {
   public autoArrangeElements(): void {
     if (this.elements.length === 0) return;
 
+    console.log('🔧 AUTO ARRANGE DEBUG:');
+    console.log('  Current panOffset:', this.panOffset);
+    console.log('  GameContainer position:', { x: this.gameContainer.x, y: this.gameContainer.y });
+
     // Get canvas dimensions (excluding discovery panel on desktop)
     const canvas = this.app.view as HTMLCanvasElement;
     const rect = canvas.getBoundingClientRect();
@@ -522,6 +526,9 @@ export class Game {
     const isDesktop = window.innerWidth > 768;
     const availableWidth = isDesktop ? rect.width - 240 : rect.width;
     const availableHeight = rect.height;
+
+    console.log('  Canvas rect:', rect);
+    console.log('  Available area:', { width: availableWidth, height: availableHeight });
     
     // Add some padding from edges
     const padding = 20;
@@ -552,23 +559,51 @@ export class Game {
       spacingY = Math.max(2, Math.floor((usableHeight - rows * elementSize) / (rows - 1)));
     }
     
-    // Calculate grid starting position (center the grid)
+    // Calculate grid starting position (center the grid in screen space)
     const gridWidth = cols * elementSize + (cols - 1) * spacingX;
     const gridHeight = rows * elementSize + (rows - 1) * spacingY;
-    const startX = padding + (usableWidth - gridWidth) / 2;
-    const startY = padding + (usableHeight - gridHeight) / 2;
+    const screenStartX = padding + (usableWidth - gridWidth) / 2;
+    const screenStartY = padding + (usableHeight - gridHeight) / 2;
     
-    // Convert to world coordinates (account for current panning and center to current view)
-    const worldStartX = startX - this.panOffset.x;
-    const worldStartY = startY - this.panOffset.y;
+    console.log('  Screen grid start:', { x: screenStartX, y: screenStartY });
+
+    // Let's check what coordinate system we're actually using
+    // Look at current element positions to understand the pattern
+    if (this.elements.length > 0) {
+      console.log('  Current element positions:');
+      this.elements.slice(0, 3).forEach((el, i) => {
+        console.log(`    Element ${i}:`, { x: el.x, y: el.y });
+      });
+    }
+
+    // Test both coordinate conversion approaches
+    const worldStartX_add = screenStartX + this.panOffset.x;
+    const worldStartY_add = screenStartY + this.panOffset.y;
+    const worldStartX_subtract = screenStartX - this.panOffset.x;
+    const worldStartY_subtract = screenStartY - this.panOffset.y;
+
+    console.log('  Coordinate conversion options:');
+    console.log('    ADD panOffset:', { x: worldStartX_add, y: worldStartY_add });
+    console.log('    SUBTRACT panOffset:', { x: worldStartX_subtract, y: worldStartY_subtract });
+
+    // For now, let's use the subtract approach like addElementFromPanel does
+    const worldStartX = screenStartX - this.panOffset.x;
+    const worldStartY = screenStartY - this.panOffset.y;
+
+    console.log('  Using world start:', { x: worldStartX, y: worldStartY });
     
     // Arrange elements in grid
+    console.log('  Arranging elements:');
     this.elements.forEach((element, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
       
       const x = worldStartX + col * (elementSize + spacingX);
       const y = worldStartY + row * (elementSize + spacingY);
+
+      if (index < 3) {
+        console.log(`    Element ${index}: col=${col}, row=${row}, target=(${x}, ${y})`);
+      }
       
       // Animate to new position
       const startX = element.x;

@@ -54,6 +54,14 @@ class IdleAlchemy {
       // Initialize the UI
       this.ui = new UI(this.game);
       
+      // Trigger UI update after both game and UI are ready (fixes page refresh bug)
+      // This ensures the discovery panel shows loaded elements
+      setTimeout(() => {
+        if (this.game) {
+          this.game.refreshUI();
+        }
+      }, 100);
+      
       console.log('🧪 Idle Alchemy initialized successfully!');
       
       // Add some helpful console commands for development

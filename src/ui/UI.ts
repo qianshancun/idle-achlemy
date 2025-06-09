@@ -1,16 +1,11 @@
 import { Game } from '@/game/Game';
+import { showConfirm } from '@/ui/Dialog';
 
 export class UI {
   private game: Game;
   private uiContainer: HTMLElement;
   private discoveryPanel!: HTMLElement;
-  private progressBar!: HTMLElement;
-  private progressText!: HTMLElement;
   private elementGrid!: HTMLElement;
-  private hintButton!: HTMLElement;
-  private resetButton!: HTMLElement;
-  private menuToggle!: HTMLElement;
-  private mobileMenu!: HTMLElement;
   
   constructor(game: Game) {
     this.game = game;
@@ -23,58 +18,38 @@ export class UI {
   
   private createUI(): void {
     this.uiContainer.innerHTML = `
-      <div class="ui-header ui-element">
-        <div class="progress-container">
-          <div class="progress-text">Elements: <span id="progress-text">0/0</span></div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
-        </div>
-        <div class="header-buttons">
-          <button class="ui-button hint-button" id="hint-button">💡 Hint</button>
-          <button class="ui-button clear-button" id="clear-button">🗑️ Clear</button>
-          <button class="ui-button menu-toggle" id="menu-toggle">☰</button>
-        </div>
-      </div>
+
       
-      <div class="mobile-menu ui-element" id="mobile-menu">
-        <div class="menu-content">
-          <h3>Game Menu</h3>
-          <button class="ui-button" id="reset-button">🔄 Reset Game</button>
-          <button class="ui-button" id="save-button">💾 Save Game</button>
-          <button class="ui-button" id="close-menu">✕ Close</button>
-        </div>
-      </div>
-      
-      <div class="discovery-panel ui-element" id="discovery-panel">
+              <div class="discovery-panel ui-element" id="discovery-panel">
         <div class="panel-header">
-          <h3>🧪 Elements</h3>
+          <h3 id="elements-title">🧪 Elements (4)</h3>
           <div class="panel-info">Drag to canvas</div>
         </div>
         <div class="element-grid" id="element-grid"></div>
       </div>
       
+      <div class="bottom-actions ui-element" id="bottom-actions">
+        <span class="action-link" id="clear-action">Clear</span>
+        <span class="action-separator">|</span>
+        <span class="action-link" id="reset-action">Reset</span>
+      </div>
+      
       <div class="help-tooltip ui-element" id="help-tooltip">
         <div class="tooltip-content">
           <p>🎯 <strong>How to Play:</strong></p>
-          <p>1. Drag elements from the bottom panel to the canvas</p>
+          <p>1. Click or drag elements from the discovery panel to the canvas</p>
           <p>2. Drag canvas elements onto each other to merge</p>
           <p>3. Double-tap canvas elements to duplicate them</p>
-          <p>4. Discover new elements by experimenting!</p>
+          <p>4. Drag empty space to pan around the unlimited canvas</p>
+          <p>5. Discover new elements by experimenting!</p>
           <button class="close-tooltip" id="close-tooltip">✕</button>
         </div>
       </div>
     `;
     
     // Get references
-    this.progressBar = document.getElementById('progress-fill')!;
-    this.progressText = document.getElementById('progress-text')!;
     this.discoveryPanel = document.getElementById('discovery-panel')!;
     this.elementGrid = document.getElementById('element-grid')!;
-    this.hintButton = document.getElementById('hint-button')!;
-    this.resetButton = document.getElementById('reset-button')!;
-    this.menuToggle = document.getElementById('menu-toggle')!;
-    this.mobileMenu = document.getElementById('mobile-menu')!;
     
     this.addStyles();
   }
@@ -82,116 +57,43 @@ export class UI {
   private addStyles(): void {
     const style = document.createElement('style');
     style.textContent = `
-      .ui-header {
+      .bottom-actions {
         position: absolute;
-        top: 10px;
-        left: 10px;
-        right: 260px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 8px;
-        padding: 8px 12px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-      }
-      
-      .progress-container {
+        top: 20px;
+        left: 20px;
         display: flex;
         align-items: center;
-        gap: 10px;
-        flex: 1;
-      }
-      
-      .progress-text {
-        color: #333;
-        font-weight: bold;
-        font-size: 14px;
-        min-width: 80px;
-      }
-      
-      .progress-bar {
-        flex: 1;
-        height: 6px;
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 3px;
-        overflow: hidden;
-        max-width: 150px;
-      }
-      
-      .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #4CAF50, #8BC34A);
-        width: 0%;
-        transition: width 0.5s ease;
-      }
-      
-      .header-buttons {
-        display: flex;
-        gap: 6px;
-      }
-      
-      .ui-button {
-        background: white;
-        border: 1px solid #ddd;
-        color: #333;
-        padding: 6px 12px;
+        gap: 8px;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 6px 10px;
         border-radius: 6px;
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: bold;
-        transition: all 0.2s ease;
-        touch-action: manipulation;
-      }
-      
-      .ui-button:hover {
-        background: #f5f5f5;
-        border-color: #bbb;
-        transform: translateY(-1px);
-      }
-      
-      .ui-button:active {
-        transform: translateY(0);
-      }
-      
-      .mobile-menu {
-        position: absolute;
-        top: 50px;
-        right: 10px;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 8px;
-        padding: 12px;
-        min-width: 150px;
-        display: none;
-        backdrop-filter: blur(10px);
         border: 1px solid rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
       }
       
-      .mobile-menu.active {
-        display: block;
-      }
-      
-      .menu-content h3 {
-        color: #333;
-        margin: 0 0 8px 0;
-        text-align: center;
+      .action-link {
+        color: #666;
         font-size: 14px;
+        cursor: pointer;
+        text-decoration: underline;
+        transition: color 0.2s ease;
       }
       
-      .menu-content .ui-button {
-        width: 100%;
-        margin-bottom: 6px;
-        justify-content: center;
-        display: flex;
-        align-items: center;
+      .action-link:hover {
+        color: #333;
+      }
+      
+      .action-separator {
+        color: #ccc;
+        font-size: 14px;
       }
       
       .discovery-panel {
         position: absolute;
-        top: 10px;
-        right: 10px;
-        bottom: 10px;
+        top: 0;
+        right: 0;
+        bottom: 0;
         width: 240px;
         background: rgba(255, 255, 255, 0.95);
         border-radius: 0;
@@ -257,6 +159,12 @@ export class UI {
         transform: scale(0.95);
       }
       
+      .element-card.clicked {
+        transform: scale(0.9);
+        background: #e3f2fd;
+        border-color: #2196f3;
+      }
+      
       .element-emoji {
         font-size: 12px;
         line-height: 1;
@@ -271,16 +179,34 @@ export class UI {
       }
       
       .help-tooltip {
-        position: absolute;
-        top: 60px;
-        right: 10px;
+        position: fixed;
         background: rgba(255, 255, 255, 0.95);
         border-radius: 8px;
         padding: 12px;
-        max-width: 200px;
+        max-width: 280px;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(0, 0, 0, 0.1);
         transition: opacity 0.3s ease;
+        z-index: 1000;
+        box-sizing: border-box;
+      }
+      
+      /* Desktop: center in canvas area (exclude right sidebar) */
+      @media (min-width: 769px) {
+        .help-tooltip {
+          top: 50%;
+          left: calc(50vw - 120px); /* Center of (viewport - 240px sidebar) */
+          transform: translate(-50%, -50%);
+          max-width: calc(100vw - 280px); /* Ensure it fits in canvas area */
+        }
+      }
+      
+      /* Mobile: just ensure it fits and has proper margins */
+      @media (max-width: 768px) {
+        .help-tooltip {
+          max-width: calc(100vw - 40px);
+          margin: 0 20px;
+        }
       }
       
       .help-tooltip.hidden {
@@ -341,9 +267,9 @@ export class UI {
         
         .discovery-panel {
           top: auto;
-          bottom: 10px;
-          left: 10px;
-          right: 10px;
+          bottom: 0;
+          left: 0;
+          right: 0;
           width: auto;
           height: 180px;
           border-left: none;
@@ -359,6 +285,10 @@ export class UI {
           right: 5px;
           left: 5px;
           max-width: none;
+        }
+        
+        .mobile-menu {
+          right: 5px;
         }
         
         .tooltip-content {
@@ -390,19 +320,6 @@ export class UI {
   }
   
   private setupEventListeners(): void {
-
-    
-    // Mobile menu toggle
-    this.menuToggle.addEventListener('click', () => {
-      this.mobileMenu.classList.toggle('active');
-    });
-    
-    // Close menu button
-    const closeMenu = document.getElementById('close-menu')!;
-    closeMenu.addEventListener('click', () => {
-      this.mobileMenu.classList.remove('active');
-    });
-    
     // Close help tooltip
     const closeTooltip = document.getElementById('close-tooltip')!;
     closeTooltip.addEventListener('click', () => {
@@ -413,36 +330,38 @@ export class UI {
       }
     });
     
-    // Hint button
-    this.hintButton.addEventListener('click', () => {
-      const hint = this.game.getHint();
-      if (hint) {
-        this.showToast(hint);
-      }
-    });
-    
-    // Clear button
-    const clearButton = document.getElementById('clear-button')!;
-    clearButton.addEventListener('click', () => {
-      if (confirm('Clear all elements from the canvas?')) {
+    // Clear action
+    const clearAction = document.getElementById('clear-action')!;
+    clearAction.addEventListener('click', async () => {
+      const confirmed = await showConfirm({
+        title: '🧹 Clear Canvas',
+        message: 'This will remove all elements from the canvas, but keep your discovered elements. Are you sure?',
+        confirmText: 'Clear',
+        cancelText: 'Cancel',
+        type: 'confirm'
+      });
+      
+      if (confirmed) {
         this.game.clearCanvas();
         this.showToast('Canvas cleared!');
       }
     });
     
-    // Reset button
-    this.resetButton.addEventListener('click', () => {
-      if (confirm('Are you sure you want to reset your progress?')) {
+    // Reset action
+    const resetAction = document.getElementById('reset-action')!;
+    resetAction.addEventListener('click', async () => {
+      const confirmed = await showConfirm({
+        title: '🔄 Reset Game',
+        message: 'This will reset your entire progress and remove all discovered elements. You will start over with just the 4 basic elements. This action cannot be undone!',
+        confirmText: 'Reset Game',
+        cancelText: 'Cancel',
+        type: 'warning'
+      });
+      
+      if (confirmed) {
         this.game.reset();
-        this.mobileMenu.classList.remove('active');
+        this.showToast('Game reset!');
       }
-    });
-    
-    // Save button
-    const saveButton = document.getElementById('save-button')!;
-    saveButton.addEventListener('click', () => {
-      this.showToast('Game saved!');
-      this.mobileMenu.classList.remove('active');
     });
     
     // Game state changes
@@ -452,22 +371,14 @@ export class UI {
       this.updateUI();
       this.hideInstructionsIfNeeded();
     }) as EventListener);
-    
-    // Click outside to close menu
-    document.addEventListener('click', (event) => {
-      if (!this.mobileMenu.contains(event.target as Node) && 
-          !this.menuToggle.contains(event.target as Node)) {
-        this.mobileMenu.classList.remove('active');
-      }
-    });
   }
   
   private updateUI(): void {
     const progress = this.game.getProgress();
     
-    // Update progress bar
-    this.progressText.textContent = `${progress.discovered}/${progress.total}`;
-    this.progressBar.style.width = `${progress.percentage}%`;
+    // Update elements title with count
+    const elementsTitle = document.getElementById('elements-title')!;
+    elementsTitle.textContent = `🧪 Elements (${progress.discovered})`;
     
     // Update element grid
     this.updateElementGrid();
@@ -502,7 +413,7 @@ export class UI {
         <span class="element-name">${element.name}</span>
       `;
       
-      // Add drag functionality only - no click to add
+      // Add drag functionality
       elementCard.addEventListener('dragstart', (e) => {
         if (e.dataTransfer) {
           e.dataTransfer.setData('text/plain', element.id);
@@ -510,10 +421,51 @@ export class UI {
         }
       });
       
+      // Add click to add functionality
+      elementCard.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // Add visual feedback
+        elementCard.classList.add('clicked');
+        setTimeout(() => {
+          elementCard.classList.remove('clicked');
+        }, 150);
+        
+        this.addElementToCanvas(element.id);
+      });
+      
       this.elementGrid.appendChild(elementCard);
     });
   }
   
+  private addElementToCanvas(elementId: string): void {
+    // Add element near the center of current view with some randomness
+    // Get canvas center in world coordinates
+    const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    // Add random offset around center (within 150px radius)
+    const angle = Math.random() * Math.PI * 2;
+    const distance = Math.random() * 150;
+    const offsetX = Math.cos(angle) * distance;
+    const offsetY = Math.sin(angle) * distance;
+    
+    // Convert to global coordinates and add the element
+    const globalX = rect.left + centerX + offsetX;
+    const globalY = rect.top + centerY + offsetY;
+    
+    const success = this.game.addElementFromPanel(elementId, globalX, globalY);
+    
+    if (success) {
+      // Show a subtle toast for feedback
+      this.showToast(`Added ${elementId}!`);
+    }
+  }
+
   private hideInstructionsIfNeeded(): void {
     // Check if help should be hidden based on user preference
     const shouldHideHelp = localStorage.getItem('idle-alchemy-hide-help');

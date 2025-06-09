@@ -21,36 +21,36 @@ export class Element extends PIXI.Container {
   }
   
   private setupGraphics(): void {
-    // Clickable background area
+    // Clickable background area - made smaller
     this.background = new PIXI.Graphics();
     this.background.beginFill(0xffffff, 0.9);
-    this.background.drawRoundedRect(-50, -50, 100, 100, 8);
+    this.background.drawRoundedRect(-35, -35, 70, 70, 6);
     this.background.endFill();
     
     // Subtle border
     this.background.lineStyle(1, 0xdddddd, 0.8);
-    this.background.drawRoundedRect(-50, -50, 100, 100, 8);
+    this.background.drawRoundedRect(-35, -35, 70, 70, 6);
     
     this.addChild(this.background);
     
-    // Emoji
+    // Emoji - smaller
     this.emojiText = new PIXI.Text(this.definition.emoji, {
-      fontSize: 32,
+      fontSize: 24,
       align: 'center'
     });
     this.emojiText.anchor.set(0.5, 0.6);
-    this.emojiText.y = -10;
+    this.emojiText.y = -8;
     this.addChild(this.emojiText);
     
-    // Name
+    // Name - smaller
     this.nameText = new PIXI.Text(this.definition.name, {
-      fontSize: 12,
+      fontSize: 10,
       fill: 0x333333,
       align: 'center',
       fontWeight: 'bold'
     });
     this.nameText.anchor.set(0.5, 0.5);
-    this.nameText.y = 30;
+    this.nameText.y = 20;
     this.addChild(this.nameText);
   }
   

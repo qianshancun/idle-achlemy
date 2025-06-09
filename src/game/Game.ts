@@ -8,7 +8,12 @@ export class Game {
   private gameContainer: PIXI.Container;
   private elements: Element[] = [];
   private draggedElement: Element | null = null;
-  private mergeDistance: number = 80;
+  private mergeDistance: number = 50;
+  
+  // Canvas panning
+  private isPanning: boolean = false;
+  private lastPanPoint: { x: number; y: number } = { x: 0, y: 0 };
+  private panOffset: { x: number; y: number } = { x: 0, y: 0 };
   
   constructor(container: HTMLElement) {
     this.app = new PIXI.Application({
@@ -58,12 +63,16 @@ export class Game {
         const canvasX = e.clientX - rect.left;
         const canvasY = e.clientY - rect.top;
         
+        // Transform to world coordinates (account for panning)
+        const worldX = canvasX - this.panOffset.x;
+        const worldY = canvasY - this.panOffset.y;
+        
         // Check if dropping on existing element for merge
         const targetElement = this.findElementAtPosition(canvasX, canvasY);
         
         if (targetElement) {
           // Attempt merge
-          const tempElement = this.elementManager.createElement(elementId, canvasX, canvasY);
+          const tempElement = this.elementManager.createElement(elementId, worldX, worldY);
           if (tempElement) {
             const mergeResult = this.elementManager.attemptMerge(tempElement, targetElement);
             console.log('Drop merge attempt:', elementId, '+', targetElement.definition.id, '=', mergeResult);
@@ -77,17 +86,112 @@ export class Game {
               }
             } else {
               // Failed merge - place element nearby
-              this.addElement(elementId, canvasX + 50, canvasY + 50);
+              this.addElement(elementId, worldX + 50, worldY + 50);
             }
           }
         } else {
           // Drop on empty space
-          this.addElement(elementId, canvasX, canvasY);
+          this.addElement(elementId, worldX, worldY);
         }
       }
     });
+    
+    // Canvas panning controls
+    this.setupCanvasPanning(canvas);
   }
   
+  private setupCanvasPanning(canvas: HTMLCanvasElement): void {
+    // Set default cursor style
+    canvas.style.cursor = 'grab';
+    
+    // Mouse events for canvas panning
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const canvasX = e.clientX - rect.left;
+      const canvasY = e.clientY - rect.top;
+      
+      // Only start panning if clicking on empty space (not on an element)
+      const targetElement = this.findElementAtPosition(canvasX, canvasY);
+      if (!targetElement && !this.draggedElement) {
+        this.isPanning = true;
+        this.lastPanPoint = { x: e.clientX, y: e.clientY };
+        canvas.style.cursor = 'grabbing';
+        e.preventDefault();
+      }
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+      if (this.isPanning) {
+        const deltaX = e.clientX - this.lastPanPoint.x;
+        const deltaY = e.clientY - this.lastPanPoint.y;
+        
+        this.panOffset.x += deltaX;
+        this.panOffset.y += deltaY;
+        
+        this.gameContainer.x = this.panOffset.x;
+        this.gameContainer.y = this.panOffset.y;
+        
+        this.lastPanPoint = { x: e.clientX, y: e.clientY };
+        e.preventDefault();
+      }
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+      if (this.isPanning) {
+        this.isPanning = false;
+        canvas.style.cursor = 'grab';
+      }
+    });
+    
+    canvas.addEventListener('mouseleave', () => {
+      if (this.isPanning) {
+        this.isPanning = false;
+        canvas.style.cursor = 'grab';
+      }
+    });
+    
+    // Touch events for mobile panning
+    canvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const canvasX = touch.clientX - rect.left;
+        const canvasY = touch.clientY - rect.top;
+        
+        // Only start panning if touching empty space
+        const targetElement = this.findElementAtPosition(canvasX, canvasY);
+        if (!targetElement && !this.draggedElement) {
+          this.isPanning = true;
+          this.lastPanPoint = { x: touch.clientX, y: touch.clientY };
+          e.preventDefault();
+        }
+      }
+    });
+    
+    canvas.addEventListener('touchmove', (e) => {
+      if (this.isPanning && e.touches.length === 1) {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - this.lastPanPoint.x;
+        const deltaY = touch.clientY - this.lastPanPoint.y;
+        
+        this.panOffset.x += deltaX;
+        this.panOffset.y += deltaY;
+        
+        this.gameContainer.x = this.panOffset.x;
+        this.gameContainer.y = this.panOffset.y;
+        
+        this.lastPanPoint = { x: touch.clientX, y: touch.clientY };
+        e.preventDefault();
+      }
+    });
+    
+    canvas.addEventListener('touchend', () => {
+      if (this.isPanning) {
+        this.isPanning = false;
+      }
+    });
+  }
+
   private onResize(): void {
     const canvas = this.app.view as HTMLCanvasElement;
     const container = canvas.parentElement;
@@ -102,11 +206,18 @@ export class Game {
       this.gameContainer.addChild(element);
       this.elements.push(element);
       
+      // Set high z-index so new elements appear on top
+      element.zIndex = this.elements.length + 100;
+      
       // Ensure element has proper event listeners
       element.on('dragstart', (el: Element) => this.onElementDragStart(el));
       element.on('dragmove', () => this.onElementDragMove());
       element.on('dragend', () => this.onElementDragEnd());
       element.on('doubletap', (el: Element) => this.onElementDoubleTap(el));
+      
+      // Sort children to respect z-index
+      this.gameContainer.sortChildren();
+      
       return element;
     }
     return null;
@@ -115,12 +226,12 @@ export class Game {
   private onElementDragStart(element: Element): void {
     this.draggedElement = element;
     
-    // Highlight potential merge targets
+    // Highlight potential merge targets (CHECK ONLY, don't discover)
     if (this.draggedElement) {
       this.elements.forEach(el => {
         if (el !== this.draggedElement) {
-          const mergeResult = this.elementManager.attemptMerge(this.draggedElement!, el);
-          if (mergeResult.success) {
+          const recipeCheck = this.elementManager.checkRecipe(this.draggedElement!, el);
+          if (recipeCheck.success) {
             el.highlight(0x00ff00); // Green for valid merge
           }
         }
@@ -147,7 +258,6 @@ export class Game {
       const mergeResult = this.elementManager.attemptMerge(this.draggedElement, target);
       
       if (mergeResult.success && mergeResult.result) {
-        console.log('🎉 Merge successful!', this.draggedElement.definition.id, '+', target.definition.id, '=', mergeResult.result);
         this.performMerge(this.draggedElement, target, mergeResult.result, mergeResult.isNewDiscovery || false);
         merged = true;
         
@@ -162,16 +272,13 @@ export class Game {
     this.elements.forEach(el => el.removeHighlight());
     
     if (!merged) {
-      // Snap back to a valid position if no merge occurred
-      this.snapElementToValidPosition(this.draggedElement);
+      // Element stays where it was dragged - no position constraints for unlimited canvas
     }
     
     this.draggedElement = null;
   }
   
   private onElementDoubleTap(element: Element): void {
-    console.log('🔄 Creating copy of', element.definition.id);
-    
     // Create a copy of the element near the original
     const offsetX = 80 + Math.random() * 40 - 20; // Random offset between 60-100
     const offsetY = 80 + Math.random() * 40 - 20;
@@ -182,7 +289,6 @@ export class Game {
     const copy = this.createElementAtPosition(element.definition.id, newX, newY);
     if (copy) {
       copy.playDiscoveryAnimation();
-      console.log('✅ Copy created successfully');
     }
   }
   
@@ -215,19 +321,18 @@ export class Game {
     }
   }
   
-  private snapElementToValidPosition(element: Element): void {
-    // Ensure element is within screen bounds
-    const margin = 60;
-    element.x = Math.max(margin, Math.min(this.app.screen.width - margin, element.x));
-    element.y = Math.max(margin, Math.min(this.app.screen.height - margin, element.y));
-  }
+
   
   private findElementAtPosition(x: number, y: number): Element | null {
+    // Transform canvas coordinates to world coordinates (account for panning)
+    const worldX = x - this.panOffset.x;
+    const worldY = y - this.panOffset.y;
+    
     // Find element at the given position
     for (const element of this.elements) {
       const bounds = element.getBounds();
-      if (x >= bounds.x && x <= bounds.x + bounds.width &&
-          y >= bounds.y && y <= bounds.y + bounds.height) {
+      if (worldX >= bounds.x && worldX <= bounds.x + bounds.width &&
+          worldY >= bounds.y && worldY <= bounds.y + bounds.height) {
         return element;
       }
     }
@@ -247,12 +352,13 @@ export class Game {
     });
     
     text.anchor.set(0.5);
-    text.x = this.app.screen.width / 2;
-    text.y = this.app.screen.height / 2; // Center vertically to avoid UI elements
+    // Position in world coordinates so it appears centered in the current view
+    text.x = (this.app.screen.width / 2) - this.panOffset.x;
+    text.y = (this.app.screen.height / 2) - this.panOffset.y;
     text.alpha = 0;
     text.zIndex = 1000; // High z-index to appear above everything
     
-    this.app.stage.addChild(text);
+    this.gameContainer.addChild(text);
     this.app.stage.sortChildren(); // Ensure z-index is respected
     
     // Animate the message
@@ -279,7 +385,7 @@ export class Game {
           if (text.alpha > 0) {
             requestAnimationFrame(fadeOut);
           } else {
-            this.app.stage.removeChild(text);
+            this.gameContainer.removeChild(text);
             text.destroy();
           }
         };
@@ -291,6 +397,9 @@ export class Game {
   }
   
   private onGameStateChanged(): void {
+    // Auto-save progress
+    this.saveGameProgress();
+    
     // Emit event for UI updates
     const progress = this.elementManager.getDiscoveryProgress();
     window.dispatchEvent(new CustomEvent('gameStateChanged', {
@@ -320,21 +429,25 @@ export class Game {
       return false;
     }
     
-    // Use provided position or find a good random position
-    const posX = x !== undefined ? x : Math.random() * (this.app.screen.width - 200) + 100;
-    const posY = y !== undefined ? y : Math.random() * (this.app.screen.height - 200) + 100;
+    // Use provided position or find a random position near the current view center
+    const posX = x !== undefined ? x : -this.panOffset.x + (Math.random() * 400 - 200);
+    const posY = y !== undefined ? y : -this.panOffset.y + (Math.random() * 400 - 200);
     
     const element = this.createElementAtPosition(elementId, posX, posY);
     return element !== null;
   }
   
   public addElementFromPanel(elementId: string, globalX: number, globalY: number): boolean {
-    // Convert global coordinates to canvas coordinates
+    // Convert global coordinates to canvas coordinates, then to world coordinates
     const rect = (this.app.view as HTMLCanvasElement).getBoundingClientRect();
-    const x = globalX - rect.left;
-    const y = globalY - rect.top;
+    const canvasX = globalX - rect.left;
+    const canvasY = globalY - rect.top;
     
-    return this.addElement(elementId, x, y);
+    // Transform to world coordinates (account for panning)
+    const worldX = canvasX - this.panOffset.x;
+    const worldY = canvasY - this.panOffset.y;
+    
+    return this.addElement(elementId, worldX, worldY);
   }
   
   public getHint(): string | null {
@@ -346,27 +459,46 @@ export class Game {
   }
   
   public clearCanvas(): void {
-    // Clear all elements from canvas
-    this.elements.forEach(element => {
-      this.removeElement(element);
-    });
+    // Clear all elements from canvas - use while loop to avoid iteration issues
+    while (this.elements.length > 0) {
+      this.removeElement(this.elements[0]);
+    }
+    
+    // Reset camera position when clearing
+    this.resetCamera();
+    
     this.onGameStateChanged();
   }
   
   public reset(): void {
-    // Clear all elements except basics
-    this.elements.forEach(element => {
-      if (!['water', 'fire', 'earth', 'air'].includes(element.definition.id)) {
-        this.removeElement(element);
-      }
-    });
+    // Clear all elements from canvas
+    while (this.elements.length > 0) {
+      this.removeElement(this.elements[0]);
+    }
     
-    // Reset element manager
-    this.elementManager = new ElementManager();
+    // Reset discovered elements to only basic 4 elements 
+    this.elementManager.resetToBasicElements();
     localStorage.removeItem('idle-alchemy-save');
+    
+    // Reset camera position
+    this.resetCamera();
+    
+    // Update UI to reflect reset state (canvas empty, discovery panel with basic 4 elements)
     this.onGameStateChanged();
   }
   
+  public resetCamera(): void {
+    // Reset canvas view to center
+    this.panOffset = { x: 0, y: 0 };
+    this.gameContainer.x = 0;
+    this.gameContainer.y = 0;
+  }
+
+  public refreshUI(): void {
+    // Force UI update - useful after loading progress
+    this.onGameStateChanged();
+  }
+
   public destroy(): void {
     this.app.destroy(true);
   }

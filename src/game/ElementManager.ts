@@ -6,16 +6,23 @@ export class ElementManager {
   private elementCounts: Map<string, number> = new Map();
   
   constructor() {
-    // Initialize with basic elements after config is loaded
+    // Initialize with basic elements immediately (config is already loaded when Game creates ElementManager)
     this.initializeBasicElements();
   }
   
-  private async initializeBasicElements() {
-    await configLoader.initialize();
-    this.discoverElement('water');
-    this.discoverElement('fire');
-    this.discoverElement('earth');
-    this.discoverElement('air');
+  private initializeBasicElements() {
+    // Force immediate discovery of basic elements
+    this.discoveredElements.add('water');
+    this.discoveredElements.add('fire');
+    this.discoveredElements.add('earth');
+    this.discoveredElements.add('air');
+  }
+  
+  public resetToBasicElements() {
+    // Reset discovered elements to only basic ones
+    this.discoveredElements.clear();
+    this.elementCounts.clear();
+    this.initializeBasicElements();
   }
   
   public discoverElement(elementId: string): boolean {
@@ -28,6 +35,8 @@ export class ElementManager {
     const wasAlreadyDiscovered = this.discoveredElements.has(elementId);
     this.discoveredElements.add(elementId);
     
+
+    
     // Update count
     const currentCount = this.elementCounts.get(elementId) || 0;
     this.elementCounts.set(elementId, currentCount + 1);
@@ -36,6 +45,11 @@ export class ElementManager {
   }
   
   public isDiscovered(elementId: string): boolean {
+    // Basic elements are always considered discovered
+    const basicElements = ['water', 'fire', 'earth', 'air'];
+    if (basicElements.includes(elementId)) {
+      return true;
+    }
     return this.discoveredElements.has(elementId);
   }
   
@@ -60,6 +74,27 @@ export class ElementManager {
     return new Element(definition, x, y);
   }
   
+  public checkRecipe(element1: Element, element2: Element): {
+    success: boolean;
+    result?: string;
+  } {
+    // Don't merge the same element with itself
+    if (element1 === element2) {
+      return { success: false };
+    }
+    
+    const recipe = configLoader.findRecipe(element1.definition.id, element2.definition.id);
+    
+    if (!recipe) {
+      return { success: false };
+    }
+    
+    return {
+      success: true,
+      result: recipe.output
+    };
+  }
+
   public attemptMerge(element1: Element, element2: Element): {
     success: boolean;
     result?: string;

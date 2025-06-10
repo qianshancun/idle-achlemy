@@ -1,0 +1,46 @@
+# Element Names and Emojis Template
+# Copy this file to elements.{lang}.tsv and translate the names
+# Format: TSV - id, name, emoji (keep emojis the same across languages)
+id	name	emoji
+water	[Translate: Water]	💧
+fire	[Translate: Fire]	🔥
+earth	[Translate: Earth]	🌍
+air	[Translate: Air]	🌬️
+steam	[Translate: Steam]	💨
+mud	[Translate: Mud]	🟫
+lava	[Translate: Lava]	🌋
+dust	[Translate: Dust]	🌫️
+lightning	[Translate: Lightning]	⚡
+cloud	[Translate: Cloud]	☁️
+rain	[Translate: Rain]	🌧️
+storm	[Translate: Storm]	⛈️
+obsidian	[Translate: Obsidian]	⬛
+plant	[Translate: Plant]	🌱
+lake	[Translate: Lake]	🏞️
+inferno	[Translate: Inferno]	🔥
+mountain	[Translate: Mountain]	⛰️
+wind	[Translate: Wind]	💨
+stone	[Translate: Stone]	🪨
+sand	[Translate: Sand]	🏜️
+glass	[Translate: Glass]	🪟
+sea	[Translate: Sea]	🌊
+beach	[Translate: Beach]	🏖️
+swamp	[Translate: Swamp]	🏞️
+volcano	[Translate: Volcano]	🌋
+geyser	[Translate: Geyser]	⛲
+mist	[Translate: Mist]	🌫️
+pressure	[Translate: Pressure]	🗜️
+energy	[Translate: Energy]	⚡
+earthquake	[Translate: Earthquake]	🌋
+tsunami	[Translate: Tsunami]	🌊
+sky	[Translate: Sky]	🌌
+sun	[Translate: Sun]	☀️
+moon	[Translate: Moon]	🌕
+night	[Translate: Night]	🌃
+time	[Translate: Time]	⏳
+tree	[Translate: Tree]	🌳
+forest	[Translate: Forest]	🌲
+wood	[Translate: Wood]	🪵
+salt	[Translate: Salt]	🧂
+# ... continue with all 316 elements
+# This is just a sample - copy from elements.en.tsv and replace names

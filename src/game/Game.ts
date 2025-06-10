@@ -491,9 +491,6 @@ export class Game {
     this.elementManager.resetToBasicElements();
     localStorage.removeItem('idle-alchemy-save');
     
-    // Reset help tooltip visibility so it shows again for new players
-    localStorage.removeItem('idle-alchemy-hide-help');
-    
     // Reset camera position
     this.resetCamera();
     

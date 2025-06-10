@@ -75,8 +75,8 @@ export class UI {
     style.textContent = `
       .bottom-actions {
         position: absolute;
-        top: 20px;
-        left: 20px;
+        top: 10px;
+        left: 10px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -90,7 +90,7 @@ export class UI {
       
       .action-link {
         color: #666;
-        font-size: 14px;
+        font-size: 12px;
         cursor: pointer;
         text-decoration: underline;
         transition: color 0.2s ease;
@@ -102,7 +102,7 @@ export class UI {
       
       .action-separator {
         color: #ccc;
-        font-size: 14px;
+        font-size: 9px;
       }
       
       .discovery-panel {
@@ -241,7 +241,7 @@ export class UI {
       }
       
       .tooltip-content strong {
-        color: #FFD700;
+        color: #000;
       }
       
       .close-tooltip {
@@ -297,10 +297,11 @@ export class UI {
         }
         
         .help-tooltip {
-          top: 50px;
+          top: calc(50% - 59px);
           right: 5px;
           left: 5px;
           max-width: none;
+          transform: translateY(-50%);
         }
         
         .mobile-menu {
@@ -410,7 +411,6 @@ export class UI {
       const tooltip = document.getElementById('help-tooltip');
       if (tooltip) {
         tooltip.classList.add('hidden');
-        localStorage.setItem('idle-alchemy-hide-help', 'true');
       }
     });
     
@@ -484,7 +484,7 @@ export class UI {
     
     // Update elements title with count
     const elementsTitle = document.getElementById('elements-title')!;
-    elementsTitle.textContent = t('ui.titles.elements', { count: progress.discovered });
+    elementsTitle.textContent = `🧪 Elements (${progress.discovered})`;
     
     // Update element grid
     this.updateElementGrid();
@@ -598,8 +598,6 @@ export class UI {
     const helpTooltip = document.getElementById('help-tooltip');
     if (!helpTooltip) return;
 
-    // Check if user manually closed the tooltip
-    const manuallyHidden = localStorage.getItem('idle-alchemy-hide-help') === 'true';
     
     // Get current progress to determine if help should be shown
     const progress = this.game.getProgress();
@@ -607,7 +605,7 @@ export class UI {
     // Show help if:
     // 1. User hasn't manually closed it AND
     // 2. User has discovered 5 or fewer elements (basic 4 + at most 1 more)
-    const shouldShowHelp = !manuallyHidden && progress.discovered <= 5;
+    const shouldShowHelp = progress.discovered <= 5;
     
     if (shouldShowHelp) {
       helpTooltip.classList.remove('hidden');
@@ -661,7 +659,7 @@ export class UI {
     if (helpStep5) helpStep5.textContent = t('ui.instructions.step5');
     
     const closeTooltip = document.getElementById('close-tooltip');
-    if (closeTooltip) closeTooltip.textContent = t('ui.buttons.close');
+    if (closeTooltip) closeTooltip.textContent = t('✕');
     
     // Update language selector
     this.updateLanguageSelector();

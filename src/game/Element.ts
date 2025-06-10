@@ -267,6 +267,61 @@ export class Element extends PIXI.Container {
     animate();
   }
   
+  public playMergeAnimation(targetX: number, targetY: number): Promise<void> {
+    return new Promise((resolve) => {
+      // Quick zoom-in-zoom-out animation with movement towards target
+      const originalX = this.x;
+      const originalY = this.y;
+      let progress = 0;
+      const duration = 300; // 300ms animation
+      const startTime = Date.now();
+      
+      const animate = () => {
+        const elapsed = Date.now() - startTime;
+        progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (ease-out cubic)
+        const eased = 1 - Math.pow(1 - progress, 3);
+        
+        if (progress < 0.5) {
+          // First half: zoom in and move toward target (merge position)
+          const moveProgress = progress * 2;
+          const easedMove = 1 - Math.pow(1 - moveProgress, 2); // Ease-out quadratic for movement
+          
+          this.scale.set(1 + moveProgress * 0.3);
+          
+          // Move towards the target position (midpoint between the two elements)
+          this.x = originalX + (targetX - originalX) * easedMove * 0.8; // Move 80% of the way
+          this.y = originalY + (targetY - originalY) * easedMove * 0.8;
+        } else {
+          // Second half: zoom out quickly and fade while continuing to move
+          const zoomProgress = (progress - 0.5) * 2;
+          
+          this.scale.set(1.3 - zoomProgress * 0.8);
+          this.alpha = 1 - zoomProgress * 0.7;
+          
+          // Complete the movement to target
+          const totalMoveProgress = 0.8 + (zoomProgress * 0.2); // Complete the final 20%
+          this.x = originalX + (targetX - originalX) * totalMoveProgress;
+          this.y = originalY + (targetY - originalY) * totalMoveProgress;
+        }
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          // Reset to original state (will be removed anyway)
+          this.scale.set(1);
+          this.alpha = 1;
+          this.x = originalX;
+          this.y = originalY;
+          resolve();
+        }
+      };
+      
+      animate();
+    });
+  }
+  
   public getDistanceTo(other: Element): number {
     const dx = this.x - other.x;
     const dy = this.y - other.y;

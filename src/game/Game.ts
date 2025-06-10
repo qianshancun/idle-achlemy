@@ -80,12 +80,12 @@ export class Game {
             
             if (mergeResult.success && mergeResult.result) {
               // Successful merge - remove target and create result
-              this.performMerge(tempElement, targetElement, mergeResult.result, mergeResult.isNewDiscovery || false);
-              
-              if (mergeResult.isNewDiscovery && mergeResult.message) {
-                const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, mergeResult.message);
-                this.showDiscoveryMessage(discoveryMessage);
-              }
+              this.performMerge(tempElement, targetElement, mergeResult.result, mergeResult.isNewDiscovery || false).then(() => {
+                if (mergeResult.isNewDiscovery && mergeResult.message) {
+                  const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, mergeResult.message);
+                  this.showDiscoveryMessage(discoveryMessage);
+                }
+              });
             } else {
               // Failed merge - place element nearby
               this.addElement(elementId, worldX + 50, worldY + 50);
@@ -260,13 +260,13 @@ export class Game {
       const mergeResult = this.elementManager.attemptMerge(this.draggedElement, target);
       
       if (mergeResult.success && mergeResult.result) {
-        this.performMerge(this.draggedElement, target, mergeResult.result, mergeResult.isNewDiscovery || false);
-        merged = true;
-        
-                  if (mergeResult.isNewDiscovery && mergeResult.message) {
+        this.performMerge(this.draggedElement, target, mergeResult.result, mergeResult.isNewDiscovery || false).then(() => {
+          if (mergeResult.isNewDiscovery && mergeResult.message) {
             const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, mergeResult.message);
             this.showDiscoveryMessage(discoveryMessage);
           }
+        });
+        merged = true;
         break;
       }
     }
@@ -295,10 +295,17 @@ export class Game {
     }
   }
   
-  private performMerge(element1: Element, element2: Element, resultId: string, isNewDiscovery: boolean): void {
+  private async performMerge(element1: Element, element2: Element, resultId: string, isNewDiscovery: boolean): Promise<void> {
     // Calculate merge position (midpoint)
     const mergeX = (element1.x + element2.x) / 2;
     const mergeY = (element1.y + element2.y) / 2;
+    
+    // Play merge animation on both elements simultaneously - each moves toward the merge point
+    const animation1 = element1.playMergeAnimation(mergeX, mergeY);
+    const animation2 = element2.playMergeAnimation(mergeX, mergeY);
+    
+    // Wait for both animations to complete
+    await Promise.all([animation1, animation2]);
     
     // Remove the two input elements
     this.removeElement(element1);

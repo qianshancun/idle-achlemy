@@ -14,14 +14,14 @@ const crypto = require('crypto');
  * - Generates compiled game configuration and i18n translation files
  */
 
-console.log('🔧 Starting unified configuration compilation...');
+console.log('🔧 Starting per-language configuration compilation...');
 
 // Configuration
 const CONFIG_DIR = path.join(__dirname);
 const OUTPUT_DIR = path.join(__dirname, '../../public');
 const LANGUAGES = ['en', 'es'];
 
-// Base elements get fixed hex IDs
+// Base elements get fixed hex IDs (same across all languages)
 const BASE_ELEMENTS = {
   'water': '0',
   'fire': '1', 
@@ -29,7 +29,7 @@ const BASE_ELEMENTS = {
   'air': '3'
 };
 
-// Generate hex ID for non-base elements
+// Generate hex ID for non-base elements (deterministic based on element ID)
 function generateHexId(elementId) {
   if (BASE_ELEMENTS[elementId]) {
     return BASE_ELEMENTS[elementId];
@@ -68,9 +68,8 @@ function parseTSV(filePath) {
 }
 
 // Load and process all language files
-console.log('📚 Loading unified source files...');
+console.log('📚 Loading language-specific source files...');
 const languageData = {};
-const allElementIds = new Set();
 
 for (const lang of LANGUAGES) {
   const filePath = path.join(CONFIG_DIR, `elements.${lang}.tsv`);
@@ -81,35 +80,12 @@ for (const lang of LANGUAGES) {
   const data = parseTSV(filePath);
   languageData[lang] = data;
   
-  // Collect all element IDs
-  data.forEach(row => {
-    if (row.id) {
-      allElementIds.add(row.id);
-    }
-  });
-  
   console.log(`✓ Loaded ${data.length} elements for ${lang === 'en' ? 'English' : 'Español'}`);
 }
 
-console.log('⚙️  Generating compiled data...');
-
-// Generate hex IDs for all elements
-const idMapping = {};
-const hexToOriginal = {};
-allElementIds.forEach(id => {
-  const hexId = generateHexId(id);
-  idMapping[id] = hexId;
-  hexToOriginal[hexId] = id;
-});
-
-// Build elements and recipes data
-const elements = {};
-const recipes = [];
-const translations = {};
-
-// Initialize translations for each language
-LANGUAGES.forEach(lang => {
-  translations[lang] = {
+// Generate UI translations (same for all languages)
+function generateUITranslations(lang) {
+  return {
     ui: {
       buttons: {
         autoArrange: lang === 'es' ? 'Organizar Automáticamente' : 'Auto Arrange',
@@ -171,64 +147,7 @@ LANGUAGES.forEach(lang => {
       tryCombing: lang === 'es' ? 'Intenta combinar {{element1}} con {{element2}}' : 'Try combining {{element1}} with {{element2}}'
     }
   };
-});
-
-// Process each language to build elements and extract recipes
-const processedRecipes = new Map(); // Track recipe inputs -> outputs for duplicate detection
-
-languageData['en'].forEach(row => {
-  const hexId = idMapping[row.id];
-  
-  // Build element definition
-  if (!elements[hexId]) {
-    elements[hexId] = {
-      id: hexId,
-      originalId: row.id,
-      emoji: row.emoji,
-      names: {},
-      rarity: determineRarity(hexId),
-      category: determineCategory(hexId)
-    };
-  }
-  
-  // Add names for all languages
-  LANGUAGES.forEach(lang => {
-    const langData = languageData[lang].find(item => item.id === row.id);
-    if (langData) {
-      elements[hexId].names[lang] = langData.name;
-    }
-  });
-  
-  // Process recipe if it has parents
-  if (row.parents && row.parents.trim()) {
-    const parents = row.parents.split('+').map(p => p.trim());
-    if (parents.length === 2) {
-      const input1 = idMapping[parents[0]];
-      const input2 = idMapping[parents[1]];
-      
-      if (input1 && input2) {
-        const recipeKey = [input1, input2].sort().join('+');
-        
-        // Check for duplicate recipes (same inputs, different outputs)
-        if (processedRecipes.has(recipeKey)) {
-          const existingOutput = processedRecipes.get(recipeKey);
-          const existingElement = Object.values(elements).find(e => e.id === existingOutput);
-          console.error(`❌ DUPLICATE RECIPE ERROR: ${row.parents} produces both "${existingElement?.originalId}" and "${row.id}"`);
-          console.error(`   This will cause unpredictable behavior in the game!`);
-          console.error(`   Please fix by using different ingredient combinations.`);
-        } else {
-          recipes.push({
-            inputs: [input1, input2],
-            output: hexId
-          });
-          processedRecipes.set(recipeKey, hexId);
-        }
-      } else {
-        console.warn(`Warning: Recipe for ${row.id} contains unknown elements: ${row.parents}`);
-      }
-    }
-  }
-});
+}
 
 // Determine rarity based on hex ID ranges
 function determineRarity(hexId) {
@@ -253,55 +172,144 @@ function determineCategory(hexId) {
   return 'abstract';
 }
 
-console.log(`✓ Generated ${Object.keys(elements).length} elements with hex IDs`);
-console.log(`✓ Generated translations for ${LANGUAGES.length} languages`);
-console.log(`✓ Generated ${recipes.length} recipes`);
+// Process each language separately
+console.log('⚙️  Generating per-language compiled data...');
+
+const allCompiledData = {};
+const allIdMappings = {};
+
+for (const lang of LANGUAGES) {
+  console.log(`\n🌍 Processing ${lang === 'en' ? 'English' : 'Español'}...`);
+  
+  const data = languageData[lang];
+  const elements = {};
+  const recipes = [];
+  const idMapping = {};
+  const hexToOriginal = {};
+  
+  // Generate hex IDs for all elements in this language
+  data.forEach(row => {
+    if (row.id) {
+      const hexId = generateHexId(row.id);
+      idMapping[row.id] = hexId;
+      hexToOriginal[hexId] = row.id;
+    }
+  });
+  
+  // Track recipes for duplicate detection
+  const processedRecipes = new Map();
+  
+  // Process elements and recipes for this language
+  data.forEach(row => {
+    const hexId = idMapping[row.id];
+    
+    // Build element definition
+    elements[hexId] = {
+      id: hexId,
+      originalId: row.id,
+      emoji: row.emoji,
+      name: row.name,
+      rarity: determineRarity(hexId),
+      category: determineCategory(hexId)
+    };
+    
+    // Process recipe if it has parents
+    if (row.parents && row.parents.trim()) {
+      const parents = row.parents.split('+').map(p => p.trim());
+      if (parents.length === 2) {
+        const input1 = idMapping[parents[0]];
+        const input2 = idMapping[parents[1]];
+        
+        if (input1 && input2) {
+          const recipeKey = [input1, input2].sort().join('+');
+          
+          // Check for duplicate recipes (same inputs, different outputs)
+          if (processedRecipes.has(recipeKey)) {
+            const existingOutput = processedRecipes.get(recipeKey);
+            const existingElement = elements[existingOutput];
+            console.error(`❌ DUPLICATE RECIPE ERROR in ${lang}: ${row.parents} produces both "${existingElement?.originalId}" and "${row.id}"`);
+            console.error(`   This will cause unpredictable behavior in the game!`);
+            console.error(`   Please fix by using different ingredient combinations.`);
+          } else {
+            recipes.push({
+              inputs: [input1, input2],
+              output: hexId
+            });
+            processedRecipes.set(recipeKey, hexId);
+          }
+        } else {
+          console.warn(`Warning in ${lang}: Recipe for ${row.id} contains unknown elements: ${row.parents}`);
+        }
+      }
+    }
+  });
+  
+  console.log(`✓ Generated ${Object.keys(elements).length} elements with hex IDs`);
+  console.log(`✓ Generated ${recipes.length} recipes`);
+  
+  // Store compiled data for this language
+  allCompiledData[lang] = {
+    elements,
+    recipes,
+    metadata: {
+      version: '2.0.0',
+      language: lang,
+      compiledAt: new Date().toISOString(),
+      totalElements: Object.keys(elements).length,
+      totalRecipes: recipes.length
+    }
+  };
+  
+  allIdMappings[lang] = { originalToHex: idMapping, hexToOriginal };
+}
 
 // Save compiled files
-console.log('💾 Saving compiled files...');
+console.log('\n💾 Saving compiled files...');
 
-// Save main elements file
-const compiledData = {
-  elements,
-  recipes,
+// Save main elements file (contains all languages)
+const mainCompiledData = {
+  languages: LANGUAGES,
+  data: allCompiledData,
   metadata: {
     version: '2.0.0',
     compiledAt: new Date().toISOString(),
-    totalElements: Object.keys(elements).length,
-    totalRecipes: recipes.length,
-    languages: LANGUAGES
+    supportedLanguages: LANGUAGES
   }
 };
 
 fs.writeFileSync(
   path.join(OUTPUT_DIR, 'elements-compiled.json'),
-  JSON.stringify(compiledData, null, 2)
+  JSON.stringify(mainCompiledData, null, 2)
 );
 console.log('✓ Saved elements-compiled.json');
 
-// Save translation files
+// Save translation files (UI only, no element names)
 LANGUAGES.forEach(lang => {
   const langName = lang === 'en' ? 'English' : 'Español';
+  const translations = generateUITranslations(lang);
+  
   fs.writeFileSync(
     path.join(OUTPUT_DIR, 'locales', `${lang}.json`),
-    JSON.stringify(translations[lang], null, 2)
+    JSON.stringify(translations, null, 2)
   );
   console.log(`✓ Saved ${lang}.json`);
 });
 
-// Save ID mapping for debugging
+// Save ID mappings for debugging (separate file per language)
 fs.writeFileSync(
   path.join(OUTPUT_DIR, 'id-mapping.json'),
-  JSON.stringify({ originalToHex: idMapping, hexToOriginal }, null, 2)
+  JSON.stringify(allIdMappings, null, 2)
 );
 console.log('✓ Saved id-mapping.json');
 
-console.log('🎉 Unified compilation completed successfully!');
+console.log('\n🎉 Per-language compilation completed successfully!');
 console.log('📊 Summary:');
-console.log(`   • ${Object.keys(elements).length} elements compiled`);
-console.log(`   • ${LANGUAGES.length} languages supported`);
-console.log(`   • ${recipes.length} recipes processed`);
+LANGUAGES.forEach(lang => {
+  const data = allCompiledData[lang];
+  console.log(`   • ${lang}: ${data.metadata.totalElements} elements, ${data.metadata.totalRecipes} recipes`);
+});
 console.log(`   • Files saved to: ${OUTPUT_DIR}`);
+console.log('\n⚠️  Note: Generated files are in .gitignore and should not be committed to version control');
 
 // The compilation runs immediately when the script is executed
 // No need for additional function calls since the code above already runs 

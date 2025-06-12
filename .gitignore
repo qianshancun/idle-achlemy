@@ -87,4 +87,9 @@ coverage/
 
 # Temporary folders
 tmp/
-temp/ 
+temp/
+
+# Auto-generated configuration files (never commit these)
+public/elements-compiled.json
+public/id-mapping.json
+public/locales/*.json 

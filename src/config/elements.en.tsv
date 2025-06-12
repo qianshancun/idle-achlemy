@@ -1,319 +1,319 @@
-# English Element Names and Emojis
-# Format: TSV - id, name, emoji
-id	name	emoji
-water	Water	💧
-fire	Fire	🔥
-earth	Earth	🌍
-air	Air	🌬️
-steam	Steam	💨
-mud	Mud	🟫
-lava	Lava	🌋
-dust	Dust	🌫️
-lightning	Lightning	⚡
-cloud	Cloud	☁️
-rain	Rain	🌧️
-storm	Storm	⛈️
-obsidian	Obsidian	⬛
-plant	Plant	🌱
-lake	Lake	🏞️
-inferno	Inferno	🔥
-mountain	Mountain	⛰️
-wind	Wind	💨
-stone	Stone	🪨
-sand	Sand	🏜️
-glass	Glass	🪟
-sea	Sea	🌊
-beach	Beach	🏖️
-swamp	Swamp	🏞️
-volcano	Volcano	🌋
-geyser	Geyser	⛲
-mist	Mist	🌫️
-pressure	Pressure	🗜️
-energy	Energy	⚡
-earthquake	Earthquake	🌋
-tsunami	Tsunami	🌊
-sky	Sky	🌌
-sun	Sun	☀️
-moon	Moon	🌕
-night	Night	🌃
-time	Time	⏳
-tree	Tree	🌳
-forest	Forest	🌲
-wood	Wood	🪵
-salt	Salt	🧂
-primordial_soup	Primordial Soup	🥣
-life	Life	🧬
-egg	Egg	🥚
-animal	Animal	🐾
-bird	Bird	🐦
-fish	Fish	🐟
-lizard	Lizard	🦎
-dinosaur	Dinosaur	🦖
-fossil	Fossil	🦴
-flower	Flower	🌸
-grass	Grass	🌿
-bee	Bee	🐝
-honey	Honey	🍯
-tool	Tool	🔧
-human	Human	🧑
-field	Field	🌾
-farmer	Farmer	👨‍🌾
-livestock	Livestock	🐄
-clay	Clay	🏺
-pottery	Pottery	🏺
-bricks	Bricks	🧱
-house	House	🏠
-village	Village	🏘️
-city	City	🏙️
-charcoal	Charcoal	⚫
-metal	Metal	⚙️
-blade	Blade	🔪
-sword	Sword	⚔️
-warrior	Warrior	🛡️
-blood	Blood	🩸
-paper	Paper	📜
-writing	Writing	✍️
-book	Book	📖
-library	Library	📚
-knowledge	Knowledge	🧠
-civilization	Civilization	🏛️
-electricity	Electricity	⚡
-lightbulb	Light Bulb	💡
-engine	Engine	⚙️
-car	Car	🚗
-boat	Boat	⛵
-ship	Ship	🚢
-airplane	Airplane	✈️
-computer	Computer	💻
-software	Software	💾
-internet	Internet	🌐
-ai	AI	🤖
-robot	Robot	🤖
-space	Space	🚀
-spaceship	Spaceship	🚀
-alien	Alien	👽
-ufo	UFO	🛸
-story	Story	📖
-myth	Myth	📜
-magic	Magic	✨
-wizard	Wizard	🧙
-spell	Spell	🪄
-potion	Potion	🧪
-golem	Golem	🗿
-dragon	Dragon	🐉
-phoenix	Phoenix	🐦‍🔥
-horse	Horse	🐴
-unicorn	Unicorn	🦄
-mermaid	Mermaid	🧜‍♀️
-pegasus	Pegasus	🐎
-death	Death	💀
-undead	Undead	🧟
-zombie	Zombie	🧟‍♂️
-ghost	Ghost	👻
-god	God	👑
-angel	Angel	😇
-demon	Demon	😈
-heaven	Heaven	☁️
-hell	Hell	🔥
-art	Art	🎨
-music	Music	🎵
-love	Love	❤️
-dream	Dream	💭
-cold	Cold	🥶
-ice	Ice	🧊
-glacier	Glacier	🏔️
-avalanche	Avalanche	🌨️
-desert	Desert	🏜️
-oasis	Oasis	🏝️
-jungle	Jungle	🌴
-fruit	Fruit	🍎
-garden	Garden	🏡
-pollen	Pollen	🌼
-ink	Ink	✒️
-philosophy	Philosophy	🤔
-science	Science	🔬
-scientist	Scientist	👩‍🔬
-steam_engine	Steam Engine	🚂
-factory	Factory	🏭
-smoke	Smoke	💨
-smog	Smog	🌫️
-planet	Planet	🪐
-continent	Continent	🗺️
-country	Country	🇺🇳
-gold	Gold	🏆
-diamond	Diamond	💎
-money	Money	💰
-bank	Bank	🏦
-war	War	💥
-army	Army	💂
-gunpowder	Gunpowder	💣
-gun	Gun	🔫
-soldier	Soldier	💂
-king	King	🤴
-queen	Queen	👸
-castle	Castle	🏰
-knight	Knight	🛡️
-vampire	Vampire	🧛
-werewolf	Werewolf	🐺
-wolf	Wolf	🐺
-sickness	Sickness	🤢
-doctor	Doctor	👨‍⚕️
-hospital	Hospital	🏥
-medicine	Medicine	💊
-poison	Poison	☠️
-rust	Rust	🟤
-wave	Wave	🌊
-sound	Sound	🔊
-imagination	Imagination	💡
-idea	Idea	💡
-mind	Mind	🧠
-soul	Soul	👻
-happiness	Happiness	😊
-sadness	Sadness	😭
-joy	Joy	😂
-sleep	Sleep	😴
-ruler	Ruler	👑
-crown	Crown	👑
-debt	Debt	📉
-peace	Peace	🕊️
-weapon	Weapon	🗡️
-explosion	Explosion	💥
-treaty	Treaty	🤝
-ash	Ash	🌫️
-river	River	🏞️
-bridge	Bridge	🌉
-textile	Textile	🧵
-clothing	Clothing	👕
-needle	Needle	🪡
-thread	Thread	🧵
-rope	Rope	🪢
-sail	Sail	⛵
-pyramid	Pyramid	🔺
-mummy	Mummy	🧟
-hieroglyphs	Hieroglyphs	📜
-papyrus	Papyrus	📜
-letter	Letter	✉️
-mail	Mail	📫
-email	Email	📧
-meme	Meme	😂
-sushi	Sushi	🍣
-seaweed	Seaweed	🌿
-pizza	Pizza	🍕
-cheese	Cheese	🧀
-milk	Milk	🥛
-bread	Bread	🍞
-flour	Flour	🌾
-wheat	Wheat	🌾
-alcohol	Alcohol	🍷
-wine	Wine	🍷
-beer	Beer	🍺
-sake	Sake	🍶
-rice	Rice	🍚
-champagne	Champagne	🍾
-gas	Gas	💨
-caviar	Caviar	🥚
-sweat	Sweat	💦
-steam_cloud	Steam Cloud	☁️
-blizzard	Blizzard	❄️
-snow	Snow	❄️
-robot_dog	Robot Dog	🤖🐶
-dog	Dog	🐶
-cat	Cat	🐱
-mouse	Mouse	🐭
-cheese_wheel	Cheese Wheel	🧀🌀
-wheel	Wheel	🛞
-cart	Cart	🛒
-bicycle	Bicycle	🚲
-train	Train	🚆
-locomotive	Locomotive	🚂
-rocket	Rocket	🚀
-satellite	Satellite	🛰️
-telescope	Telescope	🔭
-microscope	Microscope	🔬
-virus	Virus	🦠
-bacteria	Bacteria	🧫
-antibiotic	Antibiotic	💊
-vaccine	Vaccine	💉
-ant	Ant	🐜
-spider	Spider	🕷️
-web	Web	🕸️
-honeycomb	Honeycomb	🍯🐝
-hexagon	Hexagon	⬡
-geometry	Geometry	📐
-math	Math	➗
-number	Number	🔢
-calendar	Calendar	📅
-clock	Clock	⏰
-alarm	Alarm	🚨
-music_box	Music Box	🎼📦
-box	Box	📦
-gift	Gift	🎁
-present	Present	🎁
-camera	Camera	📷
-film	Film	🎞️
-movie	Movie	🎬
-actor	Actor	🎭
-director	Director	🎬🧑‍💼
-popcorn	Popcorn	🍿
-corn	Corn	🌽
-pizza_slice	Pizza Slice	🍕🔪
-burger	Burger	🍔
-meat	Meat	🥩
-sausage	Sausage	🌭
-hotdog	Hotdog	🌭
-soda	Soda	🥤
-ice_cream	Ice Cream	🍦
-cake	Cake	🍰
-cookie	Cookie	🍪
-chocolate	Chocolate	🍫
-owl	Owl	🦉
-bat	Bat	🦇
-wolfpack	Wolfpack	🐺🐺
-werecat	Werecat	🐱🌕
-phoenix_egg	Phoenix Egg	🥚🐦‍🔥
-griffin	Griffin	🦅🦁
-lion	Lion	🦁
-tiger	Tiger	🐯
-bear	Bear	🐻
-panda	Panda	🐼
-bamboo	Bamboo	🎍
-asia	Asia	🗾
-europe	Europe	🌍
-africa	Africa	🦁
-america	America	🦅
-eagle	Eagle	🦅
-kangaroo	Kangaroo	🦘
-australia	Australia	🇦🇺
-island	Island	🏝️
-volcano_island	Volcano Island	🌋🏝️
-lava_lamp	Lava Lamp	🪔
-mirror	Mirror	🪞
-magnifying_glass	Magnifying Glass	🔍
-prism	Prism	🔺
-light	Light	💡
-shadow	Shadow	🌑
-rainbow	Rainbow	🌈
-storm_cloud	Storm Cloud	🌩️
-tornado	Tornado	🌪️
-hurricane	Hurricane	🌀
-tsunami_warning	Tsunami Warning	🚨
-flood	Flood	🌊
-drought	Drought	🌵
-cactus	Cactus	🌵
-rose	Rose	🌹
-treehouse	Treehouse	🏡
-log_cabin	Log Cabin	🏚️
-skyscraper	Skyscraper	🏢
-submarine	Submarine	🚢🌊
-spacesuit	Spacesuit	👨‍🚀
-alien_plant	Alien Plant	🪐🌱
-alien_animal	Alien Animal	👽🐾
-portal	Portal	🌀
-wizard_hat	Wizard Hat	🧙‍♂️🧢
-spellbook	Spellbook	📖🪄
-crystal_ball	Crystal Ball	🔮
-fairy	Fairy	🧚
-goblin	Goblin	👺
-troll	Troll	👹
-unicorn_horn	Unicorn Horn	🦄🦴
-bone	Bone	🦴 
+# English Elements with Recipes
+# Format: TSV - id, name, emoji, parents (empty for base elements)
+id	name	emoji	parents
+water	Water	💧	
+fire	Fire	🔥	
+earth	Earth	🌍	
+air	Air	🌬️	
+steam	Steam	💨	water+fire
+mud	Mud	🟫	water+earth
+lava	Lava	🌋	fire+earth
+dust	Dust	🌫️	air+earth
+lightning	Lightning	⚡	air+fire
+cloud	Cloud	☁️	air+water
+rain	Rain	🌧️	cloud+water
+storm	Storm	⛈️	cloud+lightning
+obsidian	Obsidian	⬛	lava+water
+plant	Plant	🌱	earth+rain
+lake	Lake	🏞️	water+water
+inferno	Inferno	🔥	fire+fire
+mountain	Mountain	⛰️	earth+earth
+wind	Wind	💨	air+air
+stone	Stone	🪨	earth+pressure
+sand	Sand	🏜️	stone+wind
+glass	Glass	🪟	sand+fire
+sea	Sea	🌊	water+lake
+beach	Beach	🏖️	sea+sand
+swamp	Swamp	🏞️	mud+plant
+volcano	Volcano	🌋	mountain+lava
+geyser	Geyser	⛲	volcano+water
+mist	Mist	🌫️	water+air
+pressure	Pressure	🗜️	air+air
+energy	Energy	⚡	lightning+lightning
+earthquake	Earthquake	🌋	earth+energy
+tsunami	Tsunami	🌊	earthquake+sea
+sky	Sky	🌌	air+cloud
+sun	Sun	☀️	fire+sky
+moon	Moon	🌕	sky+stone
+night	Night	🌃	moon+sky
+time	Time	⏳	sun+moon
+tree	Tree	🌳	plant+time
+forest	Forest	🌲	tree+tree
+wood	Wood	🪵	tree+tool
+salt	Salt	🧂	sea+fire
+primordial_soup	Primordial Soup	🥣	water+energy
+life	Life	🧬	primordial_soup+lightning
+egg	Egg	🥚	life+life
+animal	Animal	🐾	life+earth
+bird	Bird	🐦	animal+air
+fish	Fish	🐟	animal+water
+lizard	Lizard	🦎	animal+swamp
+dinosaur	Dinosaur	🦖	lizard+time
+fossil	Fossil	🦴	dinosaur+earth
+flower	Flower	🌸	plant+sun
+grass	Grass	🌿	plant+earth
+bee	Bee	🐝	flower+animal
+honey	Honey	🍯	bee+flower
+tool	Tool	🔧	stone+wood
+human	Human	🧑	animal+tool
+field	Field	🌾	earth+tool
+farmer	Farmer	👨‍🌾	human+field
+livestock	Livestock	🐄	animal+farmer
+clay	Clay	🏺	mud+tool
+pottery	Pottery	🏺	clay+fire
+bricks	Bricks	🧱	clay+fire
+house	House	🏠	bricks+wood
+village	Village	🏘️	house+house
+city	City	🏙️	village+village
+charcoal	Charcoal	⚫	wood+fire
+metal	Metal	⚙️	stone+fire
+blade	Blade	🔪	metal+stone
+sword	Sword	⚔️	blade+metal
+warrior	Warrior	🛡️	human+sword
+blood	Blood	🩸	human+blade
+paper	Paper	📜	wood+water
+writing	Writing	✍️	paper+human
+book	Book	📖	paper+writing
+library	Library	📚	book+book
+knowledge	Knowledge	🧠	book+human
+civilization	Civilization	🏛️	city+knowledge
+electricity	Electricity	⚡	lightning+metal
+lightbulb	Light Bulb	💡	electricity+glass
+engine	Engine	⚙️	metal+steam
+car	Car	🚗	engine+metal
+boat	Boat	⛵	wood+water
+ship	Ship	🚢	boat+metal
+airplane	Airplane	✈️	bird+metal
+computer	Computer	💻	electricity+metal
+software	Software	💾	computer+knowledge
+internet	Internet	🌐	computer+computer
+ai	AI	🤖	computer+knowledge
+robot	Robot	🤖	metal+ai
+space	Space	🚀	sky+airplane
+spaceship	Spaceship	🚀	space+metal
+alien	Alien	👽	space+life
+ufo	UFO	🛸	alien+spaceship
+story	Story	📖	human+book
+myth	Myth	📜	story+time
+magic	Magic	✨	energy+knowledge
+wizard	Wizard	🧙	human+magic
+spell	Spell	🪄	magic+book
+potion	Potion	🧪	magic+water
+golem	Golem	🗿	clay+magic
+dragon	Dragon	🐉	lizard+magic
+phoenix	Phoenix	🐦‍🔥	bird+fire
+horse	Horse	🐴	animal+human
+unicorn	Unicorn	🦄	horse+magic
+mermaid	Mermaid	🧜‍♀️	human+fish
+pegasus	Pegasus	🐎	horse+bird
+death	Death	💀	life+time
+undead	Undead	🧟	death+magic
+zombie	Zombie	🧟‍♂️	undead+human
+ghost	Ghost	👻	death+energy
+god	God	👑	human+immortality
+angel	Angel	😇	human+heaven
+demon	Demon	😈	human+hell
+heaven	Heaven	☁️	sky+god
+hell	Hell	🔥	fire+death
+art	Art	🎨	human+color
+music	Music	🎵	sound+human
+love	Love	❤️	human+human
+dream	Dream	💭	human+sleep
+cold	Cold	🥶	water+air
+ice	Ice	🧊	cold+water
+glacier	Glacier	🏔️	ice+mountain
+avalanche	Avalanche	🌨️	glacier+earthquake
+desert	Desert	🏜️	sand+sun
+oasis	Oasis	🏝️	desert+water
+jungle	Jungle	🌴	forest+rain
+fruit	Fruit	🍎	tree+flower
+garden	Garden	🏡	plant+house
+pollen	Pollen	🌼	flower+wind
+ink	Ink	✒️	water+charcoal
+philosophy	Philosophy	🤔	human+knowledge
+science	Science	🔬	knowledge+tool
+scientist	Scientist	👩‍🔬	human+science
+steam_engine	Steam Engine	🚂	steam+engine
+factory	Factory	🏭	steam_engine+house
+smoke	Smoke	💨	fire+wood
+smog	Smog	🌫️	smoke+city
+planet	Planet	🪐	earth+space
+continent	Continent	🗺️	earth+earth
+country	Country	🇺🇳	continent+human
+gold	Gold	🏆	metal+sun
+diamond	Diamond	💎	carbon+pressure
+money	Money	💰	gold+human
+bank	Bank	🏦	money+house
+war	War	💥	human+sword
+army	Army	💂	warrior+warrior
+gunpowder	Gunpowder	💣	charcoal+salt
+gun	Gun	🔫	gunpowder+metal
+soldier	Soldier	💂	human+gun
+king	King	🤴	human+crown
+queen	Queen	👸	human+crown
+castle	Castle	🏰	house+king
+knight	Knight	🛡️	warrior+horse
+vampire	Vampire	🧛	human+blood
+werewolf	Werewolf	🐺	human+wolf
+wolf	Wolf	🐺	dog+wild
+sickness	Sickness	🤢	human+bacteria
+doctor	Doctor	👨‍⚕️	human+medicine
+hospital	Hospital	🏥	house+doctor
+medicine	Medicine	💊	plant+science
+poison	Poison	☠️	plant+death
+rust	Rust	🟤	metal+water
+wave	Wave	🌊	water+wind
+sound	Sound	🔊	air+energy
+imagination	Imagination	💡	human+dream
+idea	Idea	💡	human+lightbulb
+mind	Mind	🧠	human+brain
+soul	Soul	👻	human+spirit
+happiness	Happiness	😊	human+joy
+sadness	Sadness	😭	human+rain
+joy	Joy	😂	human+music
+sleep	Sleep	😴	human+night
+ruler	Ruler	👑	human+power
+crown	Crown	👑	gold+king
+debt	Debt	📉	money+time
+peace	Peace	🕊️	love+world
+weapon	Weapon	🗡️	tool+war
+explosion	Explosion	💥	gunpowder+fire
+treaty	Treaty	🤝	peace+paper
+ash	Ash	🌫️	fire+wood
+river	River	🏞️	water+mountain
+bridge	Bridge	🌉	river+wood
+textile	Textile	🧵	thread+thread
+clothing	Clothing	👕	textile+human
+needle	Needle	🪡	metal+thread
+thread	Thread	🧵	cotton+tool
+rope	Rope	🪢	thread+thread
+sail	Sail	⛵	cloth+wind
+pyramid	Pyramid	🔺	stone+desert
+mummy	Mummy	🧟	human+pyramid
+hieroglyphs	Hieroglyphs	📜	writing+pyramid
+papyrus	Papyrus	📜	plant+water
+letter	Letter	✉️	paper+writing
+mail	Mail	📫	letter+horse
+email	Email	📧	letter+internet
+meme	Meme	😂	internet+humor
+sushi	Sushi	🍣	fish+rice
+seaweed	Seaweed	🌿	plant+sea
+pizza	Pizza	🍕	bread+cheese
+cheese	Cheese	🧀	milk+bacteria
+milk	Milk	🥛	cow+human
+bread	Bread	🍞	flour+fire
+flour	Flour	🌾	wheat+tool
+wheat	Wheat	🌾	grass+farmer
+alcohol	Alcohol	🍷	fruit+time
+wine	Wine	🍷	grape+alcohol
+beer	Beer	🍺	wheat+alcohol
+sake	Sake	🍶	rice+alcohol
+rice	Rice	🍚	grass+water
+champagne	Champagne	🍾	wine+pressure
+gas	Gas	💨	air+pressure
+caviar	Caviar	🥚	fish+luxury
+sweat	Sweat	💦	human+heat
+steam_cloud	Steam Cloud	☁️	steam+cloud
+blizzard	Blizzard	❄️	snow+wind
+snow	Snow	❄️	ice+cloud
+robot_dog	Robot Dog	🤖🐶	robot+dog
+dog	Dog	🐶	wolf+human
+cat	Cat	🐱	animal+house
+mouse	Mouse	🐭	animal+cheese
+cheese_wheel	Cheese Wheel	🧀🌀	cheese+wheel
+wheel	Wheel	🛞	wood+tool
+cart	Cart	🛒	wheel+wood
+bicycle	Bicycle	🚲	wheel+wheel
+train	Train	🚆	steam_engine+cart
+locomotive	Locomotive	🚂	train+steam
+rocket	Rocket	🚀	fire+metal
+satellite	Satellite	🛰️	rocket+space
+telescope	Telescope	🔭	glass+metal
+microscope	Microscope	🔬	glass+science
+virus	Virus	🦠	bacteria+sickness
+bacteria	Bacteria	🧫	life+swamp
+antibiotic	Antibiotic	💊	medicine+bacteria
+vaccine	Vaccine	💉	medicine+virus
+ant	Ant	🐜	animal+sugar
+spider	Spider	🕷️	animal+web
+web	Web	🕸️	spider+thread
+honeycomb	Honeycomb	🍯🐝	bee+wax
+hexagon	Hexagon	⬡	geometry+six
+geometry	Geometry	📐	math+shape
+math	Math	➗	number+logic
+number	Number	🔢	human+count
+calendar	Calendar	📅	time+paper
+clock	Clock	⏰	time+metal
+alarm	Alarm	🚨	clock+sound
+music_box	Music Box	🎼📦	music+box
+box	Box	📦	wood+tool
+gift	Gift	🎁	box+love
+present	Present	🎁	gift+time
+camera	Camera	📷	light+box
+film	Film	🎞️	camera+time
+movie	Movie	🎬	film+story
+actor	Actor	🎭	human+movie
+director	Director	🎬🧑‍💼	human+movie
+popcorn	Popcorn	🍿	corn+fire
+corn	Corn	🌽	plant+sun
+pizza_slice	Pizza Slice	🍕🔪	pizza+blade
+burger	Burger	🍔	bread+meat
+meat	Meat	🥩	animal+blade
+sausage	Sausage	🌭	meat+tube
+hotdog	Hotdog	🌭	sausage+bread
+soda	Soda	🥤	water+sugar
+ice_cream	Ice Cream	🍦	milk+ice
+cake	Cake	🍰	flour+sugar
+cookie	Cookie	🍪	flour+sugar
+chocolate	Chocolate	🍫	cocoa+sugar
+owl	Owl	🦉	bird+night
+bat	Bat	🦇	bird+vampire
+wolfpack	Wolfpack	🐺🐺	wolf+wolf
+werecat	Werecat	🐱🌕	cat+werewolf
+phoenix_egg	Phoenix Egg	🥚🐦‍🔥	phoenix+egg
+griffin	Griffin	🦅🦁	eagle+lion
+lion	Lion	🦁	cat+wild
+tiger	Tiger	🐯	cat+orange
+bear	Bear	🐻	animal+forest
+panda	Panda	🐼	bear+bamboo
+bamboo	Bamboo	🎍	grass+asia
+asia	Asia	🗾	continent+rice
+europe	Europe	🌍	continent+castle
+africa	Africa	🦁	continent+lion
+america	America	🦅	continent+eagle
+eagle	Eagle	🦅	bird+mountain
+kangaroo	Kangaroo	🦘	animal+australia
+australia	Australia	🇦🇺	continent+kangaroo
+island	Island	🏝️	water+volcano
+volcano_island	Volcano Island	🌋🏝️	volcano+island
+lava_lamp	Lava Lamp	🪔	lava+glass
+mirror	Mirror	🪞	glass+silver
+magnifying_glass	Magnifying Glass	🔍	glass+sun
+prism	Prism	🔺	glass+light
+light	Light	💡	electricity+glass
+shadow	Shadow	🌑	light+wall
+rainbow	Rainbow	🌈	light+rain
+storm_cloud	Storm Cloud	🌩️	cloud+electricity
+tornado	Tornado	🌪️	wind+storm
+hurricane	Hurricane	🌀	wind+ocean
+tsunami_warning	Tsunami Warning	🚨	tsunami+alarm
+flood	Flood	🌊	rain+river
+drought	Drought	🌵	desert+time
+cactus	Cactus	🌵	plant+desert
+rose	Rose	🌹	flower+love
+treehouse	Treehouse	🏡	tree+house
+log_cabin	Log Cabin	🏚️	wood+house
+skyscraper	Skyscraper	🏢	building+sky
+submarine	Submarine	🚢🌊	ship+water
+spacesuit	Spacesuit	👨‍🚀	clothing+space
+alien_plant	Alien Plant	🪐🌱	plant+alien
+alien_animal	Alien Animal	👽🐾	animal+alien
+portal	Portal	🌀	magic+space
+wizard_hat	Wizard Hat	🧙‍♂️🧢	wizard+hat
+spellbook	Spellbook	📖🪄	book+magic
+crystal_ball	Crystal Ball	🔮	glass+magic
+fairy	Fairy	🧚	magic+flower
+goblin	Goblin	👺	magic+cave
+troll	Troll	👹	magic+bridge
+unicorn_horn	Unicorn Horn	🦄🦴	unicorn+bone
+bone	Bone	🦴	animal+death 

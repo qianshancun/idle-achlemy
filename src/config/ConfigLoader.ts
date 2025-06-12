@@ -1,13 +1,12 @@
 export interface ElementDefinition {
   id: string; // hex ID
-  stringId: string; // original string ID for debugging
+  originalId: string; // original string ID for debugging
   name: string; // current language name
-  emoji: string; // current language emoji
+  emoji: string; // emoji (same across languages)
   color: number;
-  category: 'basic' | 'nature' | 'human' | 'abstract' | 'advanced';
+  category: 'basic' | 'nature' | 'science' | 'life' | 'civilization' | 'technology' | 'magic' | 'abstract';
   discovered: boolean;
-  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-  recipe: [string, string] | null; // hex IDs of ingredients, null for base elements
+  rarity: 'basic' | 'common' | 'uncommon' | 'rare' | 'legendary';
 }
 
 export interface Recipe {
@@ -19,18 +18,21 @@ export interface Recipe {
 
 interface CompiledElementData {
   id: string; // hex ID
-  stringId: string; // original string ID
+  originalId: string; // original string ID
+  emoji: string; // emoji (same across languages)
   names: Record<string, string>; // language -> name mapping
-  emojis: Record<string, string>; // language -> emoji mapping  
-  recipe: [string, string] | null; // hex IDs
+  rarity: string;
+  category: string;
 }
 
 interface CompiledConfig {
   elements: Record<string, CompiledElementData>; // hex ID -> element data
+  recipes: Recipe[]; // recipes array
   metadata: {
     version: string;
-    compiled: string;
+    compiledAt: string;
     totalElements: number;
+    totalRecipes: number;
     languages: string[];
   };
 }
@@ -45,11 +47,14 @@ class ConfigLoader {
   private getElementColor(hexId: string, category: string): number {
     // Use category-based coloring with some specific overrides
     const categoryColors: Record<string, number> = {
-      'basic': 0x4FC3F7,      // Light blue
-      'nature': 0x4CAF50,     // Green
-      'human': 0xFF9800,      // Orange
-      'abstract': 0x9C27B0,   // Purple
-      'advanced': 0xF44336    // Red
+      'basic': 0x4FC3F7,        // Light blue
+      'nature': 0x4CAF50,       // Green
+      'science': 0x2196F3,      // Blue
+      'life': 0x8BC34A,         // Light green
+      'civilization': 0xFF9800, // Orange
+      'technology': 0x607D8B,   // Blue grey
+      'magic': 0x9C27B0,        // Purple
+      'abstract': 0xE91E63      // Pink
     };
     
     // Specific hex ID overrides
@@ -63,42 +68,18 @@ class ConfigLoader {
     return specificColors[hexId] || categoryColors[category] || 0x888888;
   }
 
-  // Determine element category based on hex ID range
-  private getElementCategory(hexId: string): 'basic' | 'nature' | 'human' | 'abstract' | 'advanced' {
-    const id = parseInt(hexId, 16);
-    if (id < 4) return 'basic';           // 0-3: basic elements
-    if (id < 50) return 'nature';         // 4-49: nature elements  
-    if (id < 150) return 'human';         // 50-149: human/civilization
-    if (id < 250) return 'abstract';      // 150-249: abstract/mythical
-    return 'advanced';                    // 250+: advanced concepts
-  }
-
-  // Determine rarity based on category and discovery status
-  private getElementRarity(category: string, isBasic: boolean): 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' {
-    if (isBasic) return 'common';
-    
-    switch (category) {
-      case 'basic': return 'common';
-      case 'nature': return 'uncommon';
-      case 'human': return 'rare';
-      case 'abstract': return 'epic';
-      case 'advanced': return 'legendary';
-      default: return 'common';
-    }
-  }
-
-  // Set the current language for element names/emojis
+  // Set the current language for element names
   setLanguage(language: string): void {
     this.currentLanguage = language;
     this.updateElementLanguage();
   }
 
-  // Update all element names/emojis when language changes
+  // Update all element names when language changes
   private updateElementLanguage(): void {
-    // This will be called when language changes to update element names
-    // For now, we'll reload the data with the new language
     if (this.initialized) {
       console.log(`🌐 Switching to language: ${this.currentLanguage}`);
+      // For now, we'll trigger a reload when language changes
+      // This could be optimized later to update names in place
     }
   }
 
@@ -115,6 +96,7 @@ class ConfigLoader {
       
       console.log(`📊 Loaded compiled config v${compiled.metadata.version}`);
       console.log(`📁 Contains ${compiled.metadata.totalElements} elements`);
+      console.log(`🔧 Contains ${compiled.metadata.totalRecipes} recipes`);
       console.log(`🌐 Supported languages: ${compiled.metadata.languages.join(', ')}`);
       
       // Clear existing data
@@ -127,24 +109,21 @@ class ConfigLoader {
       // Process elements
       let discoveredCount = 0;
       for (const [hexId, elementData] of Object.entries(compiled.elements)) {
-        const category = this.getElementCategory(hexId);
         const isBasic = baseElementIds.includes(hexId);
         const discovered = isBasic;
         
-        // Get name and emoji for current language, fallback to English
-        const name = elementData.names[this.currentLanguage] || elementData.names['en'] || elementData.stringId;
-        const emoji = elementData.emojis[this.currentLanguage] || elementData.emojis['en'] || '❓';
+        // Get name for current language, fallback to English
+        const name = elementData.names[this.currentLanguage] || elementData.names['en'] || elementData.originalId;
         
         const elementDef: ElementDefinition = {
           id: hexId,
-          stringId: elementData.stringId,
+          originalId: elementData.originalId,
           name,
-          emoji,
-          color: this.getElementColor(hexId, category),
-          category,
+          emoji: elementData.emoji,
+          color: this.getElementColor(hexId, elementData.category),
+          category: elementData.category as any,
           discovered,
-          rarity: this.getElementRarity(category, isBasic),
-          recipe: elementData.recipe
+          rarity: elementData.rarity as any
         };
         
         this.elements.set(hexId, elementDef);
@@ -153,18 +132,15 @@ class ConfigLoader {
           discoveredCount++;
           console.log(`✅ Base element: ${hexId} (${name})`);
         }
-        
-        // Create recipe if element has one
-        if (elementData.recipe) {
-          const recipeDef: Recipe = {
-            id: `${elementData.recipe[0]}_${elementData.recipe[1]}`,
-            inputs: elementData.recipe,
-            output: hexId,
-            discoveryMessage: name
-          };
-          this.recipes.push(recipeDef);
-        }
       }
+      
+      // Process recipes
+      this.recipes = compiled.recipes.map(recipe => ({
+        id: `${recipe.inputs[0]}_${recipe.inputs[1]}`,
+        inputs: recipe.inputs,
+        output: recipe.output,
+        discoveryMessage: this.elements.get(recipe.output)?.name || 'New element discovered!'
+      }));
       
       console.log(`✅ Loaded ${this.elements.size} elements and ${this.recipes.length} recipes`);
       console.log(`🎯 ${discoveredCount} base elements discovered`);
@@ -179,10 +155,10 @@ class ConfigLoader {
   private loadFallbackElements(): void {
     console.log('🔄 Loading fallback elements...');
     const fallbackElements = [
-      { id: '0', stringId: 'water', name: 'Water', emoji: '💧' },
-      { id: '1', stringId: 'fire', name: 'Fire', emoji: '🔥' },
-      { id: '2', stringId: 'earth', name: 'Earth', emoji: '🌍' },
-      { id: '3', stringId: 'air', name: 'Air', emoji: '🌬️' }
+      { id: '0', originalId: 'water', name: 'Water', emoji: '💧' },
+      { id: '1', originalId: 'fire', name: 'Fire', emoji: '🔥' },
+      { id: '2', originalId: 'earth', name: 'Earth', emoji: '🌍' },
+      { id: '3', originalId: 'air', name: 'Air', emoji: '🌬️' }
     ];
     
     for (const elem of fallbackElements) {
@@ -191,8 +167,7 @@ class ConfigLoader {
         color: this.getElementColor(elem.id, 'basic'),
         category: 'basic',
         discovered: true,
-        rarity: 'common',
-        recipe: null
+        rarity: 'basic'
       };
       
       this.elements.set(elem.id, elementDef);
@@ -250,12 +225,11 @@ class ConfigLoader {
     return this.recipes.filter(r => r.output === elementId);
   }
 
-  // Update element name/emoji for current language (used by i18n system)
-  updateElementForLanguage(elementId: string, name: string, emoji: string): void {
+  // Update element name for current language (used by i18n system)
+  updateElementForLanguage(elementId: string, name: string): void {
     const element = this.elements.get(elementId);
     if (element) {
       element.name = name;
-      element.emoji = emoji;
     }
   }
 

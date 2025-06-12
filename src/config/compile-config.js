@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 /**
  * Configuration Compiler for Idle Alchemy Game
@@ -13,342 +14,294 @@ const path = require('path');
  * - Generates compiled game configuration and i18n translation files
  */
 
-// Configuration
-const SOURCE_DIR = path.join(__dirname);
-const OUTPUT_DIR = path.join(__dirname, '../../public');
-const LOCALES_DIR = path.join(OUTPUT_DIR, 'locales');
+console.log('🔧 Starting unified configuration compilation...');
 
-// Supported languages
-const LANGUAGES = {
-    en: 'English',
-    es: 'Español'
+// Configuration
+const CONFIG_DIR = path.join(__dirname);
+const OUTPUT_DIR = path.join(__dirname, '../../public');
+const LANGUAGES = ['en', 'es'];
+
+// Base elements get fixed hex IDs
+const BASE_ELEMENTS = {
+  'water': '0',
+  'fire': '1', 
+  'earth': '2',
+  'air': '3'
 };
 
-/**
- * Parse TSV file into array of objects
- */
+// Generate hex ID for non-base elements
+function generateHexId(elementId) {
+  if (BASE_ELEMENTS[elementId]) {
+    return BASE_ELEMENTS[elementId];
+  }
+  
+  // Generate hash and take first 3 characters, offset by 4 to avoid base element IDs
+  const hash = crypto.createHash('md5').update(elementId).digest('hex');
+  const hexValue = parseInt(hash.substring(0, 3), 16) + 4;
+  return hexValue.toString(16).toUpperCase();
+}
+
+// Parse TSV file
 function parseTSV(filePath) {
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`TSV file not found: ${filePath}`);
+  const content = fs.readFileSync(filePath, 'utf-8');
+  const lines = content.split('\n').filter(line => line.trim() && !line.startsWith('#'));
+  
+  if (lines.length === 0) {
+    throw new Error(`No data found in ${filePath}`);
+  }
+  
+  const headers = lines[0].split('\t');
+  const data = [];
+  
+  for (let i = 1; i < lines.length; i++) {
+    const values = lines[i].split('\t');
+    if (values.length >= headers.length) {
+      const row = {};
+      headers.forEach((header, index) => {
+        row[header.trim()] = values[index] ? values[index].trim() : '';
+      });
+      data.push(row);
     }
-    
-    const content = fs.readFileSync(filePath, 'utf-8');
-    const lines = content.split('\n').filter(line => line.trim() && !line.startsWith('#'));
-    
-    if (lines.length < 2) {
-        throw new Error(`Invalid TSV file: ${filePath} - need at least header and one data row`);
-    }
-    
-    const headers = lines[0].split('\t');
-    const data = [];
-    
-    for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split('\t');
-        if (values.length !== headers.length) {
-            console.warn(`Warning: Row ${i + 1} in ${filePath} has ${values.length} columns, expected ${headers.length}`);
-            continue;
-        }
-        
-        const row = {};
-        headers.forEach((header, index) => {
-            row[header] = values[index] || '';
-        });
-        data.push(row);
-    }
-    
-    return data;
+  }
+  
+  return data;
 }
 
-/**
- * Convert string ID to hexadecimal value
- * Uses a simple hash function to generate consistent hex IDs
- * Base elements get special fixed IDs
- */
-function stringToHex(str) {
-    // Fixed IDs for base elements
-    const baseElements = {
-        'water': '0',
-        'fire': '1', 
-        'earth': '2',
-        'air': '3'
+// Load and process all language files
+console.log('📚 Loading unified source files...');
+const languageData = {};
+const allElementIds = new Set();
+
+for (const lang of LANGUAGES) {
+  const filePath = path.join(CONFIG_DIR, `elements.${lang}.tsv`);
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Missing language file: ${filePath}`);
+  }
+  
+  const data = parseTSV(filePath);
+  languageData[lang] = data;
+  
+  // Collect all element IDs
+  data.forEach(row => {
+    if (row.id) {
+      allElementIds.add(row.id);
+    }
+  });
+  
+  console.log(`✓ Loaded ${data.length} elements for ${lang === 'en' ? 'English' : 'Español'}`);
+}
+
+console.log('⚙️  Generating compiled data...');
+
+// Generate hex IDs for all elements
+const idMapping = {};
+const hexToOriginal = {};
+allElementIds.forEach(id => {
+  const hexId = generateHexId(id);
+  idMapping[id] = hexId;
+  hexToOriginal[hexId] = id;
+});
+
+// Build elements and recipes data
+const elements = {};
+const recipes = [];
+const translations = {};
+
+// Initialize translations for each language
+LANGUAGES.forEach(lang => {
+  translations[lang] = {
+    ui: {
+      buttons: {
+        autoArrange: lang === 'es' ? 'Organizar Automáticamente' : 'Auto Arrange',
+        removeDuplicate: lang === 'es' ? 'Eliminar Duplicados' : 'Remove Duplicate',
+        clear: lang === 'es' ? 'Limpiar' : 'Clear',
+        reset: lang === 'es' ? 'Reiniciar' : 'Reset',
+        close: lang === 'es' ? 'Cerrar' : 'Close'
+      },
+      titles: {
+        discovered: lang === 'es' ? 'Descubiertos ({{count}})' : 'Discovered ({{count}})',
+        canvas: lang === 'es' ? 'Lienzo ({{count}})' : 'Canvas ({{count}})',
+        help: lang === 'es' ? 'Ayuda' : 'Help',
+        howToPlay: lang === 'es' ? 'Cómo Jugar' : 'How to Play',
+        elements: lang === 'es' ? 'Elementos' : 'Elements'
+      },
+      messages: {
+        discovered: lang === 'es' ? '¡Descubierto {{element}}!' : 'Discovered {{element}}!',
+        duplicate: lang === 'es' ? 'Ya tienes este elemento' : 'You already have this element',
+        cannotCombine: lang === 'es' ? 'No se pueden combinar estos elementos' : 'Cannot combine these elements',
+        cleared: lang === 'es' ? 'Lienzo limpiado' : 'Canvas cleared',
+        reset: lang === 'es' ? 'Juego reiniciado' : 'Game reset',
+        elementsArranged: lang === 'es' ? '¡Elementos organizados!' : 'Elements arranged!',
+        noDuplicatesFound: lang === 'es' ? '¡No se encontraron duplicados!' : 'No duplicates found!',
+        removedDuplicates: lang === 'es' ? '¡Eliminados {{count}} duplicado{{s}}!' : 'Removed {{count}} duplicate{{s}}!',
+        canvasCleared: lang === 'es' ? '¡Lienzo limpiado!' : 'Canvas cleared!',
+        gameReset: lang === 'es' ? '¡Juego reiniciado!' : 'Game reset!',
+        added: lang === 'es' ? '¡Agregado {{element}}!' : 'Added {{element}}!',
+        keepExperimenting: lang === 'es' ? '¡Sigue experimentando!' : 'Keep experimenting!'
+      },
+      instructions: {
+        step1: lang === 'es' ? 'Arrastra elementos desde el panel de descubrimientos' : 'Drag elements from the discovery panel',
+        step2: lang === 'es' ? 'Combina dos elementos arrastrando uno sobre otro' : 'Combine two elements by dragging one onto another',
+        step3: lang === 'es' ? 'Descubre nuevos elementos experimentando' : 'Discover new elements by experimenting',
+        step4: lang === 'es' ? 'Usa los botones para organizar y limpiar' : 'Use buttons to arrange and clean up',
+        step5: lang === 'es' ? 'Haz clic en el botón de ayuda para más información' : 'Click the help button for more information'
+      },
+      confirmations: {
+        clear: lang === 'es' ? '¿Limpiar todos los elementos del lienzo?' : 'Clear all elements from canvas?',
+        reset: lang === 'es' ? '¿Reiniciar el juego y perder todo el progreso?' : 'Reset game and lose all progress?',
+        clearCanvas: {
+          title: lang === 'es' ? 'Limpiar Lienzo' : 'Clear Canvas',
+          message: lang === 'es' ? '¿Estás seguro de que quieres limpiar todos los elementos del lienzo?' : 'Are you sure you want to clear all elements from the canvas?',
+          confirm: lang === 'es' ? 'Limpiar' : 'Clear',
+          cancel: lang === 'es' ? 'Cancelar' : 'Cancel'
+        },
+        resetGame: {
+          title: lang === 'es' ? 'Reiniciar Juego' : 'Reset Game',
+          message: lang === 'es' ? '¿Estás seguro de que quieres reiniciar el juego? Se perderá todo el progreso.' : 'Are you sure you want to reset the game? All progress will be lost.',
+          confirm: lang === 'es' ? 'Reiniciar' : 'Reset',
+          cancel: lang === 'es' ? 'Cancelar' : 'Cancel'
+        }
+      },
+      languageSelector: {
+        label: lang === 'es' ? 'Idioma' : 'Language'
+      },
+      dragToCanvas: lang === 'es' ? 'Arrastra al lienzo' : 'Drag to canvas'
+    },
+    hints: {
+      tryCombing: lang === 'es' ? 'Intenta combinar {{element1}} con {{element2}}' : 'Try combining {{element1}} with {{element2}}'
+    }
+  };
+});
+
+// Process each language to build elements and extract recipes
+const processedRecipes = new Map(); // Track recipe inputs -> outputs for duplicate detection
+
+languageData['en'].forEach(row => {
+  const hexId = idMapping[row.id];
+  
+  // Build element definition
+  if (!elements[hexId]) {
+    elements[hexId] = {
+      id: hexId,
+      originalId: row.id,
+      emoji: row.emoji,
+      names: {},
+      rarity: determineRarity(hexId),
+      category: determineCategory(hexId)
     };
-    
-    if (baseElements[str]) {
-        return baseElements[str];
+  }
+  
+  // Add names for all languages
+  LANGUAGES.forEach(lang => {
+    const langData = languageData[lang].find(item => item.id === row.id);
+    if (langData) {
+      elements[hexId].names[lang] = langData.name;
     }
-    
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32-bit integer
-    }
-    
-    // Convert to positive hex value (2-3 characters)
-    // Skip 0-3 since they're reserved for base elements
-    let hex = (Math.abs(hash) % 0xFFF) + 4;
-    return hex.toString(16).toUpperCase();
-}
-
-/**
- * Load all language data from TSV files
- */
-function loadLanguageData() {
-    const languageData = {};
-    
-    for (const [langCode, langName] of Object.entries(LANGUAGES)) {
-        const tsvPath = path.join(SOURCE_DIR, `elements.${langCode}.tsv`);
-        try {
-            const data = parseTSV(tsvPath);
-            languageData[langCode] = data;
-            console.log(`✓ Loaded ${data.length} elements for ${langName}`);
-        } catch (error) {
-            console.error(`✗ Failed to load ${langName} language file:`, error.message);
+  });
+  
+  // Process recipe if it has parents
+  if (row.parents && row.parents.trim()) {
+    const parents = row.parents.split('+').map(p => p.trim());
+    if (parents.length === 2) {
+      const input1 = idMapping[parents[0]];
+      const input2 = idMapping[parents[1]];
+      
+      if (input1 && input2) {
+        const recipeKey = [input1, input2].sort().join('+');
+        
+        // Check for duplicate recipes (same inputs, different outputs)
+        if (processedRecipes.has(recipeKey)) {
+          const existingOutput = processedRecipes.get(recipeKey);
+          const existingElement = Object.values(elements).find(e => e.id === existingOutput);
+          console.error(`❌ DUPLICATE RECIPE ERROR: ${row.parents} produces both "${existingElement?.originalId}" and "${row.id}"`);
+          console.error(`   This will cause unpredictable behavior in the game!`);
+          console.error(`   Please fix by using different ingredient combinations.`);
+        } else {
+          recipes.push({
+            inputs: [input1, input2],
+            output: hexId
+          });
+          processedRecipes.set(recipeKey, hexId);
         }
+      } else {
+        console.warn(`Warning: Recipe for ${row.id} contains unknown elements: ${row.parents}`);
+      }
     }
-    
-    return languageData;
+  }
+});
+
+// Determine rarity based on hex ID ranges
+function determineRarity(hexId) {
+  const numericId = parseInt(hexId, 16);
+  if (numericId < 4) return 'basic';
+  if (numericId < 50) return 'common';
+  if (numericId < 200) return 'uncommon';
+  if (numericId < 500) return 'rare';
+  return 'legendary';
 }
 
-/**
- * Load recipe data from TSV file
- */
-function loadRecipeData() {
-    const recipePath = path.join(SOURCE_DIR, 'recipes.tsv');
-    try {
-        const data = parseTSV(recipePath);
-        console.log(`✓ Loaded ${data.length} recipes`);
-        return data;
-    } catch (error) {
-        console.error('✗ Failed to load recipes:', error.message);
-        return [];
-    }
+// Determine category based on hex ID ranges  
+function determineCategory(hexId) {
+  const numericId = parseInt(hexId, 16);
+  if (numericId < 4) return 'basic';
+  if (numericId < 20) return 'nature';
+  if (numericId < 50) return 'science';
+  if (numericId < 100) return 'life';
+  if (numericId < 200) return 'civilization';
+  if (numericId < 300) return 'technology';
+  if (numericId < 400) return 'magic';
+  return 'abstract';
 }
 
-/**
- * Generate element definitions with hex IDs
- */
-function generateElements(languageData, recipes) {
-    const elements = {};
-    const idToHex = {};
-    
-    // Use English as the master list for element IDs
-    const masterElements = languageData.en || [];
-    
-    masterElements.forEach(element => {
-        const hexId = stringToHex(element.id);
-        idToHex[element.id] = hexId;
-        
-        elements[hexId] = {
-            id: hexId,
-            stringId: element.id,
-            names: {},
-            emojis: {},
-            recipe: null
-        };
-        
-        // Add names and emojis for all languages
-        for (const [langCode, langElements] of Object.entries(languageData)) {
-            const langElement = langElements.find(e => e.id === element.id);
-            if (langElement) {
-                elements[hexId].names[langCode] = langElement.name;
-                elements[hexId].emojis[langCode] = langElement.emoji;
-            }
-        }
-    });
-    
-    // Add recipes
-    recipes.forEach(recipe => {
-        const hexId = idToHex[recipe.id];
-        if (hexId && elements[hexId]) {
-            if (recipe.recipe && recipe.recipe.includes('+')) {
-                const [id1, id2] = recipe.recipe.split('+');
-                const hex1 = idToHex[id1];
-                const hex2 = idToHex[id2];
-                
-                if (hex1 && hex2) {
-                    elements[hexId].recipe = [hex1, hex2];
-                } else {
-                    console.warn(`Warning: Recipe for ${recipe.id} contains unknown elements: ${recipe.recipe}`);
-                }
-            }
-        }
-    });
-    
-    return { elements, idToHex };
-}
+console.log(`✓ Generated ${Object.keys(elements).length} elements with hex IDs`);
+console.log(`✓ Generated translations for ${LANGUAGES.length} languages`);
+console.log(`✓ Generated ${recipes.length} recipes`);
 
-/**
- * Generate i18n translation files
- */
-function generateTranslations(elements, languageData) {
-    const translations = {};
-    
-    for (const langCode of Object.keys(LANGUAGES)) {
-              translations[langCode] = {
-        ui: {
-          buttons: {
-            autoArrange: langCode === 'es' ? 'Auto Organizar' : 'Auto Arrange',
-            removeDuplicate: langCode === 'es' ? 'Eliminar Duplicados' : 'Remove Duplicate',
-            clear: langCode === 'es' ? 'Limpiar' : 'Clear',
-            reset: langCode === 'es' ? 'Reiniciar' : 'Reset',
-            close: langCode === 'es' ? 'Cerrar' : 'Close'
-          },
-          titles: {
-            discovered: langCode === 'es' ? 'Descubierto ({{count}})' : 'Discovered ({{count}})',
-            canvas: langCode === 'es' ? 'Lienzo ({{count}})' : 'Canvas ({{count}})',
-            help: langCode === 'es' ? 'Ayuda' : 'Help',
-            howToPlay: langCode === 'es' ? 'Cómo Jugar' : 'How to Play',
-            elements: langCode === 'es' ? 'Elementos' : 'Elements'
-          },
-          messages: {
-            discovered: langCode === 'es' ? '¡Descubierto {{element}}!' : 'Discovered {{element}}!',
-            duplicate: langCode === 'es' ? 'Ya tienes este elemento' : 'You already have this element',
-            cannotCombine: langCode === 'es' ? 'No se pueden combinar estos elementos' : 'Cannot combine these elements',
-            cleared: langCode === 'es' ? 'Lienzo limpiado' : 'Canvas cleared',
-            reset: langCode === 'es' ? 'Juego reiniciado' : 'Game reset',
-            elementsArranged: langCode === 'es' ? '¡Elementos organizados!' : 'Elements arranged!',
-            noDuplicatesFound: langCode === 'es' ? '¡No se encontraron duplicados!' : 'No duplicates found!',
-            removedDuplicates: langCode === 'es' ? '¡Se eliminaron {{count}} duplicado{{s}}!' : 'Removed {{count}} duplicate{{s}}!',
-            canvasCleared: langCode === 'es' ? '¡Lienzo limpiado!' : 'Canvas cleared!',
-            gameReset: langCode === 'es' ? '¡Juego reiniciado!' : 'Game reset!',
-            added: langCode === 'es' ? '¡Añadido {{element}}!' : 'Added {{element}}!',
-            keepExperimenting: langCode === 'es' ? '¡Sigue experimentando!' : 'Keep experimenting!'
-          },
-          instructions: {
-            step1: langCode === 'es' ? 'Arrastra elementos desde el panel de descubrimientos' : 'Drag elements from the discovery panel',
-            step2: langCode === 'es' ? 'Combina dos elementos arrastrando uno sobre otro' : 'Combine two elements by dragging one onto another',
-            step3: langCode === 'es' ? 'Descubre nuevos elementos experimentando' : 'Discover new elements by experimenting',
-            step4: langCode === 'es' ? 'Usa los botones para organizar y limpiar' : 'Use buttons to arrange and clean up',
-            step5: langCode === 'es' ? 'Haz clic en el botón de ayuda para obtener más información' : 'Click the help button for more information'
-          },
-          confirmations: {
-            clear: langCode === 'es' ? '¿Limpiar todos los elementos del lienzo?' : 'Clear all elements from canvas?',
-            reset: langCode === 'es' ? '¿Reiniciar el juego y perder todo el progreso?' : 'Reset game and lose all progress?',
-            clearCanvas: {
-              title: langCode === 'es' ? 'Limpiar Lienzo' : 'Clear Canvas',
-              message: langCode === 'es' ? '¿Estás seguro de que quieres limpiar todos los elementos del lienzo?' : 'Are you sure you want to clear all elements from the canvas?',
-              confirm: langCode === 'es' ? 'Limpiar' : 'Clear',
-              cancel: langCode === 'es' ? 'Cancelar' : 'Cancel'
-            },
-            resetGame: {
-              title: langCode === 'es' ? 'Reiniciar Juego' : 'Reset Game',
-              message: langCode === 'es' ? '¿Estás seguro de que quieres reiniciar el juego? Se perderá todo el progreso.' : 'Are you sure you want to reset the game? All progress will be lost.',
-              confirm: langCode === 'es' ? 'Reiniciar' : 'Reset',
-              cancel: langCode === 'es' ? 'Cancelar' : 'Cancel'
-            }
-          },
-          languageSelector: {
-            label: langCode === 'es' ? 'Idioma' : 'Language'
-          },
-          dragToCanvas: langCode === 'es' ? 'Arrastra al lienzo' : 'Drag to canvas'
-        },
-        hints: {
-          tryCombing: langCode === 'es' ? 'Intenta combinar {{element1}} con {{element2}}' : 'Try combining {{element1}} with {{element2}}'
-        },
-        elements: {
-          names: {}
-        }
-      };
-        
-        // Add element names
-        Object.values(elements).forEach(element => {
-            if (element.names[langCode]) {
-                translations[langCode].elements.names[element.id] = element.names[langCode];
-            }
-        });
-    }
-    
-    return translations;
-}
+// Save compiled files
+console.log('💾 Saving compiled files...');
 
-/**
- * Ensure directory exists
- */
-function ensureDir(dirPath) {
-    if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath, { recursive: true });
-    }
-}
+// Save main elements file
+const compiledData = {
+  elements,
+  recipes,
+  metadata: {
+    version: '2.0.0',
+    compiledAt: new Date().toISOString(),
+    totalElements: Object.keys(elements).length,
+    totalRecipes: recipes.length,
+    languages: LANGUAGES
+  }
+};
 
-/**
- * Save JSON file with pretty formatting
- */
-function saveJSON(filePath, data) {
-    ensureDir(path.dirname(filePath));
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
+fs.writeFileSync(
+  path.join(OUTPUT_DIR, 'elements-compiled.json'),
+  JSON.stringify(compiledData, null, 2)
+);
+console.log('✓ Saved elements-compiled.json');
 
-/**
- * Main compilation function
- */
-function compile() {
-    console.log('🔧 Starting configuration compilation...\n');
-    
-    try {
-        // Load source data
-        console.log('📚 Loading source files...');
-        const languageData = loadLanguageData();
-        const recipes = loadRecipeData();
-        
-        if (Object.keys(languageData).length === 0) {
-            throw new Error('No language files found');
-        }
-        
-        // Generate compiled data
-        console.log('\n⚙️  Generating compiled data...');
-        const { elements, idToHex } = generateElements(languageData, recipes);
-        const translations = generateTranslations(elements, languageData);
-        
-        console.log(`✓ Generated ${Object.keys(elements).length} elements with hex IDs`);
-        console.log(`✓ Generated translations for ${Object.keys(translations).length} languages`);
-        
-        // Save compiled files
-        console.log('\n💾 Saving compiled files...');
-        
-        // Save main game configuration
-        const gameConfig = {
-            elements,
-            metadata: {
-                version: '2.0',
-                compiled: new Date().toISOString(),
-                totalElements: Object.keys(elements).length,
-                languages: Object.keys(LANGUAGES)
-            }
-        };
-        
-        saveJSON(path.join(OUTPUT_DIR, 'elements-compiled.json'), gameConfig);
-        console.log('✓ Saved elements-compiled.json');
-        
-        // Save translation files
-        for (const [langCode, translation] of Object.entries(translations)) {
-            saveJSON(path.join(LOCALES_DIR, `${langCode}.json`), translation);
-            console.log(`✓ Saved ${langCode}.json`);
-        }
-        
-        // Save ID mapping for debugging
-        saveJSON(path.join(OUTPUT_DIR, 'id-mapping.json'), {
-            stringToHex: idToHex,
-            hexToString: Object.fromEntries(Object.entries(idToHex).map(([str, hex]) => [hex, str]))
-        });
-        console.log('✓ Saved id-mapping.json');
-        
-        console.log('\n🎉 Compilation completed successfully!');
-        console.log(`📊 Summary:`);
-        console.log(`   • ${Object.keys(elements).length} elements compiled`);
-        console.log(`   • ${Object.keys(LANGUAGES).length} languages supported`);
-        console.log(`   • ${recipes.length} recipes processed`);
-        console.log(`   • Files saved to: ${OUTPUT_DIR}`);
-        
-    } catch (error) {
-        console.error('\n❌ Compilation failed:', error.message);
-        process.exit(1);
-    }
-}
+// Save translation files
+LANGUAGES.forEach(lang => {
+  const langName = lang === 'en' ? 'English' : 'Español';
+  fs.writeFileSync(
+    path.join(OUTPUT_DIR, 'locales', `${lang}.json`),
+    JSON.stringify(translations[lang], null, 2)
+  );
+  console.log(`✓ Saved ${lang}.json`);
+});
 
-// Run compilation if called directly
-if (require.main === module) {
-    compile();
-}
+// Save ID mapping for debugging
+fs.writeFileSync(
+  path.join(OUTPUT_DIR, 'id-mapping.json'),
+  JSON.stringify({ originalToHex: idMapping, hexToOriginal }, null, 2)
+);
+console.log('✓ Saved id-mapping.json');
 
-module.exports = { compile }; 
+console.log('🎉 Unified compilation completed successfully!');
+console.log('📊 Summary:');
+console.log(`   • ${Object.keys(elements).length} elements compiled`);
+console.log(`   • ${LANGUAGES.length} languages supported`);
+console.log(`   • ${recipes.length} recipes processed`);
+console.log(`   • Files saved to: ${OUTPUT_DIR}`);
+
+// The compilation runs immediately when the script is executed
+// No need for additional function calls since the code above already runs 

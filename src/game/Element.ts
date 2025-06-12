@@ -280,9 +280,6 @@ export class Element extends PIXI.Container {
         const elapsed = Date.now() - startTime;
         progress = Math.min(elapsed / duration, 1);
         
-        // Easing function (ease-out cubic)
-        const eased = 1 - Math.pow(1 - progress, 3);
-        
         if (progress < 0.5) {
           // First half: zoom in and move toward target (merge position)
           const moveProgress = progress * 2;

@@ -33,7 +33,7 @@ class IdleAlchemy {
           height: 100%;
           color: white;
           text-align: center;
-          font-family: Arial, sans-serif;
+          font-family: system-ui, Arial, sans-serif;
         ">
           <div>
             <h2>🧪 Loading Idle Alchemy...</h2>
@@ -94,7 +94,7 @@ class IdleAlchemy {
           height: 100%;
           color: white;
           text-align: center;
-          font-family: Arial, sans-serif;
+          font-family: system-ui, Arial, sans-serif;
         ">
           <div>
             <h2>⚠️ Oops!</h2>

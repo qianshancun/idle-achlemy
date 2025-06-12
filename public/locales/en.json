@@ -4,7 +4,8 @@
       "autoArrange": "Auto Arrange",
       "removeDuplicate": "Remove Duplicate",
       "clear": "Clear",
-      "reset": "Reset"
+      "reset": "Reset",
+      "close": "Close"
     },
     "titles": {
       "discovered": "Discovered ({{count}})",

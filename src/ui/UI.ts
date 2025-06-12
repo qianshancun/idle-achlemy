@@ -580,7 +580,7 @@ export class UI {
     
     if (success) {
       // Get element name from config for display
-      const element = configLoader.getElements().get(elementId);
+      const element = configLoader.getElementById(elementId);
       const elementName = element ? i18n.getElementName(elementId, element.name) : elementId;
       this.showToast(t('ui.messages.added', { element: elementName }));
     }

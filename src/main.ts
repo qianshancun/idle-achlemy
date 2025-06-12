@@ -46,8 +46,8 @@ class IdleAlchemy {
       await i18n.initialize();
       console.log('✅ i18n system loaded successfully');
       
-      // Initialize configuration
-      await configLoader.initialize();
+      // Initialize configuration with new API
+      await configLoader.loadConfig();
       console.log('✅ Configuration loaded successfully');
       
       // Clear loading message

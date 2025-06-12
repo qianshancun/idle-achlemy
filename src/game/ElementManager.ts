@@ -1,5 +1,5 @@
 import { Element } from './Element';
-import { configLoader, ElementDefinition } from '@/config/ConfigLoader';
+import { configLoader, Element as ElementType } from '@/config/ConfigLoader';
 import { i18n, t } from '@/i18n/Translation';
 
 export class ElementManager {
@@ -29,16 +29,14 @@ export class ElementManager {
   }
   
   public discoverElement(elementId: string): boolean {
-    const elements = configLoader.getElements();
-    if (!elements.has(elementId)) {
+    const element = configLoader.getElementById(elementId);
+    if (!element) {
       console.warn(`Element ${elementId} not found in definitions`);
       return false;
     }
     
     const wasAlreadyDiscovered = this.discoveredElements.has(elementId);
     this.discoveredElements.add(elementId);
-    
-
     
     // Update count
     const currentCount = this.elementCounts.get(elementId) || 0;
@@ -56,20 +54,20 @@ export class ElementManager {
     return this.discoveredElements.has(elementId);
   }
   
-  public getDiscoveredElements(): ElementDefinition[] {
-    const elements = configLoader.getElements();
+  public getDiscoveredElements(): ElementType[] {
+    const gameConfig = configLoader.getGameConfig();
     
     console.log('🔍 ElementManager.getDiscoveredElements() called');
     console.log('   📦 Discovered IDs:', Array.from(this.discoveredElements));
-    console.log('   📚 Available elements in config:', elements.size);
+    console.log('   📚 Available elements in config:', gameConfig.elements.length);
     
     const result = Array.from(this.discoveredElements)
       .map(id => {
-        const element = elements.get(id);
+        const element = configLoader.getElementById(id);
         console.log(`   🔗 Mapping ${id} -> ${element ? element.name : 'NOT FOUND'}`);
         return element;
       })
-      .filter(Boolean) as ElementDefinition[];
+      .filter(Boolean) as ElementType[];
     
     console.log('   ✅ Final discovered elements:', result);
     return result;
@@ -80,13 +78,48 @@ export class ElementManager {
   }
   
   public createElement(elementId: string, x: number = 0, y: number = 0): Element | null {
-    const elements = configLoader.getElements();
-    const definition = elements.get(elementId);
-    if (!definition || !this.isDiscovered(elementId)) {
+    const element = configLoader.getElementById(elementId);
+    if (!element || !this.isDiscovered(elementId)) {
       return null;
     }
     
+    // Convert to old ElementDefinition format for compatibility
+    const definition = {
+      id: element.id,
+      originalId: element.originalId,
+      name: element.name,
+      emoji: element.emoji,
+      color: this.getElementColor(element.id, element.category),
+      category: element.category,
+      discovered: this.isDiscovered(element.id),
+      rarity: element.rarity
+    };
+    
     return new Element(definition, x, y);
+  }
+  
+  private getElementColor(hexId: string, category: string): number {
+    // Color mapping for different categories
+    const categoryColors: Record<string, number> = {
+      'basic': 0x4FC3F7,        // Light blue
+      'nature': 0x4CAF50,       // Green
+      'science': 0x2196F3,      // Blue
+      'life': 0x8BC34A,         // Light green
+      'civilization': 0xFF9800, // Orange
+      'technology': 0x607D8B,   // Blue grey
+      'magic': 0x9C27B0,        // Purple
+      'abstract': 0xE91E63      // Pink
+    };
+    
+    // Specific hex ID overrides
+    const specificColors: Record<string, number> = {
+      '0': 0x4FC3F7,    // water - blue
+      '1': 0xFF5722,    // fire - red-orange
+      '2': 0x8D6E63,    // earth - brown
+      '3': 0xE0E0E0,    // air - light gray
+    };
+    
+    return specificColors[hexId] || categoryColors[category] || 0x888888;
   }
   
   public checkRecipe(element1: Element, element2: Element): {
@@ -98,7 +131,7 @@ export class ElementManager {
       return { success: false };
     }
     
-    const recipe = configLoader.findRecipe(element1.definition.id, element2.definition.id);
+    const recipe = configLoader.getRecipeByInputs(element1.definition.id, element2.definition.id);
     
     if (!recipe) {
       return { success: false };
@@ -116,24 +149,31 @@ export class ElementManager {
     isNewDiscovery?: boolean;
     message?: string;
   } {
+    console.log(`[MERGE ATTEMPT] Trying to merge ${element1.definition.originalId}(${element1.definition.id}) + ${element2.definition.originalId}(${element2.definition.id})`);
+
     // Don't merge the same element with itself
     if (element1 === element2) {
+      console.log(`[MERGE FAILED] Reason: Cannot merge an element with itself.`);
       return { success: false };
     }
     
-    const recipe = configLoader.findRecipe(element1.definition.id, element2.definition.id);
+    const recipe = configLoader.getRecipeByInputs(element1.definition.id, element2.definition.id);
     
     if (!recipe) {
+      console.log(`[MERGE FAILED] Reason: No recipe found in ConfigLoader for these inputs.`);
       return { success: false };
     }
     
+    console.log(`[MERGE SUCCESS] Found recipe! Output: ${recipe.output}`);
     const isNewDiscovery = this.discoverElement(recipe.output);
+    console.log(`[MERGE DISCOVERY] Is new discovery? ${isNewDiscovery}`);
+    const resultElement = configLoader.getElementById(recipe.output);
     
     return {
       success: true,
       result: recipe.output,
       isNewDiscovery,
-      message: recipe.discoveryMessage
+      message: resultElement ? `Discovered ${resultElement.name}!` : 'New element discovered!'
     };
   }
   
@@ -142,8 +182,8 @@ export class ElementManager {
     canMake: boolean;
     hasIngredients: boolean;
   }> {
-    const recipes = configLoader.getRecipes();
-    return recipes.map(recipe => {
+    const gameConfig = configLoader.getGameConfig();
+    return gameConfig.recipes.map(recipe => {
       const hasIngredient1 = this.isDiscovered(recipe.inputs[0]);
       const hasIngredient2 = this.isDiscovered(recipe.inputs[1]);
       const hasIngredients = hasIngredient1 && hasIngredient2;
@@ -162,8 +202,8 @@ export class ElementManager {
     total: number;
     percentage: number;
   } {
-    const elements = configLoader.getElements();
-    const total = elements.size;
+    const gameConfig = configLoader.getGameConfig();
+    const total = gameConfig.elements.length;
     const discovered = this.discoveredElements.size;
     
     return {
@@ -183,9 +223,8 @@ export class ElementManager {
     
     const randomRecipe = possibleRecipes[Math.floor(Math.random() * possibleRecipes.length)];
     const [input1, input2] = randomRecipe.recipe.inputs;
-    const elements = configLoader.getElements();
-    const element1 = elements.get(input1);
-    const element2 = elements.get(input2);
+    const element1 = configLoader.getElementById(input1);
+    const element2 = configLoader.getElementById(input2);
     
     if (!element1 || !element2) {
       return t('ui.messages.keepExperimenting');

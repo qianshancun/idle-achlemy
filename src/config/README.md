@@ -1,16 +1,18 @@
-# Idle Alchemy Configuration System
+# Configuration System Documentation
 
-This directory contains the unified configuration system for Idle Alchemy. The new design uses a single TSV file per language that contains everything: elements, names, emojis, and recipes.
+## Overview
 
-## 🎯 Design Philosophy
+The Idle Alchemy game uses a **per-language TSV-based configuration system** where each language has its own elements and recipes. This allows for localized gameplay experiences where different languages can have completely different recipe combinations.
 
-**Single Source of Truth**: Each language has one TSV file containing all elements and their recipes. No more scattered files!
+## 🎯 **Key Features**
 
-**Easy Maintenance**: To add a new element or recipe, you only need to edit the TSV file. To add i18n support, you only need to translate the name column.
+- **Per-language recipes**: English and Spanish can have different combinations
+- **Single source of truth**: Only TSV files need to be maintained
+- **Auto-compilation**: Generated files are never committed to git
+- **Duplicate detection**: Compiler catches recipe conflicts automatically
+- **Designer-friendly**: Simple spreadsheet-compatible format
 
-**Automatic Compilation**: The system compiles TSV files into optimized JSON with hex IDs for efficient storage and loading.
-
-## 📁 File Structure
+## 📁 **File Structure**
 
 ```
 src/config/
@@ -19,21 +21,46 @@ src/config/
 ├── elements.template.tsv    # Template for new languages
 ├── compile-config.js        # Unified compiler
 ├── ConfigLoader.ts          # Game configuration loader
-└── README.md               # This file
+└── README.md               # This documentation
 
-public/
-├── elements-compiled.json   # Compiled game data (auto-generated)
-├── locales/
-│   ├── en.json             # English UI translations (auto-generated)
-│   └── es.json             # Spanish UI translations (auto-generated)
-└── id-mapping.json         # Debug mapping (auto-generated)
+public/ (auto-generated, in .gitignore)
+├── elements-compiled.json   # Compiled game data for all languages
+├── id-mapping.json         # Debug mapping (per-language)
+└── locales/
+    ├── en.json             # UI translations
+    └── es.json             # UI translations
 ```
 
-## 📝 TSV File Format
+## 🔧 **When to Run Compilation**
 
-Each language file follows this unified format:
+### **IMPORTANT: You MUST run compilation after ANY changes to TSV files!**
+
+```bash
+npm run compile
+```
+
+**Run this command whenever you:**
+- ✅ Add new elements to any `.tsv` file
+- ✅ Remove elements from any `.tsv` file  
+- ✅ Change element names, emojis, or recipes
+- ✅ Modify any TSV file content
+- ✅ Create a new language file
+
+**The game will NOT see your changes until you compile!**
+
+### **Development Workflow:**
+1. Edit `src/config/elements.en.tsv` or `src/config/elements.es.tsv`
+2. Run `npm run compile` 
+3. Run `npm run dev` to test your changes
+4. Commit only the TSV files (generated files are in `.gitignore`)
+
+## 📝 **TSV File Format**
+
+Each language has its own TSV file with this format:
 
 ```tsv
+# Language Elements with Recipes
+# Format: TSV - id, name, emoji, parents (empty for base elements)
 id	name	emoji	parents
 water	Water	💧	
 fire	Fire	🔥	
@@ -44,117 +71,169 @@ mud	Mud	🟫	water+earth
 lava	Lava	🌋	fire+earth
 ```
 
-### Columns:
-- **id**: Unique element identifier (same across all languages)
-- **name**: Translated element name (only column that changes per language)
-- **emoji**: Element emoji (same across all languages)
-- **parents**: Recipe definition (empty for base elements, "element1+element2" for crafted elements)
+### **Column Definitions:**
+- **id**: Unique identifier (same across all languages)
+- **name**: Localized element name
+- **emoji**: Visual representation (same across languages)
+- **parents**: Recipe ingredients separated by `+` (empty for base elements)
 
-## 🔧 Adding New Elements
+## 🌍 **Per-Language Recipes**
 
-1. **Add to English file** (`elements.en.tsv`):
-   ```tsv
-   new_element	New Element	🆕	parent1+parent2
-   ```
+**Different languages can have completely different recipes!**
 
-2. **Add to all other language files** with translated names:
-   ```tsv
-   new_element	Nuevo Elemento	🆕	parent1+parent2
-   ```
+### English Example:
+```tsv
+water+air → cloud
+air+air → wind
+```
 
-3. **Compile**: Run `npm run compile` to generate the compiled files
+### Spanish Example:
+```tsv
+water+air → mist
+air+air → pressure
+```
 
-## 🌍 Adding New Languages
+This allows for localized gameplay experiences tailored to different cultures.
 
-1. **Copy template**: `cp elements.template.tsv elements.{lang}.tsv`
-2. **Translate names**: Only change the `name` column, keep everything else identical
-3. **Update compiler**: Add the new language code to `LANGUAGES` array in `compile-config.js`
-4. **Compile**: Run `npm run compile`
+## ⚙️ **Compilation Process**
 
-## ⚙️ Compilation Process
+The `compile-config.js` script:
 
-The compiler (`compile-config.js`) processes the TSV files and generates:
+1. **Loads each language separately**
+2. **Generates deterministic hex IDs** (base elements: 0,1,2,3)
+3. **Extracts recipes from parents column**
+4. **Detects duplicate recipe conflicts**
+5. **Creates optimized JSON files**
+6. **Generates UI translations**
 
-### 1. Hex ID Generation
-- Base elements (water, fire, earth, air) get fixed IDs: 0, 1, 2, 3
-- Other elements get hash-generated hex IDs for efficient storage
+### **Generated Files:**
+- `public/elements-compiled.json` - Complete game data for all languages
+- `public/id-mapping.json` - Debug hex ID mappings per language
+- `public/locales/*.json` - UI translations only
 
-### 2. Element Processing
-- Extracts element definitions with names for all languages
-- Assigns categories and rarities based on hex ID ranges
-- Preserves emojis (same across languages)
+## 🚨 **Error Detection**
 
-### 3. Recipe Extraction
-- Parses `parents` column to generate recipe definitions
-- Converts string IDs to hex IDs
-- Validates that all recipe ingredients exist
+The compiler automatically detects:
 
-### 4. Output Generation
-- `elements-compiled.json`: Complete game configuration
-- `locales/{lang}.json`: UI translations for each language
-- `id-mapping.json`: Debug mapping between string and hex IDs
+### **Duplicate Recipes:**
+```
+❌ DUPLICATE RECIPE ERROR in es: water+air produces both "cloud" and "mist"
+   This will cause unpredictable behavior in the game!
+   Please fix by using different ingredient combinations.
+```
 
-## 🚀 Usage
+### **Missing Ingredients:**
+```
+Warning in es: Recipe for diamond contains unknown elements: carbon+pressure
+```
 
-### Development
+## 🎮 **Game Integration**
+
+### **ConfigLoader API:**
+```typescript
+// Load configuration
+await configLoader.loadConfig();
+
+// Set language (switches entire dataset)
+configLoader.setLanguage('es');
+
+// Get game data for current language
+const config = configLoader.getGameConfig();
+
+// Get specific element
+const element = configLoader.getElementById('762'); // steam
+
+// Find recipe
+const recipe = configLoader.getRecipeByInputs('0', '1'); // water + fire
+```
+
+### **Language Switching:**
+When the user changes language, the entire element and recipe dataset switches. This means:
+- Element names change to the new language
+- Available recipes change to the new language's combinations
+- Game progress is maintained using hex IDs
+
+## 📋 **Adding New Elements**
+
+### **Step 1: Add to English**
+Edit `src/config/elements.en.tsv`:
+```tsv
+volcano	Volcano	🌋	lava+earth
+```
+
+### **Step 2: Add to Spanish**
+Edit `src/config/elements.es.tsv`:
+```tsv
+volcano	Volcán	🌋	lava+earth
+```
+
+### **Step 3: Compile**
 ```bash
-# Compile configuration after changes
 npm run compile
+```
 
-# Run development server
+### **Step 4: Test**
+```bash
 npm run dev
 ```
 
-### Production
+## 🌐 **Adding New Languages**
+
+### **Step 1: Create Language File**
+Copy `src/config/elements.template.tsv` to `src/config/elements.fr.tsv`
+
+### **Step 2: Translate Names**
+Translate only the `name` column, keep `id`, `emoji`, and `parents` identical (or modify recipes for localization)
+
+### **Step 3: Update Compiler**
+Add `'fr'` to the `LANGUAGES` array in `compile-config.js`
+
+### **Step 4: Compile and Test**
 ```bash
-# Build includes compilation
-npm run build
+npm run compile
+npm run dev
 ```
 
-## 🎮 Game Integration
+## 🔍 **Debugging**
 
-The game loads compiled configuration via `ConfigLoader.ts`:
+### **Check ID Mappings:**
+Look at `public/id-mapping.json` to see hex ID assignments per language
 
-```typescript
-import { configLoader } from '@/config/ConfigLoader';
-
-// Initialize (loads compiled JSON)
-await configLoader.initialize();
-
-// Get elements
-const elements = configLoader.getElements();
-
-// Find recipes
-const recipe = configLoader.findRecipe('0', '1'); // water + fire = steam
+### **Verify Compilation:**
+```bash
+npm run compile
 ```
+Check for error messages and warnings
 
-## 🔍 Debugging
+### **Test Language Switching:**
+Use the in-game language selector to verify different datasets load correctly
 
-- **ID Mapping**: Check `public/id-mapping.json` to see string ↔ hex ID mappings
-- **Compiled Data**: Inspect `public/elements-compiled.json` for the full compiled structure
-- **Console Logs**: The compiler provides detailed logging during the build process
+## ⚠️ **Important Notes**
 
-## 📊 Benefits of New Design
+1. **Never edit generated files** in `public/` - they're overwritten on each compilation
+2. **Always run `npm run compile`** after TSV changes
+3. **Generated files are in `.gitignore** - don't commit them
+4. **Base elements (water/fire/earth/air) must exist in all languages**
+5. **Element IDs must be consistent across languages**
+6. **Different recipes per language are encouraged for localization**
 
-### For Game Designers
-- ✅ **Single file per language** - everything in one place
-- ✅ **Simple TSV format** - edit in any spreadsheet program
-- ✅ **Recipe definition inline** - no separate recipe files
-- ✅ **Easy to add elements** - just add a row
+## 🎯 **Best Practices**
 
-### For Translators
-- ✅ **Only translate names** - emojis and recipes stay the same
-- ✅ **Clear template** - copy and translate
-- ✅ **No technical knowledge needed** - just edit the name column
+- Use descriptive element IDs (e.g., `steam_engine` not `se`)
+- Keep emojis consistent across languages
+- Test compilation after each change
+- Use different recipes to create unique cultural experiences
+- Document any complex recipe chains
+- Validate that all recipe ingredients exist
 
-### For Developers
-- ✅ **Automatic compilation** - no manual JSON editing
-- ✅ **Hex ID optimization** - efficient storage and lookup
-- ✅ **Type safety** - TypeScript interfaces for all data
-- ✅ **Hot reload** - changes reflect immediately in development
+---
 
-### For Maintenance
-- ✅ **Version control friendly** - TSV files diff cleanly
-- ✅ **No scattered files** - everything organized
-- ✅ **Consistent structure** - same format across languages
-- ✅ **Validation** - compiler catches errors early 
+## 🚀 **Quick Start**
+
+1. Edit TSV files in `src/config/`
+2. Run `npm run compile`
+3. Run `npm run dev`
+4. Test your changes
+5. Commit only TSV files
+
+**Remember: The game won't see your changes until you compile!** 

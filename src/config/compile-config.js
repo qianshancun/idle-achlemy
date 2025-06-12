@@ -187,7 +187,8 @@ for (const lang of LANGUAGES) {
   const idMapping = {};
   const hexToOriginal = {};
   
-  // Generate hex IDs for all elements in this language
+  // PASS 1: Generate hex IDs for all elements in this language
+  // This ensures the full mapping is available before processing recipes.
   data.forEach(row => {
     if (row.id) {
       const hexId = generateHexId(row.id);
@@ -199,7 +200,7 @@ for (const lang of LANGUAGES) {
   // Track recipes for duplicate detection
   const processedRecipes = new Map();
   
-  // Process elements and recipes for this language
+  // PASS 2: Process elements and build recipes now that the full ID map is ready.
   data.forEach(row => {
     const hexId = idMapping[row.id];
     
@@ -217,25 +218,23 @@ for (const lang of LANGUAGES) {
     if (row.parents && row.parents.trim()) {
       const parents = row.parents.split('+').map(p => p.trim());
       if (parents.length === 2) {
-        const input1 = idMapping[parents[0]];
-        const input2 = idMapping[parents[1]];
+        const input1 = idMapping[parents[0].trim()];
+        const input2 = idMapping[parents[1].trim()];
         
         if (input1 && input2) {
           const recipeKey = [input1, input2].sort().join('+');
           
-          // Check for duplicate recipes (same inputs, different outputs)
           if (processedRecipes.has(recipeKey)) {
-            const existingOutput = processedRecipes.get(recipeKey);
-            const existingElement = elements[existingOutput];
-            console.error(`❌ DUPLICATE RECIPE ERROR in ${lang}: ${row.parents} produces both "${existingElement?.originalId}" and "${row.id}"`);
-            console.error(`   This will cause unpredictable behavior in the game!`);
-            console.error(`   Please fix by using different ingredient combinations.`);
+            const existingOutputHex = processedRecipes.get(recipeKey);
+            const existingOutputId = hexToOriginal[existingOutputHex];
+            console.error(`❌ DUPLICATE RECIPE ERROR in ${lang}: The combination "${row.parents}" is used to create both "${existingOutputId}" and "${row.id}".`);
+            console.error(`   This will cause unpredictable behavior. Please resolve the conflict in elements.${lang}.tsv`);
           } else {
             recipes.push({
               inputs: [input1, input2],
-              output: hexId
+              output: idMapping[row.id]
             });
-            processedRecipes.set(recipeKey, hexId);
+            processedRecipes.set(recipeKey, idMapping[row.id]);
           }
         } else {
           console.warn(`Warning in ${lang}: Recipe for ${row.id} contains unknown elements: ${row.parents}`);

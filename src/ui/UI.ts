@@ -7,6 +7,7 @@ export class UI {
   private game: Game;
   private uiContainer: HTMLElement;
   private elementGrid!: HTMLElement;
+  private helpManuallyClosed: boolean = false;
   
   constructor(game: Game) {
     this.game = game;
@@ -28,13 +29,26 @@ export class UI {
     this.uiContainer.innerHTML = `
       <div class="discovery-panel ui-element" id="discovery-panel">
         <div class="panel-header">
-          <h3 id="elements-title">🧪 Elements (4)</h3>
-          <div class="language-selector" id="language-selector">
-            <button class="language-button" id="language-button"></button>
-            <div class="language-dropdown" id="language-dropdown"></div>
+          <div class="title-row">
+            <h3 id="elements-title">🧪 Elements (4)</h3>
+            <div class="title-actions">
+              <button class="title-btn" id="reset-action" title="Reset Game">
+                <span class="btn-icon">🔄</span>
+              </button>
+              <button class="title-btn" id="dark-mode-toggle" title="Toggle Dark Mode">
+                <span class="btn-icon">🌙</span>
+              </button>
+            </div>
+          </div>
+          <div class="header-actions">
+            <div class="search-container">
+              <input type="text" id="element-search" placeholder="Search..." class="search-input" />
+              <span class="search-icon">🔍</span>
+            </div>
           </div>
         </div>
         <div class="element-grid" id="element-grid"></div>
+        <div class="panel-resize-handle" id="panel-resize-handle"></div>
       </div>
       
       <div class="bottom-actions ui-element" id="bottom-actions">
@@ -43,8 +57,6 @@ export class UI {
         <span class="action-link" id="remove-duplicate-action"></span>
         <span class="action-separator">|</span>
         <span class="action-link" id="clear-action"></span>
-        <span class="action-separator">|</span>
-        <span class="action-link" id="reset-action"></span>
       </div>
       
       <div class="help-tooltip ui-element" id="help-tooltip">
@@ -116,24 +128,163 @@ export class UI {
         padding: 12px;
         backdrop-filter: blur(10px);
         overflow: hidden;
-        transition: all 0.3s ease;
         border-left: 1px solid rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        max-width: 500px;
+        box-sizing: border-box;
       }
       
-
+      .panel-resize-handle {
+        position: absolute;
+        left: -3px;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        cursor: ew-resize;
+        background: transparent;
+        z-index: 10;
+        transition: background 0.15s ease;
+      }
+      
+      .panel-resize-handle:hover {
+        background: rgba(0, 123, 255, 0.15);
+        box-shadow: inset 2px 0 0 rgba(0, 123, 255, 0.4);
+      }
       
       .panel-header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        gap: 8px;
         color: #333;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
+      }
+      
+      .title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
       }
       
       .panel-header h3 {
         margin: 0;
         font-size: 14px;
         font-weight: 600;
+        color: #2c3e50;
+        flex: 1;
+      }
+      
+      .title-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      
+      .title-btn {
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 4px;
+        padding: 3px 5px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-size: 9px;
+        color: #777;
+        min-width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .title-btn:hover {
+        background: rgba(0, 0, 0, 0.06);
+        border-color: rgba(0, 0, 0, 0.12);
+        color: #555;
+      }
+      
+      .title-btn:active {
+        transform: scale(0.95);
+      }
+      
+      .header-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .search-container {
+        position: relative;
+        width: 100%;
+      }
+      
+      .search-input {
+        width: 100%;
+        padding: 6px 30px 6px 10px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 11px;
+        outline: none;
+        transition: all 0.2s ease;
+        box-sizing: border-box;
+      }
+      
+      .search-input:focus {
+        border-color: rgba(0, 123, 255, 0.4);
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+      }
+      
+      .search-input::placeholder {
+        color: #999;
+      }
+      
+      .search-icon {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 10px;
+        color: #666;
+        pointer-events: none;
+      }
+      
+      .secondary-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 4px;
+        position: relative;
+      }
+      
+      .secondary-btn {
+        background: rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 4px;
+        padding: 4px 6px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-size: 10px;
+        color: #666;
+        min-width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .secondary-btn:hover {
+        background: rgba(0, 0, 0, 0.08);
+        border-color: rgba(0, 0, 0, 0.15);
+        color: #333;
+      }
+      
+      .secondary-btn:active {
+        transform: scale(0.95);
+      }
+      
+      .btn-icon {
+        font-size: 10px;
+        line-height: 1;
       }
       
       .panel-info {
@@ -263,55 +414,75 @@ export class UI {
         background: rgba(0, 0, 0, 0.1);
       }
       
-      /* Mobile optimizations */
-      @media (max-width: 768px) {
-        .ui-header {
-          right: 10px;
-          flex-direction: column;
-          gap: 8px;
-          padding: 8px;
+              /* Mobile optimizations */
+        @media (max-width: 768px) {
+          .discovery-panel {
+            position: fixed !important;
+            top: auto !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100vw !important;
+            min-width: auto !important;
+            max-width: none !important;
+            height: 200px;
+            border-left: none;
+            border-top: 1px solid rgba(0, 0, 0, 0.15);
+            min-height: 120px;
+            max-height: 350px;
+            border-radius: 0;
+            margin: 0 !important;
+            padding: 12px;
+            box-sizing: border-box;
+          }
+          
+          .panel-resize-handle {
+            left: 0;
+            right: 0;
+            top: -3px;
+            bottom: auto;
+            width: 100%;
+            height: 6px;
+            cursor: ns-resize;
+          }
+          
+          .panel-resize-handle:hover {
+            background: rgba(0, 123, 255, 0.15);
+            box-shadow: inset 0 2px 0 rgba(0, 123, 255, 0.4);
+          }
+          
+          .title-row {
+            margin-bottom: 6px;
+          }
+          
+          .header-actions {
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .search-container {
+            flex: 1;
+          }
+          
+          .element-grid {
+            height: calc(100% - 60px);
+          }
+          
+          .help-tooltip {
+            top: calc(50% - 100px);
+            right: 10px;
+            left: 10px;
+            max-width: none;
+            transform: translateY(-50%);
+          }
+          
+          .tooltip-content {
+            font-size: 10px;
+          }
+          
+
         }
-        
-        .progress-container {
-          width: 100%;
-          justify-content: center;
-        }
-        
-        .progress-bar {
-          max-width: none;
-        }
-        
-        .discovery-panel {
-          top: auto;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          width: auto;
-          height: 180px;
-          border-left: none;
-          border-top: 1px solid rgba(0, 0, 0, 0.15);
-        }
-        
-        .element-grid {
-          height: calc(100% - 40px);
-        }
-        
-        .help-tooltip {
-          top: calc(50% - 59px);
-          right: 5px;
-          left: 5px;
-          max-width: none;
-          transform: translateY(-50%);
-        }
-        
-        .mobile-menu {
-          right: 5px;
-        }
-        
-        .tooltip-content {
-          font-size: 10px;
-        }
-      }
       
       /* Scrollbar styling */
       .element-grid::-webkit-scrollbar {
@@ -332,71 +503,131 @@ export class UI {
         background: rgba(0, 0, 0, 0.3);
       }
       
-      /* Language Selector */
-      .language-selector {
-        position: relative;
-        z-index: 1000;
+      /* Dark Mode Support */
+      body.dark-mode {
+        background: #1a1a1a;
+        color: #e0e0e0;
       }
       
-      .language-button {
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        color: #666;
-        padding: 4px 8px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 10px;
+      body.dark-mode .discovery-panel {
+        background: rgba(40, 40, 40, 0.95);
+        border-left-color: rgba(255, 255, 255, 0.15);
+        border-top-color: rgba(255, 255, 255, 0.15);
+      }
+      
+      body.dark-mode .panel-header h3 {
+        color: #e0e0e0;
+      }
+      
+      body.dark-mode .title-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #ccc;
+      }
+      
+      body.dark-mode .title-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+      
+      body.dark-mode .search-input {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #e0e0e0;
+      }
+      
+      body.dark-mode .search-input:focus {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(100, 181, 246, 0.5);
+      }
+      
+      body.dark-mode .search-input::placeholder {
+        color: #aaa;
+      }
+      
+      body.dark-mode .element-card {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      
+      body.dark-mode .element-card:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      
+      body.dark-mode .element-name {
+        color: #e0e0e0;
+      }
+      
+      body.dark-mode .bottom-actions {
+        background: rgba(40, 40, 40, 0.9);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      body.dark-mode .action-link {
+        color: #bbb;
+      }
+      
+      body.dark-mode .action-link:hover {
+        color: #fff;
+      }
+      
+      body.dark-mode .help-tooltip {
+        background: rgba(40, 40, 40, 0.95);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #e0e0e0;
+      }
+      
+      /* Loading Screen Support */
+      .loading-screen {
+        color: #333;
+      }
+      
+      body.dark-mode .loading-screen {
+        color: #e0e0e0;
+      }
+      
+      /* Error Screen Support */
+      .error-screen {
+        color: #333;
+      }
+      
+      body.dark-mode .error-screen {
+        color: #e0e0e0;
+      }
+      
+      .error-reload-btn {
         transition: all 0.2s ease;
-        white-space: nowrap;
       }
       
-      .language-button:hover {
-        background: rgba(255, 255, 255, 1);
-        border-color: rgba(0, 0, 0, 0.2);
-        color: #333;
+      .error-reload-btn:hover {
+        background: rgba(51, 51, 51, 0.2) !important;
+        border-color: rgba(51, 51, 51, 0.5) !important;
       }
       
-      .language-dropdown {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background: rgba(255, 255, 255, 0.98);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        min-width: 120px;
-        max-height: 200px;
-        overflow-y: auto;
+      body.dark-mode .error-reload-btn {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        color: #e0e0e0 !important;
+      }
+      
+      body.dark-mode .error-reload-btn:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+      }
+      
+      /* Element Grid with Search */
+      .element-card.hidden {
         display: none;
-        margin-top: 2px;
-        z-index: 1001;
       }
       
-      .language-dropdown.show {
-        display: block;
-      }
-      
-      .language-option {
-        padding: 8px 12px;
-        color: #333;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        font-size: 10px;
-      }
-      
-      .language-option:last-child {
-        border-bottom: none;
-      }
-      
-      .language-option:hover {
-        background: rgba(0, 0, 0, 0.05);
-      }
-      
-      .language-option.active {
-        background: rgba(33, 150, 243, 0.1);
-        color: #1976d2;
-        font-weight: bold;
+      .no-results-message {
+        text-align: center;
+        color: #999;
+        font-size: 11px;
+        padding: 20px;
+        font-style: italic;
       }
     `;
     
@@ -411,6 +642,7 @@ export class UI {
       const tooltip = document.getElementById('help-tooltip');
       if (tooltip) {
         tooltip.classList.add('hidden');
+        this.helpManuallyClosed = true; // Track manual closure
       }
     });
     
@@ -450,7 +682,7 @@ export class UI {
       }
     });
     
-    // Reset action
+    // Reset action (now in panel header)
     const resetAction = document.getElementById('reset-action')!;
     resetAction.addEventListener('click', async () => {
       const confirmed = await showConfirm({
@@ -467,8 +699,14 @@ export class UI {
       }
     });
     
-    // Language selector
-    this.setupLanguageSelector();
+    // Search functionality
+    this.setupElementSearch();
+    
+    // Panel resize functionality
+    this.setupPanelResize();
+    
+    // Dark mode toggle
+    this.setupDarkModeToggle();
 
     // Game state changes
     window.addEventListener('gameStateChanged', ((event: CustomEvent) => {
@@ -598,13 +836,16 @@ export class UI {
     const helpTooltip = document.getElementById('help-tooltip');
     if (!helpTooltip) return;
 
+    // If user manually closed help, never show it again
+    if (this.helpManuallyClosed) {
+      helpTooltip.classList.add('hidden');
+      return;
+    }
     
     // Get current progress to determine if help should be shown
     const progress = this.game.getProgress();
     
-    // Show help if:
-    // 1. User hasn't manually closed it AND
-    // 2. User has discovered 5 or fewer elements (basic 4 + at most 1 more)
+    // Show help if user has discovered 5 or fewer elements (basic 4 + at most 1 more)
     const shouldShowHelp = progress.discovered <= 5;
     
     if (shouldShowHelp) {
@@ -619,9 +860,6 @@ export class UI {
     this.updateTranslatedContent();
     this.updateUI();
     this.hideInstructionsIfNeeded();
-    
-    // Reattach language selector listeners
-    this.setupLanguageOptions();
   }
   
   private updateTranslatedContent(): void {
@@ -637,7 +875,11 @@ export class UI {
     if (clearAction) clearAction.textContent = t('ui.buttons.clear');
     
     const resetAction = document.getElementById('reset-action');
-    if (resetAction) resetAction.textContent = t('ui.buttons.reset');
+    if (resetAction) resetAction.title = t('ui.buttons.reset') || 'Reset Game';
+    
+    // Update search placeholder
+    const searchInput = document.getElementById('element-search') as HTMLInputElement;
+    if (searchInput) searchInput.placeholder = t('ui.placeholder.search') || 'Search...';
     
     // Update help tooltip
     const helpTitle = document.getElementById('help-title');
@@ -660,148 +902,318 @@ export class UI {
     
     const closeTooltip = document.getElementById('close-tooltip');
     if (closeTooltip) closeTooltip.textContent = t('✕');
-    
-    // Update language selector
-    this.updateLanguageSelector();
   }
   
-  private updateLanguageSelector(): void {
-    console.log('🔄 Updating language selector...');
-    const languageButton = document.getElementById('language-button');
-    if (languageButton) {
-      const currentLang = i18n.getCurrentLanguageConfig();
-      const buttonText = `🌍 ${currentLang?.nativeName || 'English'}`;
-      languageButton.textContent = buttonText;
-      console.log('🔄 Updated button text to:', buttonText);
-    } else {
-      console.error('❌ Language button not found during update!');
-    }
-    
-    // Update language dropdown
-    const languageDropdown = document.getElementById('language-dropdown');
-    if (languageDropdown) {
-      const currentLang = i18n.getCurrentLanguage();
-      const dropdownHTML = i18n.getSupportedLanguages().map(lang => 
-        `<div class="language-option ${lang.code === currentLang ? 'active' : ''}" data-lang="${lang.code}">
-          ${lang.nativeName}
-        </div>`
-      ).join('');
-      languageDropdown.innerHTML = dropdownHTML;
-      console.log('🔄 Updated dropdown with', i18n.getSupportedLanguages().length, 'languages');
-    } else {
-      console.error('❌ Language dropdown not found during update!');
-    }
-  }
+
   
-  private setupLanguageSelector(): void {
-    console.log('🔧 Setting up language selector...');
-    const languageButton = document.getElementById('language-button');
-    const languageDropdown = document.getElementById('language-dropdown');
+  private setupDarkModeToggle(): void {
+    console.log('🔧 Setting up dark mode toggle...');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
     
-    console.log('🔍 Language button:', languageButton);
-    console.log('🔍 Language dropdown:', languageDropdown);
-    
-    if (!languageButton || !languageDropdown) {
-      console.error('❌ Language selector elements not found!');
+    if (!darkModeToggle) {
+      console.error('❌ Dark mode toggle button not found!');
       return;
     }
     
-    // Store reference for cleanup (avoid cloning)
-    (languageButton as any)._clickHandler = (e: Event) => {
-      console.log('🖱️ Language button clicked!');
-      e.stopPropagation();
-      const currentDropdown = document.getElementById('language-dropdown')!;
-      const isShowing = currentDropdown.classList.contains('show');
-      console.log('🔍 Dropdown currently showing:', isShowing);
-      currentDropdown.classList.toggle('show');
-      console.log('🔍 Dropdown after toggle:', currentDropdown.classList.contains('show'));
-    };
-    
-    // Remove old listener if exists
-    if ((languageButton as any)._oldClickHandler) {
-      languageButton.removeEventListener('click', (languageButton as any)._oldClickHandler);
+    // Load saved dark mode preference
+    const isDarkMode = localStorage.getItem('idle-alchemy-dark-mode') === 'true';
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+      this.updateDarkModeIcon(true);
     }
     
-    console.log('🔧 Adding click listener to language button...');
-    languageButton.addEventListener('click', (languageButton as any)._clickHandler);
-    (languageButton as any)._oldClickHandler = (languageButton as any)._clickHandler;
+    // Dark mode toggle handler
+    darkModeToggle.addEventListener('click', () => {
+      const isCurrentlyDark = document.body.classList.contains('dark-mode');
+      
+      if (isCurrentlyDark) {
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('idle-alchemy-dark-mode', 'false');
+        this.updateDarkModeIcon(false);
+      } else {
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('idle-alchemy-dark-mode', 'true');
+        this.updateDarkModeIcon(true);
+      }
+    });
+  }
+  
+  private updateDarkModeIcon(isDark: boolean): void {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if (darkModeToggle) {
+      const icon = darkModeToggle.querySelector('.btn-icon');
+      if (icon) {
+        icon.textContent = isDark ? '☀️' : '🌙';
+      }
+    }
+  }
+  
+
+  
+    private setupPanelResize(): void {
+    const resizeHandle = document.getElementById('panel-resize-handle');
+    const discoveryPanel = document.getElementById('discovery-panel');
+    const gameContainer = document.getElementById('game-container');
     
-    // Close dropdown when clicking outside
-    const closeDropdown = (e: Event) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest('.language-selector')) {
-        const currentDropdown = document.getElementById('language-dropdown');
-        if (currentDropdown) {
-          currentDropdown.classList.remove('show');
+    if (!resizeHandle || !discoveryPanel || !gameContainer) {
+      console.error('❌ Panel resize elements not found!');
+      return;
+    }
+    
+    let isResizing = false;
+    let startX = 0;
+    let startY = 0;
+    let startWidth = 0;
+    let startHeight = 0;
+    
+    const updateGameContainerSize = (newWidth?: number, newHeight?: number) => {
+      const isDesktop = window.innerWidth > 768;
+      
+      if (isDesktop) {
+        // Desktop: reset mobile styles and adjust for side panel
+        gameContainer.style.marginBottom = '0';
+        gameContainer.style.height = '100vh';
+        if (newWidth) {
+          gameContainer.style.marginRight = `${newWidth}px`;
+          gameContainer.style.width = `calc(100vw - ${newWidth}px)`;
+        } else {
+          gameContainer.style.marginRight = '240px';
+          gameContainer.style.width = 'calc(100vw - 240px)';
+        }
+      } else {
+        // Mobile: reset desktop styles and adjust for bottom panel
+        gameContainer.style.marginRight = '0';
+        gameContainer.style.width = '100vw';
+        if (newHeight) {
+          gameContainer.style.marginBottom = `${newHeight}px`;
+          gameContainer.style.height = `calc(100vh - ${newHeight}px)`;
+        } else {
+          gameContainer.style.marginBottom = '200px';
+          gameContainer.style.height = 'calc(100vh - 200px)';
         }
       }
-    };
-    document.addEventListener('click', closeDropdown);
-    
-    // Set up language option listeners
-    this.setupLanguageOptions();
-  }
-  
-  private setupLanguageOptions(): void {
-    console.log('🔧 Setting up language options...');
-    const languageDropdown = document.getElementById('language-dropdown');
-    
-    if (!languageDropdown) {
-      console.error('❌ Language dropdown not found!');
-      return;
-    }
-    
-    console.log('🔍 Language dropdown found:', languageDropdown);
-    
-    // Store reference for cleanup (avoid cloning)
-    (languageDropdown as any)._clickHandler = async (e: Event) => {
-      console.log('🖱️ Language dropdown clicked!');
-      e.stopPropagation();
-      const target = e.target as HTMLElement;
-      console.log('🔍 Clicked target:', target);
       
-      if (target.classList.contains('language-option')) {
-        const langCode = target.dataset.lang;
-        console.log('🌍 Language option clicked:', langCode);
-        if (langCode) {
-          try {
-            await i18n.setLanguage(langCode);
-            languageDropdown.classList.remove('show');
-          } catch (error) {
-            console.error('Failed to change language:', error);
+      // Trigger PIXI resize without causing infinite loop
+      setTimeout(() => {
+        if ((window as any).game && (window as any).game.app) {
+          const canvas = (window as any).game.app.view;
+          const container = canvas.parentElement;
+          if (container) {
+            (window as any).game.app.renderer.resize(container.clientWidth, container.clientHeight);
           }
         }
+      }, 0);
+    };
+    
+    const handleMouseDown = (e: MouseEvent) => {
+      isResizing = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      
+      const isDesktop = window.innerWidth > 768;
+      if (isDesktop) {
+        startWidth = discoveryPanel.offsetWidth;
+      } else {
+        startHeight = discoveryPanel.offsetHeight;
+      }
+      
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = isDesktop ? 'ew-resize' : 'ns-resize';
+      document.body.style.userSelect = 'none';
+      // Disable pointer events on iframe/canvas during resize to prevent issues
+      document.body.style.pointerEvents = 'none';
+      resizeHandle.style.pointerEvents = 'auto';
+      e.preventDefault();
+    };
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      
+      const isDesktop = window.innerWidth > 768;
+      
+      if (isDesktop) {
+        // Desktop: horizontal resize (right panel)
+        const deltaX = startX - e.clientX; // Reversed because panel is on the right
+        const maxWidth = Math.min(500, window.innerWidth * 0.6); // Max 60% of viewport
+        const newWidth = Math.min(maxWidth, Math.max(200, startWidth + deltaX));
+        
+        discoveryPanel.style.width = `${newWidth}px`;
+        updateGameContainerSize(newWidth);
+      } else {
+        // Mobile: vertical resize (bottom panel)
+        const deltaY = startY - e.clientY; // Reversed because panel is at the bottom
+        const maxHeight = Math.min(350, window.innerHeight * 0.5); // Max 50% of viewport
+        const newHeight = Math.min(maxHeight, Math.max(120, startHeight + deltaY));
+        
+        discoveryPanel.style.height = `${newHeight}px`;
+        updateGameContainerSize(undefined, newHeight);
       }
     };
     
-    // Remove old listener if exists
-    if ((languageDropdown as any)._oldClickHandler) {
-      languageDropdown.removeEventListener('click', (languageDropdown as any)._oldClickHandler);
+    const handleMouseUp = () => {
+      isResizing = false;
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      document.body.style.pointerEvents = '';
+      resizeHandle.style.pointerEvents = '';
+    };
+    
+    // Touch events for mobile
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      
+      const touch = e.touches[0];
+      isResizing = true;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      
+      const isDesktop = window.innerWidth > 768;
+      if (isDesktop) {
+        startWidth = discoveryPanel.offsetWidth;
+      } else {
+        startHeight = discoveryPanel.offsetHeight;
+      }
+      
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    };
+    
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isResizing || e.touches.length !== 1) return;
+      
+      const touch = e.touches[0];
+      const isDesktop = window.innerWidth > 768;
+      
+      if (isDesktop) {
+        // Desktop: horizontal resize
+        const deltaX = startX - touch.clientX;
+        const maxWidth = Math.min(500, window.innerWidth * 0.6);
+        const newWidth = Math.min(maxWidth, Math.max(200, startWidth + deltaX));
+        
+        discoveryPanel.style.width = `${newWidth}px`;
+        updateGameContainerSize(newWidth);
+      } else {
+        // Mobile: vertical resize
+        const deltaY = startY - touch.clientY;
+        const maxHeight = Math.min(350, window.innerHeight * 0.5);
+        const newHeight = Math.min(maxHeight, Math.max(120, startHeight + deltaY));
+        
+        discoveryPanel.style.height = `${newHeight}px`;
+        updateGameContainerSize(undefined, newHeight);
+      }
+      
+      e.preventDefault();
+    };
+    
+    const handleTouchEnd = () => {
+      isResizing = false;
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+      document.body.style.userSelect = '';
+    };
+    
+    resizeHandle.addEventListener('mousedown', handleMouseDown);
+    resizeHandle.addEventListener('touchstart', handleTouchStart);
+    
+    // Handle window resize to transition between desktop/mobile layouts
+    const handleWindowResize = () => {
+      // Update layout based on current window size
+      updateGameContainerSize();
+    };
+    
+    window.addEventListener('resize', handleWindowResize);
+    
+    // Initial layout setup
+    updateGameContainerSize();
+  }
+  
+  private setupElementSearch(): void {
+    const searchInput = document.getElementById('element-search') as HTMLInputElement;
+    
+    if (!searchInput) {
+      console.error('❌ Search input not found!');
+      return;
     }
     
-    console.log('🔧 Adding click listener to language dropdown...');
-    languageDropdown.addEventListener('click', (languageDropdown as any)._clickHandler);
-    (languageDropdown as any)._oldClickHandler = (languageDropdown as any)._clickHandler;
+    let searchTimeout: NodeJS.Timeout;
+    
+    const performSearch = () => {
+      const query = searchInput.value.toLowerCase().trim();
+      const elementCards = this.elementGrid.querySelectorAll('.element-card');
+      let visibleCount = 0;
+      
+      elementCards.forEach(card => {
+        const elementName = card.querySelector('.element-name')?.textContent?.toLowerCase() || '';
+        const shouldShow = query === '' || elementName.includes(query);
+        
+        if (shouldShow) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      // Remove any existing no-results message
+      const existingMessage = this.elementGrid.querySelector('.no-results-message');
+      if (existingMessage) {
+        existingMessage.remove();
+      }
+      
+      // Show no results message if needed
+      if (query !== '' && visibleCount === 0) {
+        const noResultsDiv = document.createElement('div');
+        noResultsDiv.className = 'no-results-message';
+        noResultsDiv.textContent = t('ui.messages.noElementsFound') || 'No elements found';
+        this.elementGrid.appendChild(noResultsDiv);
+      }
+    };
+    
+    // Debounced search
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(performSearch, 150);
+    });
+    
+    // Clear search on escape
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        searchInput.value = '';
+        performSearch();
+        searchInput.blur();
+      }
+    });
   }
-
+ 
   private showToast(message: string): void {
     const toast = document.createElement('div');
     toast.style.cssText = `
       position: fixed;
-      top: 100px;
+      top: 80px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.85);
       color: white;
-      padding: 12px 24px;
-      border-radius: 25px;
-      font-weight: bold;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
       z-index: 1000;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease;
+      max-width: 250px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     `;
     
     toast.textContent = message;
@@ -812,12 +1224,12 @@ export class UI {
       toast.style.opacity = '1';
     });
     
-    // Remove after delay
+    // Remove after shorter delay
     setTimeout(() => {
       toast.style.opacity = '0';
       setTimeout(() => {
         document.body.removeChild(toast);
-      }, 300);
-    }, 2000);
+      }, 200);
+    }, 1500);
   }
 } 

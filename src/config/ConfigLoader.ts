@@ -35,26 +35,9 @@ export interface ElementDefinition {
   rarity: 'basic' | 'common' | 'uncommon' | 'rare' | 'legendary';
 }
 
-interface CompiledElementData {
-  id: string; // hex ID
-  originalId: string; // original string ID
-  emoji: string; // emoji (same across languages)
-  names: Record<string, string>; // language -> name mapping
-  rarity: string;
-  category: string;
-}
 
-interface CompiledConfig {
-  elements: Record<string, CompiledElementData>; // hex ID -> element data
-  recipes: Recipe[]; // recipes array
-  metadata: {
-    version: string;
-    compiledAt: string;
-    totalElements: number;
-    totalRecipes: number;
-    languages: string[];
-  };
-}
+
+
 
 export interface CompiledElement {
   id: string;

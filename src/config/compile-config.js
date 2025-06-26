@@ -113,7 +113,9 @@ function generateUITranslations(lang) {
         canvasCleared: lang === 'es' ? '¡Lienzo limpiado!' : 'Canvas cleared!',
         gameReset: lang === 'es' ? '¡Juego reiniciado!' : 'Game reset!',
         added: lang === 'es' ? '¡Agregado {{element}}!' : 'Added {{element}}!',
-        keepExperimenting: lang === 'es' ? '¡Sigue experimentando!' : 'Keep experimenting!'
+        keepExperimenting: lang === 'es' ? '¡Sigue experimentando!' : 'Keep experimenting!',
+        noElementsFound: lang === 'es' ? 'No se encontraron elementos' : 'No elements found',
+        newElementDiscovered: lang === 'es' ? '¡Nuevo elemento descubierto!' : 'New element discovered!'
       },
       instructions: {
         step1: lang === 'es' ? 'Arrastra elementos desde el panel de descubrimientos' : 'Drag elements from the discovery panel',
@@ -140,6 +142,9 @@ function generateUITranslations(lang) {
       },
       languageSelector: {
         label: lang === 'es' ? 'Idioma' : 'Language'
+      },
+      placeholder: {
+        search: lang === 'es' ? 'Buscar...' : 'Search...'
       },
       dragToCanvas: lang === 'es' ? 'Arrastra al lienzo' : 'Drag to canvas'
     },

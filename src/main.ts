@@ -26,12 +26,11 @@ class IdleAlchemy {
     try {
       // Show loading message
       gameContainer.innerHTML = `
-        <div style="
+        <div class="loading-screen" style="
           display: flex;
           justify-content: center;
           align-items: center;
           height: 100%;
-          color: white;
           text-align: center;
           font-family: system-ui, Arial, sans-serif;
         ">
@@ -87,22 +86,21 @@ class IdleAlchemy {
     const gameContainer = document.getElementById('game-container');
     if (gameContainer) {
       gameContainer.innerHTML = `
-        <div style="
+        <div class="error-screen" style="
           display: flex;
           justify-content: center;
           align-items: center;
           height: 100%;
-          color: white;
           text-align: center;
           font-family: system-ui, Arial, sans-serif;
         ">
           <div>
             <h2>⚠️ Oops!</h2>
             <p>${message}</p>
-            <button onclick="location.reload()" style="
-              background: rgba(255, 255, 255, 0.1);
-              border: 2px solid rgba(255, 255, 255, 0.3);
-              color: white;
+            <button onclick="location.reload()" class="error-reload-btn" style="
+              background: rgba(51, 51, 51, 0.1);
+              border: 2px solid rgba(51, 51, 51, 0.3);
+              color: #333;
               padding: 10px 20px;
               border-radius: 8px;
               cursor: pointer;

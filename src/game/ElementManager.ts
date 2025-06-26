@@ -147,7 +147,6 @@ export class ElementManager {
     success: boolean;
     result?: string;
     isNewDiscovery?: boolean;
-    message?: string;
   } {
     console.log(`[MERGE ATTEMPT] Trying to merge ${element1.definition.originalId}(${element1.definition.id}) + ${element2.definition.originalId}(${element2.definition.id})`);
 
@@ -167,13 +166,11 @@ export class ElementManager {
     console.log(`[MERGE SUCCESS] Found recipe! Output: ${recipe.output}`);
     const isNewDiscovery = this.discoverElement(recipe.output);
     console.log(`[MERGE DISCOVERY] Is new discovery? ${isNewDiscovery}`);
-    const resultElement = configLoader.getElementById(recipe.output);
     
     return {
       success: true,
       result: recipe.output,
-      isNewDiscovery,
-      message: resultElement ? `Discovered ${resultElement.name}!` : 'New element discovered!'
+      isNewDiscovery
     };
   }
   

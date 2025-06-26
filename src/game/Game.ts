@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { Element } from './Element';
 import { ElementManager } from './ElementManager';
 import { i18n } from '@/i18n/Translation';
+import { configLoader } from '@/config/ConfigLoader';
 
 export class Game {
   private app: PIXI.Application;
@@ -32,10 +33,46 @@ export class Game {
     this.gameContainer = new PIXI.Container();
     this.app.stage.addChild(this.gameContainer);
     
+    // Set up dark mode handling
+    this.setupDarkModeHandling();
+    
     this.initialize();
     this.setupEventListeners();
   }
   
+  private setupDarkModeHandling(): void {
+    // Set initial background based on current dark mode state
+    this.updateCanvasBackground();
+    
+    // Listen for dark mode changes
+    const checkDarkMode = () => {
+      this.updateCanvasBackground();
+    };
+    
+    // Use MutationObserver to detect dark mode class changes on body
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          checkDarkMode();
+        }
+      });
+    });
+    
+    // Start observing body for class changes
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+  
+  private updateCanvasBackground(): void {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const backgroundColor = isDarkMode ? 0x1a1a1a : 0xf8f8f8;
+    
+    // Update PIXI app background
+    this.app.renderer.background.color = backgroundColor;
+  }
+
   private initialize(): void {
     // Start with empty canvas - elements will be dragged from the panel
     this.loadGameProgress();
@@ -80,11 +117,13 @@ export class Game {
             
             if (mergeResult.success && mergeResult.result) {
               // Successful merge - remove target and create result
-              this.performMerge(tempElement, targetElement, mergeResult.result, mergeResult.isNewDiscovery || false).then(() => {
-                if (mergeResult.isNewDiscovery && mergeResult.message) {
-                  const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, mergeResult.message);
-                  this.showDiscoveryMessage(discoveryMessage);
-                }
+                          this.performMerge(tempElement, targetElement, mergeResult.result, mergeResult.isNewDiscovery || false).then(() => {
+              if (mergeResult.isNewDiscovery && mergeResult.result) {
+                // Get element details for proper name display
+                const resultElement = configLoader.getElementById(mergeResult.result!);
+                const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, resultElement?.name);
+                this.showDiscoveryMessage(discoveryMessage);
+              }
               });
             } else {
               // Failed merge - place element nearby
@@ -260,11 +299,13 @@ export class Game {
       const mergeResult = this.elementManager.attemptMerge(this.draggedElement, target);
       
       if (mergeResult.success && mergeResult.result) {
-        this.performMerge(this.draggedElement, target, mergeResult.result, mergeResult.isNewDiscovery || false).then(() => {
-          if (mergeResult.isNewDiscovery && mergeResult.message) {
-            const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, mergeResult.message);
-            this.showDiscoveryMessage(discoveryMessage);
-          }
+                    this.performMerge(this.draggedElement, target, mergeResult.result, mergeResult.isNewDiscovery || false).then(() => {
+              if (mergeResult.isNewDiscovery && mergeResult.result) {
+                // Get element details for proper name display
+                const resultElement = configLoader.getElementById(mergeResult.result!);
+                const discoveryMessage = i18n.getDiscoveryMessage(mergeResult.result!, resultElement?.name);
+                this.showDiscoveryMessage(discoveryMessage);
+              }
         });
         merged = true;
         break;
@@ -350,13 +391,17 @@ export class Game {
   }
   
   private showDiscoveryMessage(message: string): void {
-    // Create a floating message
+    // Create a floating message with appropriate colors for light/dark mode
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const textColor = isDarkMode ? 0xffd700 : 0xff6b00; // Gold in dark, orange in light
+    const shadowColor = isDarkMode ? 0x000000 : 0xffffff; // Black shadow in dark, white in light
+    
     const text = new PIXI.Text(message, {
       fontSize: 24,
-      fill: 0xffd700,
+      fill: textColor,
       fontWeight: 'bold',
       dropShadow: true,
-      dropShadowColor: 0x000000,
+      dropShadowColor: shadowColor,
       dropShadowBlur: 4,
       dropShadowDistance: 2
     });
@@ -520,24 +565,25 @@ export class Game {
   public autoArrangeElements(): void {
     if (this.elements.length === 0) return;
 
-    console.log('🔧 AUTO ARRANGE DEBUG:');
-    console.log('  Current panOffset:', this.panOffset);
-    console.log('  GameContainer position:', { x: this.gameContainer.x, y: this.gameContainer.y });
-
-    // Get canvas dimensions (excluding discovery panel on desktop)
+    // Get canvas dimensions and current discovery panel width
     const canvas = this.app.view as HTMLCanvasElement;
     const rect = canvas.getBoundingClientRect();
+    const discoveryPanel = document.getElementById('discovery-panel');
     
-    // On desktop, exclude the 240px discovery panel from the right
-    // On mobile, use full width (discovery panel is at bottom)
+    // Calculate available area based on current panel size
     const isDesktop = window.innerWidth > 768;
-    const availableWidth = isDesktop ? rect.width - 240 : rect.width;
-    const availableHeight = rect.height;
-
-    console.log('  Canvas rect:', rect);
-    console.log('  Available area:', { width: availableWidth, height: availableHeight });
+    let availableWidth = rect.width;
+    let availableHeight = rect.height;
     
-    // Add some padding from edges
+    if (isDesktop && discoveryPanel) {
+      // Desktop: exclude the discovery panel width from the right
+      availableWidth = rect.width - discoveryPanel.offsetWidth;
+    } else if (!isDesktop && discoveryPanel) {
+      // Mobile: exclude the discovery panel height from the bottom
+      availableHeight = rect.height - discoveryPanel.offsetHeight;
+    }
+    
+    // Add padding from edges
     const padding = 20;
     const usableWidth = availableWidth - (padding * 2);
     const usableHeight = availableHeight - (padding * 2);
@@ -547,87 +593,56 @@ export class Game {
     
     // Calculate optimal grid dimensions
     const elementCount = this.elements.length;
-    const cols = Math.ceil(Math.sqrt(elementCount * (usableWidth / usableHeight)));
+    const aspectRatio = usableWidth / usableHeight;
+    const cols = Math.ceil(Math.sqrt(elementCount * aspectRatio));
     const rows = Math.ceil(elementCount / cols);
     
-    // Calculate spacing
-    let spacingX = 9; // Default 9px margin
-    let spacingY = 9;
+    // Calculate spacing to fit elements in available space
+    let spacingX = Math.max(2, Math.floor((usableWidth - cols * elementSize) / Math.max(1, cols - 1)));
+    let spacingY = Math.max(2, Math.floor((usableHeight - rows * elementSize) / Math.max(1, rows - 1)));
     
-    // If elements don't fit with 9px spacing, reduce it
-    const requiredWidth = cols * elementSize + (cols - 1) * spacingX;
-    const requiredHeight = rows * elementSize + (rows - 1) * spacingY;
+    // Limit spacing to reasonable values
+    spacingX = Math.min(spacingX, 20);
+    spacingY = Math.min(spacingY, 20);
     
-    if (requiredWidth > usableWidth) {
-      spacingX = Math.max(2, Math.floor((usableWidth - cols * elementSize) / (cols - 1)));
-    }
-    
-    if (requiredHeight > usableHeight) {
-      spacingY = Math.max(2, Math.floor((usableHeight - rows * elementSize) / (rows - 1)));
-    }
-    
-    // Calculate grid starting position (center the grid in screen space)
+    // Calculate actual grid size and center it
     const gridWidth = cols * elementSize + (cols - 1) * spacingX;
     const gridHeight = rows * elementSize + (rows - 1) * spacingY;
-    const screenStartX = padding + (usableWidth - gridWidth) / 2;
-    const screenStartY = padding + (usableHeight - gridHeight) / 2;
     
-    console.log('  Screen grid start:', { x: screenStartX, y: screenStartY });
-
-    // Let's check what coordinate system we're actually using
-    // Look at current element positions to understand the pattern
-    if (this.elements.length > 0) {
-      console.log('  Current element positions:');
-      this.elements.slice(0, 3).forEach((el, i) => {
-        console.log(`    Element ${i}:`, { x: el.x, y: el.y });
-      });
-    }
-
-    // Test both coordinate conversion approaches
-    const worldStartX_add = screenStartX + this.panOffset.x;
-    const worldStartY_add = screenStartY + this.panOffset.y;
-    const worldStartX_subtract = screenStartX - this.panOffset.x;
-    const worldStartY_subtract = screenStartY - this.panOffset.y;
-
-    console.log('  Coordinate conversion options:');
-    console.log('    ADD panOffset:', { x: worldStartX_add, y: worldStartY_add });
-    console.log('    SUBTRACT panOffset:', { x: worldStartX_subtract, y: worldStartY_subtract });
-
-    // For now, let's use the subtract approach like addElementFromPanel does
-    const worldStartX = screenStartX - this.panOffset.x;
-    const worldStartY = screenStartY - this.panOffset.y;
-
-    console.log('  Using world start:', { x: worldStartX, y: worldStartY });
+    // Screen coordinates (center of available area)
+    const screenCenterX = availableWidth / 2;
+    const screenCenterY = availableHeight / 2;
+    const screenStartX = screenCenterX - gridWidth / 2;
+    const screenStartY = screenCenterY - gridHeight / 2;
     
-    // Arrange elements in grid
-    console.log('  Arranging elements:');
+    // Convert to world coordinates
+    // The gameContainer position represents the current pan offset
+    const worldStartX = screenStartX - this.gameContainer.x;
+    const worldStartY = screenStartY - this.gameContainer.y;
+    
+    // Arrange elements in grid with smooth animation
     this.elements.forEach((element, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
       
-      const x = worldStartX + col * (elementSize + spacingX);
-      const y = worldStartY + row * (elementSize + spacingY);
-
-      if (index < 3) {
-        console.log(`    Element ${index}: col=${col}, row=${row}, target=(${x}, ${y})`);
-      }
+      const targetX = worldStartX + col * (elementSize + spacingX) + elementSize / 2;
+      const targetY = worldStartY + row * (elementSize + spacingY) + elementSize / 2;
       
-      // Animate to new position
+      // Smooth animation to new position
       const startX = element.x;
       const startY = element.y;
-      const targetX = x;
-      const targetY = y;
       
       let progress = 0;
       const animate = () => {
-        progress += 0.1;
+        progress += 0.08; // Slightly slower for smoother animation
+        
         if (progress >= 1) {
           element.x = targetX;
           element.y = targetY;
           return;
         }
         
-        // Smooth easing
+        // Smooth easing function
         const eased = 1 - Math.pow(1 - progress, 3);
         element.x = startX + (targetX - startX) * eased;
         element.y = startY + (targetY - startY) * eased;

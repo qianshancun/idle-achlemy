@@ -93,3 +93,6 @@ temp/
 public/elements-compiled.json
 public/id-mapping.json
 public/locales/*.json 
+
+playwright-report/
+test-results/

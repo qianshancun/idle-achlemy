@@ -23,16 +23,9 @@ export class Element extends PIXI.Container {
   }
   
   private setupGraphics(): void {
-    // Clickable background area - made smaller
+    // Create graphics with dark mode awareness
     this.background = new PIXI.Graphics();
-    this.background.beginFill(0xffffff, 0.9);
-    this.background.drawRoundedRect(-35, -35, 70, 70, 6);
-    this.background.endFill();
-    
-    // Subtle border
-    this.background.lineStyle(1, 0xdddddd, 0.8);
-    this.background.drawRoundedRect(-35, -35, 70, 70, 6);
-    
+    this.updateGraphicsForTheme();
     this.addChild(this.background);
     
     // Emoji - smaller
@@ -48,13 +41,65 @@ export class Element extends PIXI.Container {
     const translatedName = i18n.getElementName(this.definition.id, this.definition.name);
     this.nameText = new PIXI.Text(translatedName, {
       fontSize: 10,
-      fill: 0x333333,
+      fill: this.getTextColor(),
       align: 'center',
       fontWeight: 'bold'
     });
     this.nameText.anchor.set(0.5, 0.5);
     this.nameText.y = 20;
     this.addChild(this.nameText);
+    
+    // Set up dark mode listener
+    this.setupDarkModeListener();
+  }
+  
+  private updateGraphicsForTheme(): void {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const backgroundColor = isDarkMode ? 0x2a2a2a : 0xffffff;
+    const borderColor = isDarkMode ? 0x404040 : 0xdddddd;
+    const backgroundAlpha = isDarkMode ? 0.95 : 0.9;
+    
+    this.background.clear();
+    this.background.beginFill(backgroundColor, backgroundAlpha);
+    this.background.drawRoundedRect(-35, -35, 70, 70, 6);
+    this.background.endFill();
+    
+    // Subtle border
+    this.background.lineStyle(1, borderColor, 0.8);
+    this.background.drawRoundedRect(-35, -35, 70, 70, 6);
+  }
+  
+  private getTextColor(): number {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    return isDarkMode ? 0xe0e0e0 : 0x333333;
+  }
+  
+  private setupDarkModeListener(): void {
+    // Listen for dark mode changes
+    const updateTheme = () => {
+      this.updateGraphicsForTheme();
+      if (this.nameText) {
+        this.nameText.style.fill = this.getTextColor();
+      }
+    };
+    
+    // Use MutationObserver to detect dark mode class changes on body
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          updateTheme();
+        }
+      });
+    });
+    
+    // Start observing body for class changes
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+    
+    // Store reference for cleanup
+    (this as any)._darkModeObserver = observer;
   }
   
   private setupInteraction(): void {
@@ -329,6 +374,11 @@ export class Element extends PIXI.Container {
     // Clean up language listener
     if ((this as any)._languageListener) {
       window.removeEventListener('languageChanged', (this as any)._languageListener);
+    }
+    
+    // Clean up dark mode observer
+    if ((this as any)._darkModeObserver) {
+      (this as any)._darkModeObserver.disconnect();
     }
     
     // Call parent destroy

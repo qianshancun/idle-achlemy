@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/* Font scaling system */
+:root {
+  --font-scale: 1;
+}
+
+* {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-size: calc(1rem * var(--font-scale));
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Ensure iOS doesn't zoom on inputs */
+input, select, textarea {
+  font-size: 16px;
+}
+
+/* Apply font scaling to all UI elements */
+.discovery-panel {
+  font-size: calc(1rem * var(--font-scale));
+}
+
+.discovery-panel h3 {
+  font-size: calc(1.125rem * var(--font-scale)); /* 18px base */
+}
+
+.discovery-panel .search-input {
+  font-size: calc(0.875rem * var(--font-scale)); /* 14px base */
+}
+
+.discovery-panel .element-name {
+  font-size: calc(0.75rem * var(--font-scale)); /* 12px base */
+}
+
+.discovery-panel .element-emoji {
+  font-size: calc(1rem * var(--font-scale)); /* 16px base */
+}
+
+.discovery-panel .btn-icon {
+  font-size: calc(0.75rem * var(--font-scale)); /* 12px base */
+}
+
+.tooltip-content {
+  font-size: calc(0.875rem * var(--font-scale)); /* 14px base */
+}
+
+.action-link {
+  font-size: calc(0.75rem * var(--font-scale)); /* 12px base */
+}
+
+/* Dark mode class support */
+.dark {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+/* Custom components */
+@layer components {
+  .game-button {
+    @apply px-2 py-1 rounded-md border transition-all duration-200 flex items-center justify-center;
+  }
+  
+  .game-button-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white border-blue-500;
+  }
+  
+  .game-button-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300;
+  }
+  
+  .game-button-subtle {
+    @apply bg-black/5 hover:bg-black/10 text-gray-600 border-black/10;
+  }
+  
+  .dark .game-button-secondary {
+    @apply bg-gray-700 hover:bg-gray-600 text-gray-200 border-gray-600;
+  }
+  
+  .dark .game-button-subtle {
+    @apply bg-white/5 hover:bg-white/10 text-gray-300 border-white/10;
+  }
+} 

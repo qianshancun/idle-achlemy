@@ -8,10 +8,18 @@ export class UI {
   private uiContainer: HTMLElement;
   private elementGrid!: HTMLElement;
   private helpManuallyClosed: boolean = false;
+  private currentSort: string = 'discovery-asc';
+  private discoveryOrder: string[] = [];
   
   constructor(game: Game) {
     this.game = game;
     this.uiContainer = document.getElementById('ui-overlay')!;
+    
+    // Set up dark mode class
+    this.setupDarkModeClass();
+    
+    // Initialize discovery order from localStorage
+    this.loadDiscoveryOrder();
     
     this.createUI();
     this.updateUI();
@@ -25,49 +33,109 @@ export class UI {
     });
   }
   
+  private loadDiscoveryOrder(): void {
+    const saved = localStorage.getItem('idle-alchemy-discovery-order');
+    if (saved) {
+      try {
+        this.discoveryOrder = JSON.parse(saved);
+      } catch (e) {
+        this.discoveryOrder = [];
+      }
+    }
+  }
+  
+  private saveDiscoveryOrder(): void {
+    localStorage.setItem('idle-alchemy-discovery-order', JSON.stringify(this.discoveryOrder));
+  }
+  
+  private addToDiscoveryOrder(elementId: string): void {
+    if (!this.discoveryOrder.includes(elementId)) {
+      this.discoveryOrder.push(elementId);
+      this.saveDiscoveryOrder();
+    }
+  }
+  
   private createUI(): void {
     this.uiContainer.innerHTML = `
-      <div class="discovery-panel ui-element" id="discovery-panel">
+      <!-- Discovery Panel -->
+      <div class="discovery-panel pointer-events-auto" id="discovery-panel">
+        <!-- Panel Header -->
         <div class="panel-header">
-          <div class="title-row">
-            <h3 id="elements-title">🧪 Elements (4)</h3>
-            <div class="title-actions">
-              <button class="title-btn" id="reset-action" title="Reset Game">
-                <span class="btn-icon">🔄</span>
-              </button>
-              <button class="title-btn" id="dark-mode-toggle" title="Toggle Dark Mode">
-                <span class="btn-icon">🌙</span>
-              </button>
-            </div>
+          <!-- System Controls -->
+          <div class="control-row">
+            <button class="control-btn" id="reset-action" title="Reset Game">
+              <span class="material-symbols-outlined">restart_alt</span>
+            </button>
+            <button class="control-btn" id="font-size-decrease" title="Decrease Font Size">
+              <span class="material-symbols-outlined">text_decrease</span>
+            </button>
+            <button class="control-btn" id="font-size-increase" title="Increase Font Size">
+              <span class="material-symbols-outlined">text_increase</span>
+            </button>
+            <button class="control-btn" id="dark-mode-toggle" title="Toggle Dark Mode">
+              <span class="material-symbols-outlined">dark_mode</span>
+            </button>
           </div>
-          <div class="header-actions">
-            <div class="search-container">
-              <input type="text" id="element-search" placeholder="Search..." class="search-input" />
-              <span class="search-icon">🔍</span>
+          
+          <!-- Title Section -->
+          <div class="title-section">
+            <h2 id="elements-title" class="panel-title">Elements</h2>
+            <div class="title-divider"></div>
+          </div>
+          
+          <!-- Search & Sort Controls -->
+          <div class="search-section">
+            <div class="search-input-container">
+              <input type="text" id="element-search" placeholder="Search elements..." class="search-input" />
+              <span class="material-symbols-outlined search-icon">search</span>
+            </div>
+            <div class="sort-controls">
+              <button class="sort-btn" id="sort-alphabetical" title="Sort Alphabetically">
+                <span class="material-symbols-outlined">sort_by_alpha</span>
+              </button>
+              <button class="sort-btn" id="sort-discovery-time" title="Sort by Discovery Time">
+                <span class="material-symbols-outlined">schedule</span>
+              </button>
             </div>
           </div>
         </div>
-        <div class="element-grid" id="element-grid"></div>
-        <div class="panel-resize-handle" id="panel-resize-handle"></div>
+        
+        <!-- Element Grid -->
+        <div class="element-grid-container">
+          <div class="element-grid" id="element-grid"></div>
+        </div>
+        
+        <!-- Resize Handle -->
+        <div class="resize-handle" id="panel-resize-handle"></div>
       </div>
       
-      <div class="bottom-actions ui-element" id="bottom-actions">
-        <span class="action-link" id="auto-arrange-action"></span>
-        <span class="action-separator">|</span>
-        <span class="action-link" id="remove-duplicate-action"></span>
-        <span class="action-separator">|</span>
-        <span class="action-link" id="clear-action"></span>
+      <!-- Game Actions -->
+      <div class="game-actions pointer-events-auto" id="bottom-actions">
+        <div class="action-group">
+          <button class="action-btn" id="auto-arrange-action"></button>
+          <div class="action-divider"></div>
+          <button class="action-btn" id="remove-duplicate-action"></button>
+          <div class="action-divider"></div>
+          <button class="action-btn" id="clear-action"></button>
+        </div>
       </div>
       
-      <div class="help-tooltip ui-element" id="help-tooltip">
-        <div class="tooltip-content">
-          <p><strong id="help-title"></strong></p>
-          <p id="help-step1"></p>
-          <p id="help-step2"></p>
-          <p id="help-step3"></p>
-          <p id="help-step4"></p>
-          <p id="help-step5"></p>
-          <button class="close-tooltip" id="close-tooltip"></button>
+      <!-- Help Tooltip -->
+      <div class="help-overlay pointer-events-auto" id="help-tooltip">
+        <div class="help-modal">
+          <button class="help-close" id="close-tooltip">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+          <div class="help-content">
+            <h3 class="help-title" id="help-title"></h3>
+            <div class="help-steps">
+              <p id="help-step1"></p>
+              <p id="help-step2"></p>
+              <p id="help-step3"></p>
+              <p id="help-step4"></p>
+              <p id="help-step5"></p>
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -85,158 +153,152 @@ export class UI {
   private addStyles(): void {
     const style = document.createElement('style');
     style.textContent = `
-      .bottom-actions {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        z-index: 100;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 6px 10px;
-        border-radius: 6px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(10px);
+      /* Global Font */
+      * {
+        font-family: system-ui, -apple-system, sans-serif;
       }
       
-      .action-link {
-        color: #666;
-        font-size: 12px;
-        cursor: pointer;
-        text-decoration: underline;
-        transition: color 0.2s ease;
-      }
-      
-      .action-link:hover {
-        color: #333;
-      }
-      
-      .action-separator {
-        color: #ccc;
-        font-size: 9px;
-      }
-      
+      /* Discovery Panel */
       .discovery-panel {
-        position: absolute;
+        position: fixed;
         top: 0;
         right: 0;
         bottom: 0;
-        width: 240px;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 0;
-        padding: 12px;
-        backdrop-filter: blur(10px);
-        overflow: hidden;
-        border-left: 1px solid rgba(0, 0, 0, 0.15);
-        min-width: 200px;
-        max-width: 500px;
-        box-sizing: border-box;
+        width: 320px;
+        min-width: 288px;
+        max-width: 384px;
+        display: flex;
+        flex-direction: column;
+        background: white;
+        border-left: 1px solid #e2e8f0;
+        z-index: 1000;
       }
       
-      .panel-resize-handle {
-        position: absolute;
-        left: -3px;
-        top: 0;
-        bottom: 0;
-        width: 6px;
-        cursor: ew-resize;
-        background: transparent;
-        z-index: 10;
-        transition: background 0.15s ease;
+      .dark .discovery-panel {
+        background: #1e293b;
+        border-left-color: #334155;
       }
       
-      .panel-resize-handle:hover {
-        background: rgba(0, 123, 255, 0.15);
-        box-shadow: inset 2px 0 0 rgba(0, 123, 255, 0.4);
-      }
-      
+      /* Panel Header */
       .panel-header {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        color: #333;
-        margin-bottom: 12px;
+        gap: 16px;
+        padding: 16px;
+        border-bottom: 1px solid #e2e8f0;
+        background: #f8fafc;
       }
       
-      .title-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: relative;
+      .dark .panel-header {
+        border-bottom-color: #334155;
+        background: #0f172a;
       }
       
-      .panel-header h3 {
-        margin: 0;
-        font-size: 14px;
-        font-weight: 600;
-        color: #2c3e50;
-        flex: 1;
-      }
-      
-      .title-actions {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-      }
-      
-      .title-btn {
-        background: rgba(0, 0, 0, 0.03);
-        border: 1px solid rgba(0, 0, 0, 0.06);
-        border-radius: 4px;
-        padding: 3px 5px;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        font-size: 9px;
-        color: #777;
-        min-width: 20px;
-        height: 20px;
+      /* Control Row */
+      .control-row {
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-      
-      .title-btn:hover {
-        background: rgba(0, 0, 0, 0.06);
-        border-color: rgba(0, 0, 0, 0.12);
-        color: #555;
-      }
-      
-      .title-btn:active {
-        transform: scale(0.95);
-      }
-      
-      .header-actions {
-        display: flex;
-        flex-direction: column;
         gap: 8px;
       }
       
-      .search-container {
+      .control-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        background: white;
+        color: #475569;
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+      }
+      
+      .control-btn:hover {
+        background: #f1f5f9;
+        color: #1e293b;
+      }
+      
+      .dark .control-btn {
+        border-color: #475569;
+        background: #334155;
+        color: #cbd5e1;
+      }
+      
+      .dark .control-btn:hover {
+        background: #475569;
+        color: #f1f5f9;
+      }
+      
+      /* Title Section */
+      .title-section {
+        text-align: center;
+      }
+      
+      .panel-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 8px;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      
+      .dark .panel-title {
+        color: #e2e8f0;
+      }
+      
+      .title-divider {
+        height: 1px;
+        background: #cbd5e1;
+      }
+      
+      .dark .title-divider {
+        background: #475569;
+      }
+      
+      /* Search Section */
+      .search-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .search-input-container {
+        flex: 1;
         position: relative;
-        width: 100%;
       }
       
       .search-input {
         width: 100%;
-        padding: 6px 30px 6px 10px;
-        border: 1px solid rgba(0, 0, 0, 0.15);
+        padding: 8px 32px 8px 12px;
+        font-size: 14px;
+        border: 1px solid #cbd5e1;
         border-radius: 6px;
-        background: rgba(255, 255, 255, 0.9);
-        font-size: 11px;
-        outline: none;
-        transition: all 0.2s ease;
-        box-sizing: border-box;
-      }
-      
-      .search-input:focus {
-        border-color: rgba(0, 123, 255, 0.4);
-        background: rgba(255, 255, 255, 1);
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+        background: white;
+        color: #0f172a;
+        font-family: system-ui, -apple-system, sans-serif;
       }
       
       .search-input::placeholder {
-        color: #999;
+        color: #64748b;
+      }
+      
+      .search-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+      }
+      
+      .dark .search-input {
+        border-color: #475569;
+        background: #334155;
+        color: #f1f5f9;
+      }
+      
+      .dark .search-input::placeholder {
+        color: #94a3b8;
       }
       
       .search-icon {
@@ -244,394 +306,352 @@ export class UI {
         right: 8px;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 10px;
-        color: #666;
+        color: #94a3b8;
+        font-size: 18px;
         pointer-events: none;
       }
       
-      .secondary-actions {
+      .sort-controls {
         display: flex;
-        justify-content: flex-end;
         gap: 4px;
-        position: relative;
       }
       
-      .secondary-btn {
-        background: rgba(0, 0, 0, 0.04);
-        border: 1px solid rgba(0, 0, 0, 0.08);
+      .sort-btn {
+        width: 32px;
+        height: 32px;
         border-radius: 4px;
-        padding: 4px 6px;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        font-size: 10px;
-        color: #666;
-        min-width: 24px;
-        height: 24px;
+        border: 1px solid #cbd5e1;
+        background: white;
+        color: #475569;
+        transition: all 0.15s;
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
       }
       
-      .secondary-btn:hover {
-        background: rgba(0, 0, 0, 0.08);
-        border-color: rgba(0, 0, 0, 0.15);
-        color: #333;
+      .sort-btn:hover {
+        background: #f1f5f9;
       }
       
-      .secondary-btn:active {
-        transform: scale(0.95);
+      .sort-btn.active {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
       }
       
-      .btn-icon {
+      /* Sort direction arrows */
+      .sort-btn[data-direction="asc"]::after {
+        content: "↑";
+        position: absolute;
+        top: -2px;
+        right: 1px;
         font-size: 10px;
-        line-height: 1;
+        font-weight: bold;
       }
       
-      .panel-info {
+      .sort-btn[data-direction="desc"]::after {
+        content: "↓";
+        position: absolute;
+        top: -2px;
+        right: 1px;
         font-size: 10px;
-        color: #666;
-        font-style: italic;
+        font-weight: bold;
       }
       
-
+      .sort-btn {
+        position: relative;
+      }
+      
+      .dark .sort-btn {
+        border-color: #475569;
+        background: #334155;
+        color: #cbd5e1;
+      }
+      
+      .dark .sort-btn:hover {
+        background: #475569;
+      }
+      
+      /* Element Grid Container */
+      .element-grid-container {
+        flex: 1;
+        overflow-y: auto;
+      }
       
       .element-grid {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px;
-        height: calc(100% - 40px);
-        overflow-y: auto;
-        align-content: flex-start;
+        gap: 6px;
+        padding: 8px;
       }
       
+      /* Minimal Element Layout - Content Fit */
       .element-card {
-        border-radius: 4px;
-        padding: 2px 4px;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        border: 1px solid #e0e0e0;
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 3px;
-        background: white;
+        padding: 6px 10px;
+        cursor: pointer;
+        transition: background-color 0.15s;
+        border-radius: 4px;
+        gap: 8px;
+        font-family: system-ui, -apple-system, sans-serif;
+        width: fit-content;
+        min-width: fit-content;
       }
       
       .element-card:hover {
-        background: #f0f0f0;
-        border-color: #bbb;
-      }
-      
-      .element-card:active {
-        transform: scale(0.95);
+        background: #f1f5f9;
       }
       
       .element-card.clicked {
-        transform: scale(0.9);
-        background: #e3f2fd;
-        border-color: #2196f3;
+        background: #dbeafe;
+      }
+      
+      .dark .element-card:hover {
+        background: #334155;
+      }
+      
+      .dark .element-card.clicked {
+        background: #1e3a8a;
       }
       
       .element-emoji {
-        font-size: 12px;
+        font-size: 18px;
         line-height: 1;
+        flex-shrink: 0;
       }
       
       .element-name {
-        color: #333;
-        font-size: 10px;
-        font-weight: 500;
-        line-height: 1;
-        white-space: nowrap;
-      }
-      
-      .help-tooltip {
-        position: fixed;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 8px;
-        padding: 12px;
-        max-width: 280px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        transition: opacity 0.3s ease;
-        z-index: 1000;
-        box-sizing: border-box;
-      }
-      
-      /* Desktop: center in canvas area (exclude right sidebar) */
-      @media (min-width: 769px) {
-        .help-tooltip {
-          top: 50%;
-          left: calc(50vw - 120px); /* Center of (viewport - 240px sidebar) */
-          transform: translate(-50%, -50%);
-          max-width: calc(100vw - 280px); /* Ensure it fits in canvas area */
-        }
-      }
-      
-      /* Mobile: just ensure it fits and has proper margins */
-      @media (max-width: 768px) {
-        .help-tooltip {
-          max-width: calc(100vw - 40px);
-          margin: 0 20px;
-        }
-      }
-      
-      .help-tooltip.hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-      
-      .tooltip-content {
-        color: #333;
-        font-size: 11px;
-        line-height: 1.3;
-      }
-      
-      .tooltip-content p {
-        margin-bottom: 6px;
-      }
-      
-      .tooltip-content strong {
-        color: #000;
-      }
-      
-      .close-tooltip {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        background: none;
-        border: none;
-        color: #666;
         font-size: 14px;
+        font-weight: 500;
+        color: #334155;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      
+      .dark .element-name {
+        color: #e2e8f0;
+      }
+      
+      /* Resize Handle */
+      .resize-handle {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        cursor: ew-resize;
+        background: transparent;
+      }
+      
+      .resize-handle:hover {
+        background: #3b82f6;
+      }
+      
+      /* Game Actions */
+      .game-actions {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 50;
+        background: white;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+      }
+      
+      .dark .game-actions {
+        background: #1e293b;
+        border-color: #334155;
+      }
+      
+      .action-group {
+        display: flex;
+        align-items: center;
+        padding: 6px 10px;
+      }
+      
+      .action-btn {
+        padding: 4px 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #475569;
         cursor: pointer;
-        padding: 2px;
-        border-radius: 3px;
-        transition: all 0.2s ease;
+        transition: color 0.15s;
+        font-family: system-ui, -apple-system, sans-serif;
       }
       
-      .close-tooltip:hover {
-        color: #333;
-        background: rgba(0, 0, 0, 0.1);
+      .action-btn:hover {
+        color: #1e293b;
       }
       
-              /* Mobile optimizations */
-        @media (max-width: 768px) {
-          .discovery-panel {
-            position: fixed !important;
-            top: auto !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            width: 100vw !important;
-            min-width: auto !important;
-            max-width: none !important;
-            height: 200px;
-            border-left: none;
-            border-top: 1px solid rgba(0, 0, 0, 0.15);
-            min-height: 120px;
-            max-height: 350px;
-            border-radius: 0;
-            margin: 0 !important;
-            padding: 12px;
-            box-sizing: border-box;
-          }
-          
-          .panel-resize-handle {
-            left: 0;
-            right: 0;
-            top: -3px;
-            bottom: auto;
-            width: 100%;
-            height: 6px;
-            cursor: ns-resize;
-          }
-          
-          .panel-resize-handle:hover {
-            background: rgba(0, 123, 255, 0.15);
-            box-shadow: inset 0 2px 0 rgba(0, 123, 255, 0.4);
-          }
-          
-          .title-row {
-            margin-bottom: 6px;
-          }
-          
-          .header-actions {
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-          }
-          
-          .search-container {
-            flex: 1;
-          }
-          
-          .element-grid {
-            height: calc(100% - 60px);
-          }
-          
-          .help-tooltip {
-            top: calc(50% - 100px);
-            right: 10px;
-            left: 10px;
-            max-width: none;
-            transform: translateY(-50%);
-          }
-          
-          .tooltip-content {
-            font-size: 10px;
-          }
-          
-
+      .dark .action-btn {
+        color: #cbd5e1;
+      }
+      
+      .dark .action-btn:hover {
+        color: #f1f5f9;
+      }
+      
+      .action-divider {
+        width: 1px;
+        height: 16px;
+        background: #cbd5e1;
+        margin: 0 8px;
+      }
+      
+      .dark .action-divider {
+        background: #475569;
+      }
+      
+      /* Help/Confirm Modal */
+      .help-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.5);
+      }
+      
+      .help-overlay.hidden {
+        display: none;
+      }
+      
+      .help-modal {
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        max-width: 448px;
+        width: 100%;
+        padding: 24px;
+        position: relative;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      
+      .dark .help-modal {
+        background: #1e293b;
+        border-color: #334155;
+      }
+      
+      .help-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+        cursor: pointer;
+        transition: color 0.15s;
+        font-size: 18px;
+      }
+      
+      .help-close:hover {
+        color: #475569;
+      }
+      
+      .dark .help-close:hover {
+        color: #e2e8f0;
+      }
+      
+      .help-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 16px;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      
+      .dark .help-title {
+        color: #f1f5f9;
+      }
+      
+      .help-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-size: 14px;
+        color: #334155;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      
+      .dark .help-steps {
+        color: #cbd5e1;
+      }
+      
+      /* Confirm Dialog Buttons */
+      button {
+        cursor: pointer;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .discovery-panel {
+          position: fixed;
+          top: auto;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100vw;
+          height: 280px;
+          max-height: 60vh;
         }
-      
-      /* Scrollbar styling */
-      .element-grid::-webkit-scrollbar {
-        width: 6px;
+        
+        .element-card {
+          padding: 6px 12px;
+          gap: 8px;
+        }
+        
+        .element-emoji {
+          font-size: 16px;
+        }
+        
+        .element-name {
+          font-size: 13px;
+        }
+        
+        .game-actions {
+          top: 8px;
+          left: 8px;
+        }
       }
       
-      .element-grid::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.05);
-        border-radius: 3px;
-      }
-      
-      .element-grid::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 3px;
-      }
-      
-      .element-grid::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 0, 0, 0.3);
-      }
-      
-      /* Dark Mode Support */
-      body.dark-mode {
-        background: #1a1a1a;
-        color: #e0e0e0;
-      }
-      
-      body.dark-mode .discovery-panel {
-        background: rgba(40, 40, 40, 0.95);
-        border-left-color: rgba(255, 255, 255, 0.15);
-        border-top-color: rgba(255, 255, 255, 0.15);
-      }
-      
-      body.dark-mode .panel-header h3 {
-        color: #e0e0e0;
-      }
-      
-      body.dark-mode .title-btn {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: #ccc;
-      }
-      
-      body.dark-mode .title-btn:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
-        color: #fff;
-      }
-      
-      body.dark-mode .search-input {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.15);
-        color: #e0e0e0;
-      }
-      
-      body.dark-mode .search-input:focus {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(100, 181, 246, 0.5);
-      }
-      
-      body.dark-mode .search-input::placeholder {
-        color: #aaa;
-      }
-      
-      body.dark-mode .element-card {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.15);
-      }
-      
-      body.dark-mode .element-card:hover {
-        background: rgba(255, 255, 255, 0.12);
-        border-color: rgba(255, 255, 255, 0.25);
-      }
-      
-      body.dark-mode .element-name {
-        color: #e0e0e0;
-      }
-      
-      body.dark-mode .bottom-actions {
-        background: rgba(40, 40, 40, 0.9);
-        border-color: rgba(255, 255, 255, 0.1);
-      }
-      
-      body.dark-mode .action-link {
-        color: #bbb;
-      }
-      
-      body.dark-mode .action-link:hover {
-        color: #fff;
-      }
-      
-      body.dark-mode .help-tooltip {
-        background: rgba(40, 40, 40, 0.95);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: #e0e0e0;
-      }
-      
-      /* Loading Screen Support */
-      .loading-screen {
-        color: #333;
-      }
-      
-      body.dark-mode .loading-screen {
-        color: #e0e0e0;
-      }
-      
-      /* Error Screen Support */
-      .error-screen {
-        color: #333;
-      }
-      
-      body.dark-mode .error-screen {
-        color: #e0e0e0;
-      }
-      
-      .error-reload-btn {
-        transition: all 0.2s ease;
-      }
-      
-      .error-reload-btn:hover {
-        background: rgba(51, 51, 51, 0.2) !important;
-        border-color: rgba(51, 51, 51, 0.5) !important;
-      }
-      
-      body.dark-mode .error-reload-btn {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-color: rgba(255, 255, 255, 0.3) !important;
-        color: #e0e0e0 !important;
-      }
-      
-      body.dark-mode .error-reload-btn:hover {
-        background: rgba(255, 255, 255, 0.2) !important;
-        border-color: rgba(255, 255, 255, 0.5) !important;
-      }
-      
-      /* Element Grid with Search */
+      /* Utility Classes */
       .element-card.hidden {
         display: none;
       }
       
       .no-results-message {
+        padding: 32px;
         text-align: center;
-        color: #999;
-        font-size: 11px;
-        padding: 20px;
+        color: #64748b;
         font-style: italic;
+        font-family: system-ui, -apple-system, sans-serif;
       }
-    `;
+      
+      .dark .no-results-message {
+        color: #94a3b8;
+      }
+      `;
     
     document.head.appendChild(style);
+  }
+  
+  private setupDarkModeClass(): void {
+    // Apply dark classes to body based on saved preference
+    const isDarkMode = localStorage.getItem('idle-alchemy-dark-mode') === 'true';
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode', 'dark');
+    }
   }
   
   private setupEventListeners(): void {
@@ -707,6 +727,12 @@ export class UI {
     
     // Dark mode toggle
     this.setupDarkModeToggle();
+    
+    // Font size controls
+    this.setupFontSizeControls();
+    
+    // Sorting controls
+    this.setupSortingControls();
 
     // Game state changes
     window.addEventListener('gameStateChanged', ((event: CustomEvent) => {
@@ -722,7 +748,7 @@ export class UI {
     
     // Update elements title with count
     const elementsTitle = document.getElementById('elements-title')!;
-    elementsTitle.textContent = `🧪 Elements (${progress.discovered})`;
+    elementsTitle.textContent = `Elements (${progress.discovered})`;
     
     // Update element grid
     this.updateElementGrid();
@@ -758,10 +784,16 @@ export class UI {
     discoveredElements.forEach((element, index) => {
       console.log(`🃏 Creating card ${index}: ${element.id} = ${element.name} ${element.emoji}`);
       
+      // Track discovery order
+      this.addToDiscoveryOrder(element.id);
+      
       const elementCard = document.createElement('div');
       elementCard.className = `element-card`;
       elementCard.draggable = true;
+      elementCard.setAttribute('data-element-id', element.id);
       const elementName = i18n.getElementName(element.id, element.name);
+      
+      // Create minimal element layout (icon + name)
       elementCard.innerHTML = `
         <span class="element-emoji">${element.emoji}</span>
         <span class="element-name">${elementName}</span>
@@ -792,6 +824,10 @@ export class UI {
     });
     
     console.log(`✅ Element grid updated with ${this.elementGrid.children.length} cards`);
+    
+    // Apply current sorting
+    const currentSort = localStorage.getItem('idle-alchemy-sort') || 'discovery-asc';
+    this.applySorting(currentSort);
   }
   
   private addElementToCanvas(elementId: string): void {
@@ -924,14 +960,14 @@ export class UI {
     
     // Dark mode toggle handler
     darkModeToggle.addEventListener('click', () => {
-      const isCurrentlyDark = document.body.classList.contains('dark-mode');
+      const isCurrentlyDark = document.body.classList.contains('dark-mode') || document.body.classList.contains('dark');
       
       if (isCurrentlyDark) {
-        document.body.classList.remove('dark-mode');
+        document.body.classList.remove('dark-mode', 'dark');
         localStorage.setItem('idle-alchemy-dark-mode', 'false');
         this.updateDarkModeIcon(false);
       } else {
-        document.body.classList.add('dark-mode');
+        document.body.classList.add('dark-mode', 'dark');
         localStorage.setItem('idle-alchemy-dark-mode', 'true');
         this.updateDarkModeIcon(true);
       }
@@ -946,6 +982,185 @@ export class UI {
         icon.textContent = isDark ? '☀️' : '🌙';
       }
     }
+  }
+  
+  private setupFontSizeControls(): void {
+    const increaseBtn = document.getElementById('font-size-increase');
+    const decreaseBtn = document.getElementById('font-size-decrease');
+    
+    if (!increaseBtn || !decreaseBtn) {
+      console.error('❌ Font size control buttons not found!');
+      return;
+    }
+    
+    // Load saved font size preference
+    const savedFontSize = localStorage.getItem('idle-alchemy-font-size') || '100';
+    this.applyFontSize(parseInt(savedFontSize));
+    
+    // Increase font size
+    increaseBtn.addEventListener('click', () => {
+      const current = parseInt(localStorage.getItem('idle-alchemy-font-size') || '100');
+      const newSize = Math.min(150, current + 10); // Max 150%
+      this.applyFontSize(newSize);
+      localStorage.setItem('idle-alchemy-font-size', newSize.toString());
+      this.showToast(`Font size: ${newSize}%`);
+    });
+    
+    // Decrease font size
+    decreaseBtn.addEventListener('click', () => {
+      const current = parseInt(localStorage.getItem('idle-alchemy-font-size') || '100');
+      const newSize = Math.max(70, current - 10); // Min 70%
+      this.applyFontSize(newSize);
+      localStorage.setItem('idle-alchemy-font-size', newSize.toString());
+      this.showToast(`Font size: ${newSize}%`);
+    });
+  }
+  
+  private applyFontSize(percentage: number): void {
+    const scale = percentage / 100;
+    document.documentElement.style.setProperty('--font-scale', scale.toString());
+    console.log(`🔤 Applied font scale: ${scale} (${percentage}%)`);
+  }
+  
+  private setupSortingControls(): void {
+    const sortAlphabeticalBtn = document.getElementById('sort-alphabetical');
+    const sortDiscoveryTimeBtn = document.getElementById('sort-discovery-time');
+    
+    if (!sortAlphabeticalBtn || !sortDiscoveryTimeBtn) {
+      console.error('❌ Sorting control buttons not found!');
+      return;
+    }
+    
+    // Track current sort state
+    this.currentSort = localStorage.getItem('idle-alchemy-sort') || 'discovery-asc';
+    this.updateSortIcons(this.currentSort);
+    
+    // Alphabetical sort toggle (A-Z / Z-A)
+    sortAlphabeticalBtn.addEventListener('click', () => {
+      if (this.currentSort === 'alphabetical-asc') {
+        this.currentSort = 'alphabetical-desc';
+      } else {
+        this.currentSort = 'alphabetical-asc';
+      }
+      
+      localStorage.setItem('idle-alchemy-sort', this.currentSort);
+      this.updateSortIcons(this.currentSort);
+      this.applySorting(this.currentSort);
+      
+      const direction = this.currentSort === 'alphabetical-asc' ? 'A-Z' : 'Z-A';
+      this.showToast(`Sorted by name: ${direction}`);
+    });
+    
+    // Discovery time sort toggle (newest first / oldest first)
+    sortDiscoveryTimeBtn.addEventListener('click', () => {
+      if (this.currentSort === 'discovery-asc') {
+        this.currentSort = 'discovery-desc';
+      } else {
+        this.currentSort = 'discovery-asc';
+      }
+      
+      localStorage.setItem('idle-alchemy-sort', this.currentSort);
+      this.updateSortIcons(this.currentSort);
+      this.applySorting(this.currentSort);
+      
+      const direction = this.currentSort === 'discovery-asc' ? 'Oldest first' : 'Newest first';
+      this.showToast(`Sorted by discovery: ${direction}`);
+    });
+    
+    // Apply initial sorting
+    this.applySorting(this.currentSort);
+  }
+  
+  private updateSortIcons(sortType: string): void {
+    const sortAlphabeticalBtn = document.getElementById('sort-alphabetical');
+    const sortDiscoveryTimeBtn = document.getElementById('sort-discovery-time');
+    
+    if (sortAlphabeticalBtn && sortDiscoveryTimeBtn) {
+      const alphaIcon = sortAlphabeticalBtn.querySelector('.material-symbols-outlined');
+      const timeIcon = sortDiscoveryTimeBtn.querySelector('.material-symbols-outlined');
+      
+      if (alphaIcon && timeIcon) {
+        // Clear active states
+        sortAlphabeticalBtn.classList.remove('active');
+        sortDiscoveryTimeBtn.classList.remove('active');
+        
+        // Update alphabetical sort icon
+        if (sortType === 'alphabetical-asc') {
+          alphaIcon.textContent = 'sort_by_alpha';
+          sortAlphabeticalBtn.classList.add('active');
+          sortAlphabeticalBtn.title = 'Sort Z-A (currently A-Z)';
+          // Add arrow indicator
+          sortAlphabeticalBtn.setAttribute('data-direction', 'asc');
+        } else if (sortType === 'alphabetical-desc') {
+          alphaIcon.textContent = 'sort_by_alpha';
+          sortAlphabeticalBtn.classList.add('active');
+          sortAlphabeticalBtn.title = 'Sort A-Z (currently Z-A)';
+          sortAlphabeticalBtn.setAttribute('data-direction', 'desc');
+        } else {
+          alphaIcon.textContent = 'sort_by_alpha';
+          sortAlphabeticalBtn.title = 'Sort A-Z';
+          sortAlphabeticalBtn.removeAttribute('data-direction');
+        }
+        
+        // Update discovery time sort icon
+        if (sortType === 'discovery-asc') {
+          timeIcon.textContent = 'schedule';
+          sortDiscoveryTimeBtn.classList.add('active');
+          sortDiscoveryTimeBtn.title = 'Sort Newest First (currently Oldest First)';
+          sortDiscoveryTimeBtn.setAttribute('data-direction', 'asc');
+        } else if (sortType === 'discovery-desc') {
+          timeIcon.textContent = 'schedule';
+          sortDiscoveryTimeBtn.classList.add('active');
+          sortDiscoveryTimeBtn.title = 'Sort Oldest First (currently Newest First)';
+          sortDiscoveryTimeBtn.setAttribute('data-direction', 'desc');
+        } else {
+          timeIcon.textContent = 'schedule';
+          sortDiscoveryTimeBtn.title = 'Sort by Discovery Time';
+          sortDiscoveryTimeBtn.removeAttribute('data-direction');
+        }
+      }
+    }
+  }
+  
+  private applySorting(sortType: string): void {
+    const elementCards = Array.from(this.elementGrid.querySelectorAll('.element-card:not(.no-results-message)'));
+    
+    elementCards.sort((a, b) => {
+      const nameA = a.querySelector('.element-name')?.textContent || '';
+      const nameB = b.querySelector('.element-name')?.textContent || '';
+      const idA = (a as HTMLElement).getAttribute('data-element-id') || '';
+      const idB = (b as HTMLElement).getAttribute('data-element-id') || '';
+      
+      if (sortType.startsWith('alphabetical')) {
+        const comparison = nameA.localeCompare(nameB);
+        return sortType === 'alphabetical-desc' ? -comparison : comparison;
+      } else if (sortType.startsWith('discovery')) {
+        // Use actual discovery order tracking
+        const indexA = this.discoveryOrder.indexOf(idA);
+        const indexB = this.discoveryOrder.indexOf(idB);
+        
+        // If both elements are in discovery order, use their positions
+        if (indexA !== -1 && indexB !== -1) {
+          const comparison = indexA - indexB;
+          return sortType === 'discovery-desc' ? -comparison : comparison;
+        }
+        
+        // If only one is in discovery order, prioritize it
+        if (indexA !== -1 && indexB === -1) return sortType === 'discovery-asc' ? -1 : 1;
+        if (indexA === -1 && indexB !== -1) return sortType === 'discovery-asc' ? 1 : -1;
+        
+        // If neither is in discovery order, fall back to alphabetical
+        const comparison = nameA.localeCompare(nameB);
+        return comparison;
+      }
+      
+      return 0;
+    });
+    
+    // Reorder the DOM elements
+    elementCards.forEach(card => {
+      this.elementGrid.appendChild(card);
+    });
   }
   
 
@@ -973,36 +1188,55 @@ export class UI {
         // Desktop: reset mobile styles and adjust for side panel
         gameContainer.style.marginBottom = '0';
         gameContainer.style.height = '100vh';
-        if (newWidth) {
-          gameContainer.style.marginRight = `${newWidth}px`;
-          gameContainer.style.width = `calc(100vw - ${newWidth}px)`;
-        } else {
-          gameContainer.style.marginRight = '240px';
-          gameContainer.style.width = 'calc(100vw - 240px)';
-        }
+        gameContainer.style.top = '0';
+        gameContainer.style.left = '0';
+        gameContainer.style.right = 'auto';
+        gameContainer.style.bottom = 'auto';
+        
+        const panelWidth = newWidth || discoveryPanel.offsetWidth;
+        gameContainer.style.marginRight = `${panelWidth}px`;
+        gameContainer.style.width = `calc(100vw - ${panelWidth}px)`;
+        
+        // Ensure discovery panel is properly positioned
+        discoveryPanel.style.position = 'fixed';
+        discoveryPanel.style.top = '0';
+        discoveryPanel.style.right = '0';
+        discoveryPanel.style.bottom = '0';
+        discoveryPanel.style.width = `${panelWidth}px`;
+        discoveryPanel.style.height = '100vh';
       } else {
         // Mobile: reset desktop styles and adjust for bottom panel
         gameContainer.style.marginRight = '0';
         gameContainer.style.width = '100vw';
-        if (newHeight) {
-          gameContainer.style.marginBottom = `${newHeight}px`;
-          gameContainer.style.height = `calc(100vh - ${newHeight}px)`;
-        } else {
-          gameContainer.style.marginBottom = '200px';
-          gameContainer.style.height = 'calc(100vh - 200px)';
-        }
+        gameContainer.style.top = '0';
+        gameContainer.style.left = '0';
+        gameContainer.style.right = 'auto';
+        gameContainer.style.bottom = 'auto';
+        
+        const panelHeight = newHeight || discoveryPanel.offsetHeight;
+        gameContainer.style.marginBottom = `${panelHeight}px`;
+        gameContainer.style.height = `calc(100vh - ${panelHeight}px)`;
+        
+        // Ensure discovery panel is properly positioned
+        discoveryPanel.style.position = 'fixed';
+        discoveryPanel.style.bottom = '0';
+        discoveryPanel.style.left = '0';
+        discoveryPanel.style.right = '0';
+        discoveryPanel.style.width = '100vw';
+        discoveryPanel.style.height = `${panelHeight}px`;
       }
       
-      // Trigger PIXI resize without causing infinite loop
-      setTimeout(() => {
+      // Trigger PIXI resize with proper timing
+      requestAnimationFrame(() => {
         if ((window as any).game && (window as any).game.app) {
           const canvas = (window as any).game.app.view;
           const container = canvas.parentElement;
           if (container) {
-            (window as any).game.app.renderer.resize(container.clientWidth, container.clientHeight);
+            const rect = container.getBoundingClientRect();
+            (window as any).game.app.renderer.resize(rect.width, rect.height);
           }
         }
-      }, 0);
+      });
     };
     
     const handleMouseDown = (e: MouseEvent) => {

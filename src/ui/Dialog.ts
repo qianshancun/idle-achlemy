@@ -52,7 +52,7 @@ export class Dialog {
         <button class="dialog-btn dialog-btn-cancel" data-action="cancel">
           ${options.cancelText || 'Cancel'}
         </button>
-        <button class="dialog-btn dialog-btn-confirm" data-action="confirm">
+        <button class="dialog-btn dialog-btn-confirm ${options.type === 'warning' ? 'dialog-btn-warning' : 'dialog-btn-primary'}" data-action="confirm">
           ${options.confirmText || 'Confirm'}
         </button>
       </div>
@@ -142,7 +142,6 @@ export class Dialog {
         justify-content: center;
         opacity: 0;
         transition: opacity 0.2s ease;
-        backdrop-filter: blur(2px);
       }
 
       .dialog-overlay.dialog-visible {
@@ -152,14 +151,19 @@ export class Dialog {
       .dialog-container {
         background: white;
         border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        max-width: 400px;
+        border: 1px solid #e2e8f0;
+        max-width: 448px;
         width: 90%;
-        max-height: 80vh;
+        max-height: 90vh;
         overflow: hidden;
         transform: scale(0.9);
         transition: transform 0.2s ease;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+
+      .dark .dialog-container {
+        background: #1e293b;
+        border-color: #334155;
       }
 
       .dialog-overlay.dialog-visible .dialog-container {
@@ -167,88 +171,112 @@ export class Dialog {
       }
 
       .dialog-header {
-        background: #f8f9fa;
-        padding: 16px 20px;
-        border-bottom: 1px solid #e9ecef;
+        padding: 20px 24px 16px;
+        border-bottom: 1px solid #e2e8f0;
+        background: #f8fafc;
+      }
+
+      .dark .dialog-header {
+        border-bottom-color: #334155;
+        background: #0f172a;
       }
 
       .dialog-title {
-        margin: 0;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 600;
-        color: #333;
+        color: #0f172a;
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+
+      .dark .dialog-title {
+        color: #f1f5f9;
       }
 
       .dialog-body {
-        padding: 20px;
+        padding: 20px 24px;
       }
 
       .dialog-message {
-        margin: 0;
         font-size: 14px;
+        color: #334155;
         line-height: 1.5;
-        color: #666;
+        margin: 0;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+
+      .dark .dialog-message {
+        color: #cbd5e1;
       }
 
       .dialog-actions {
         display: flex;
         gap: 12px;
-        padding: 16px 20px;
-        background: #f8f9fa;
-        border-top: 1px solid #e9ecef;
+        padding: 16px 24px 20px;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
         justify-content: flex-end;
+      }
+
+      .dark .dialog-actions {
+        background: #0f172a;
+        border-top-color: #334155;
       }
 
       .dialog-btn {
         padding: 8px 16px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
         font-size: 14px;
         font-weight: 500;
+        border-radius: 6px;
+        border: 1px solid;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.15s;
         min-width: 80px;
-        background: white;
-      }
-
-      .dialog-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .dialog-btn:active {
-        transform: translateY(0);
+        font-family: system-ui, -apple-system, sans-serif;
       }
 
       .dialog-btn-cancel {
-        color: #666;
-        border-color: #ddd;
+        color: #475569;
+        background: white;
+        border-color: #cbd5e1;
       }
 
       .dialog-btn-cancel:hover {
-        background: #f8f9fa;
-        border-color: #bbb;
+        background: #f1f5f9;
+        color: #1e293b;
       }
 
-      .dialog-btn-confirm {
-        background: #007bff;
+      .dark .dialog-btn-cancel {
+        color: #cbd5e1;
+        background: #334155;
+        border-color: #475569;
+      }
+
+      .dark .dialog-btn-cancel:hover {
+        background: #475569;
+        color: #f1f5f9;
+      }
+
+      .dialog-btn-primary {
         color: white;
-        border-color: #007bff;
+        background: #3b82f6;
+        border-color: #3b82f6;
       }
 
-      .dialog-btn-confirm:hover {
-        background: #0056b3;
-        border-color: #0056b3;
+      .dialog-btn-primary:hover {
+        background: #2563eb;
+        border-color: #2563eb;
       }
 
-      .dialog-warning .dialog-btn-confirm {
-        background: #dc3545;
-        border-color: #dc3545;
+      .dialog-btn-warning {
+        color: white;
+        background: #dc2626;
+        border-color: #dc2626;
       }
 
-      .dialog-warning .dialog-btn-confirm:hover {
-        background: #c82333;
-        border-color: #c82333;
+      .dialog-btn-warning:hover {
+        background: #b91c1c;
+        border-color: #b91c1c;
       }
 
       /* Mobile responsiveness */

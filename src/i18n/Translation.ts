@@ -61,7 +61,7 @@ class TranslationService {
   private async loadLanguage(langCode: string): Promise<void> {
     try {
       console.log(`📚 Loading language: ${langCode}`);
-      const response = await fetch(`/locales/${langCode}.json`);
+      const response = await fetch(`./locales/${langCode}.json`);
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);

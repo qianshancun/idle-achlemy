@@ -60,7 +60,7 @@ class TranslationService {
   private async loadLanguage(langCode: string): Promise<void> {
     try {
       console.log(\`📚 Loading language: \${langCode}\`);
-      const response = await fetch(\`/locales/\${langCode}.json\`);
+      const response = await fetch(\`./locales/\${langCode}.json\`);
       
       if (!response.ok) {
         throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
@@ -200,6 +200,33 @@ export const t = (keyPath: string, variables?: Record<string, any>): string => {
       stdio: 'inherit',
       env: { ...process.env, VITE_BUILD_LANG: lang }
     });
+    
+    // Copy necessary JSON files to the output directory
+    const localesDir = path.join(langDir, 'locales');
+    fs.mkdirSync(localesDir, { recursive: true });
+    
+    // Copy locale JSON files
+    const publicLocalesDir = path.join('public', 'locales');
+    if (fs.existsSync(publicLocalesDir)) {
+      const localeFiles = fs.readdirSync(publicLocalesDir);
+      for (const file of localeFiles) {
+        if (file.endsWith('.json')) {
+          fs.copyFileSync(
+            path.join(publicLocalesDir, file),
+            path.join(localesDir, file)
+          );
+        }
+      }
+    }
+    
+    // Copy elements-compiled.json
+    const elementsCompiledPath = path.join('public', 'elements-compiled.json');
+    if (fs.existsSync(elementsCompiledPath)) {
+      fs.copyFileSync(
+        elementsCompiledPath,
+        path.join(langDir, 'elements-compiled.json')
+      );
+    }
     
     console.log(`✅ Built ${lang} version successfully`);
   } catch (error) {

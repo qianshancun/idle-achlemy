@@ -91,7 +91,7 @@ export class ConfigLoader {
 
   public async loadConfig(): Promise<void> {
     try {
-      const response = await fetch('/elements-compiled.json');
+      const response = await fetch('./elements-compiled.json');
       if (!response.ok) {
         throw new Error(`Failed to load compiled config: ${response.status}`);
       }

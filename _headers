@@ -1,24 +1,28 @@
-# Security headers for all routes
+# Security and performance headers for all routes
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  # Performance optimizations
+  Vary: Accept-Encoding
+  # Preload critical resources
+  Link: </assets/pixi.js>; rel=preload; as=script; crossorigin
 
-# Cache static assets for 1 year
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache JavaScript files
-*.js
+# Cache JavaScript files specifically
+/assets/*.js
   Cache-Control: public, max-age=31536000, immutable
   Content-Type: application/javascript
 
-# Cache CSS files
-*.css
+# Cache CSS files specifically  
+/assets/*.css
   Cache-Control: public, max-age=31536000, immutable
   Content-Type: text/css
+
+# Cache other static assets
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
 
 # Cache images
 *.png
@@ -39,6 +43,27 @@
 *.woff2
   Cache-Control: public, max-age=31536000, immutable
   Content-Type: font/woff2
+
+# JSON configuration files
+*.json
+  Cache-Control: public, max-age=3600, must-revalidate
+  Content-Type: application/json
+  Vary: Accept-Encoding
+
+# Element configuration
+/elements-compiled.json
+  Cache-Control: public, max-age=3600, must-revalidate
+  Content-Type: application/json
+  Vary: Accept-Encoding
+
+# Language directories
+/en/*
+  Cache-Control: public, max-age=3600, must-revalidate
+  Vary: Accept-Encoding
+
+/es/*
+  Cache-Control: public, max-age=3600, must-revalidate
+  Vary: Accept-Encoding
 
 # Main HTML file - shorter cache for updates
 /index.html

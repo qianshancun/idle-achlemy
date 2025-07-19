@@ -17,11 +17,16 @@ export class Game {
   private lastPanPoint: { x: number; y: number } = { x: 0, y: 0 };
   private panOffset: { x: number; y: number } = { x: 0, y: 0 };
   
+  // Canvas zoom
+  private zoomLevel: number = 1.0;
+  private minZoom: number = 0.5;
+  private maxZoom: number = 2.0;
+  
   constructor(container: HTMLElement) {
     this.app = new PIXI.Application({
       width: container.clientWidth,
       height: container.clientHeight,
-      backgroundColor: 0xf8f8f8,
+      backgroundColor: 0xf8f8f8, // Default to light, will be updated by setupDarkModeHandling
       antialias: true,
       autoDensity: true,
       resolution: window.devicePixelRatio || 1
@@ -67,7 +72,7 @@ export class Game {
   
   private updateCanvasBackground(): void {
     const isDarkMode = document.body.classList.contains('dark-mode');
-    const backgroundColor = isDarkMode ? 0x1a1a1a : 0xf8f8f8;
+    const backgroundColor = isDarkMode ? 0x1a1a1a : 0xf8f8f8; // Dark mode: dark gray, Light mode: light gray
     
     // Update PIXI app background
     this.app.renderer.background.color = backgroundColor;
@@ -191,7 +196,7 @@ export class Game {
       }
     });
     
-    // Touch events for mobile panning
+    // Touch events for mobile panning (optimized for performance)
     canvas.addEventListener('touchstart', (e) => {
       if (e.touches.length === 1) {
         const touch = e.touches[0];
@@ -207,7 +212,7 @@ export class Game {
           e.preventDefault();
         }
       }
-    });
+    }, { passive: false });
     
     canvas.addEventListener('touchmove', (e) => {
       if (this.isPanning && e.touches.length === 1) {
@@ -224,13 +229,31 @@ export class Game {
         this.lastPanPoint = { x: touch.clientX, y: touch.clientY };
         e.preventDefault();
       }
-    });
+    }, { passive: false });
     
     canvas.addEventListener('touchend', () => {
       if (this.isPanning) {
         this.isPanning = false;
       }
-    });
+    }, { passive: true });
+
+    // Mouse wheel zoom (centered on cursor)
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      
+      const zoomStep = 0.1;
+      if (e.deltaY < 0) {
+        // Zoom in (wheel up)
+        this.zoomToPoint(mouseX, mouseY, this.zoomLevel + zoomStep);
+      } else {
+        // Zoom out (wheel down)
+        this.zoomToPoint(mouseX, mouseY, this.zoomLevel - zoomStep);
+      }
+    }, { passive: false });
   }
 
   private onResize(): void {
@@ -570,16 +593,19 @@ export class Game {
     if (this.elements.length === 0) return;
 
     console.log(`🎯 Auto-arranging ${this.elements.length} elements`);
+    
+    // Reset zoom to 100% for consistent arrangement
+    this.resetZoom();
 
     // Get actual canvas viewport dimensions
     const canvas = this.app.view as HTMLCanvasElement;
     const viewportWidth = canvas.width;
     const viewportHeight = canvas.height;
     
-    // Element properties - using closer spacing as requested
+    // Element properties - improved spacing for better visual separation
     const elementSize = 60; // Approximate diameter of elements
-    const spacing = 3; // Very small margin as requested (3px)
-    const padding = 30; // Smaller padding for more room
+    const spacing = 20; // Comfortable spacing between elements (20px)
+    const padding = 40; // Generous padding around the grid
     
     const elementCount = this.elements.length;
     console.log(`📐 Canvas: ${viewportWidth}x${viewportHeight}, Elements: ${elementCount}`);
@@ -702,6 +728,70 @@ export class Game {
     }
     
     return removedCount;
+  }
+
+  // Zoom functionality with proper centering
+  public zoomToPoint(mouseX: number, mouseY: number, newZoomLevel: number): void {
+    // Clamp zoom level to allowed range
+    const clampedZoom = Math.max(this.minZoom, Math.min(this.maxZoom, newZoomLevel));
+    
+    if (clampedZoom === this.zoomLevel) return; // No change needed
+    
+    // Get the world point that the mouse is currently over
+    const worldPoint = {
+      x: (mouseX - this.gameContainer.x) / this.zoomLevel,
+      y: (mouseY - this.gameContainer.y) / this.zoomLevel
+    };
+    
+    // Apply new zoom
+    this.zoomLevel = clampedZoom;
+    this.gameContainer.scale.set(this.zoomLevel);
+    
+    // Calculate new container position to keep the world point under the mouse
+    this.gameContainer.x = mouseX - worldPoint.x * this.zoomLevel;
+    this.gameContainer.y = mouseY - worldPoint.y * this.zoomLevel;
+    
+    // Update pan offset to match container position
+    this.panOffset.x = this.gameContainer.x;
+    this.panOffset.y = this.gameContainer.y;
+    
+    console.log(`🔍 Canvas zoom set to: ${Math.round(this.zoomLevel * 100)}%`);
+  }
+
+  public setZoom(zoomLevel: number): void {
+    // Center zoom on canvas center
+    const canvas = this.app.view as HTMLCanvasElement;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    this.zoomToPoint(centerX, centerY, zoomLevel);
+  }
+
+  public getZoom(): number {
+    return this.zoomLevel;
+  }
+
+  public zoomIn(step: number = 0.1): void {
+    // Center zoom on canvas center for button clicks
+    const canvas = this.app.view as HTMLCanvasElement;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    this.zoomToPoint(centerX, centerY, this.zoomLevel + step);
+  }
+
+  public zoomOut(step: number = 0.1): void {
+    // Center zoom on canvas center for button clicks
+    const canvas = this.app.view as HTMLCanvasElement;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    this.zoomToPoint(centerX, centerY, this.zoomLevel - step);
+  }
+
+  public resetZoom(): void {
+    this.setZoom(1.0);
+    // Reset pan offset to center
+    this.panOffset = { x: 0, y: 0 };
+    this.gameContainer.x = 0;
+    this.gameContainer.y = 0;
   }
 
   public destroy(): void {

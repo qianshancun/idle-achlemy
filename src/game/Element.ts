@@ -28,25 +28,30 @@ export class Element extends PIXI.Container {
     this.updateGraphicsForTheme();
     this.addChild(this.background);
     
-    // Emoji - smaller
+    // HD rendering scale factor for crisp zoom
+    const hdScale = 2.0; // Render at 2x resolution
+    
+    // Emoji - rendered at HD scale
     this.emojiText = new PIXI.Text(this.definition.emoji, {
-      fontSize: 24,
+      fontSize: 24 * hdScale,
       align: 'center'
     });
     this.emojiText.anchor.set(0.5, 0.6);
     this.emojiText.y = -8;
+    this.emojiText.scale.set(1 / hdScale); // Scale down to normal size
     this.addChild(this.emojiText);
     
-    // Name - smaller (use i18n for translation)
+    // Name - rendered at HD scale (use i18n for translation)
     const translatedName = i18n.getElementName(this.definition.id, this.definition.name);
     this.nameText = new PIXI.Text(translatedName, {
-      fontSize: 10,
+      fontSize: 10 * hdScale,
       fill: this.getTextColor(),
       align: 'center',
       fontWeight: 'bold'
     });
     this.nameText.anchor.set(0.5, 0.5);
     this.nameText.y = 20;
+    this.nameText.scale.set(1 / hdScale); // Scale down to normal size
     this.addChild(this.nameText);
     
     // Set up dark mode listener
@@ -221,9 +226,21 @@ export class Element extends PIXI.Container {
         const canvasX = clientX - rect.left;
         const canvasY = clientY - rect.top;
         
-        // Apply drag offset
-        this.x = canvasX - this.dragOffset.x;
-        this.y = canvasY - this.dragOffset.y;
+        // Get the game instance to access zoom and pan information
+        const game = (window as any).game;
+        if (game) {
+          // Convert canvas coordinates to world coordinates (accounting for zoom and pan)
+          const worldX = (canvasX - game.gameContainer.x) / game.getZoom();
+          const worldY = (canvasY - game.gameContainer.y) / game.getZoom();
+          
+          // Apply drag offset in world coordinates
+          this.x = worldX - this.dragOffset.x;
+          this.y = worldY - this.dragOffset.y;
+        } else {
+          // Fallback: use direct positioning if game not available
+          this.x = canvasX - this.dragOffset.x;
+          this.y = canvasY - this.dragOffset.y;
+        }
       } else {
         // Fallback: use direct positioning (less accurate but prevents crashes)
         this.x = clientX - this.dragOffset.x;

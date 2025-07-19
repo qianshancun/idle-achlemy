@@ -66,11 +66,11 @@ export class UI {
             <button class="control-btn" id="reset-action" title="Reset Game">
               <span class="material-symbols-outlined">restart_alt</span>
             </button>
-            <button class="control-btn" id="font-size-decrease" title="Decrease Font Size">
-              <span class="material-symbols-outlined">text_decrease</span>
+            <button class="control-btn" id="zoom-out" title="Zoom Out Canvas">
+              <span class="material-symbols-outlined">zoom_out</span>
             </button>
-            <button class="control-btn" id="font-size-increase" title="Increase Font Size">
-              <span class="material-symbols-outlined">text_increase</span>
+            <button class="control-btn" id="zoom-in" title="Zoom In Canvas">
+              <span class="material-symbols-outlined">zoom_in</span>
             </button>
             <button class="control-btn" id="dark-mode-toggle" title="Toggle Dark Mode">
               <span class="material-symbols-outlined">dark_mode</span>
@@ -731,7 +731,7 @@ export class UI {
     this.setupDarkModeToggle();
     
     // Font size controls
-    this.setupFontSizeControls();
+    this.setupZoomControls();
     
     // Sorting controls
     this.setupSortingControls();
@@ -994,42 +994,37 @@ export class UI {
     }
   }
   
-  private setupFontSizeControls(): void {
-    const increaseBtn = document.getElementById('font-size-increase');
-    const decreaseBtn = document.getElementById('font-size-decrease');
+    private setupZoomControls(): void {
+    const zoomInBtn = document.getElementById('zoom-in');
+    const zoomOutBtn = document.getElementById('zoom-out');
     
-    if (!increaseBtn || !decreaseBtn) {
-      console.error('❌ Font size control buttons not found!');
+    if (!zoomInBtn || !zoomOutBtn) {
+      console.error('❌ Zoom control buttons not found!');
       return;
     }
     
-    // Load saved font size preference
-    const savedFontSize = localStorage.getItem('idle-alchemy-font-size') || '100';
-    this.applyFontSize(parseInt(savedFontSize));
+    // Load saved zoom level
+    const savedZoom = localStorage.getItem('idle-alchemy-zoom') || '100';
+    const zoomPercent = parseInt(savedZoom);
+    this.game.setZoom(zoomPercent / 100);
     
-    // Increase font size
-    increaseBtn.addEventListener('click', () => {
-      const current = parseInt(localStorage.getItem('idle-alchemy-font-size') || '100');
-      const newSize = Math.min(150, current + 10); // Max 150%
-      this.applyFontSize(newSize);
-      localStorage.setItem('idle-alchemy-font-size', newSize.toString());
-      this.showToast(`Font size: ${newSize}%`);
+    // Zoom in
+    zoomInBtn.addEventListener('click', () => {
+      const current = Math.round(this.game.getZoom() * 100);
+      const newZoom = Math.min(200, current + 10); // Max 200%
+      this.game.setZoom(newZoom / 100);
+      localStorage.setItem('idle-alchemy-zoom', newZoom.toString());
+      this.showToast(`Canvas zoom: ${newZoom}%`);
     });
     
-    // Decrease font size
-    decreaseBtn.addEventListener('click', () => {
-      const current = parseInt(localStorage.getItem('idle-alchemy-font-size') || '100');
-      const newSize = Math.max(70, current - 10); // Min 70%
-      this.applyFontSize(newSize);
-      localStorage.setItem('idle-alchemy-font-size', newSize.toString());
-      this.showToast(`Font size: ${newSize}%`);
+    // Zoom out
+    zoomOutBtn.addEventListener('click', () => {
+      const current = Math.round(this.game.getZoom() * 100);
+      const newZoom = Math.max(50, current - 10); // Min 50%
+      this.game.setZoom(newZoom / 100);
+      localStorage.setItem('idle-alchemy-zoom', newZoom.toString());
+      this.showToast(`Canvas zoom: ${newZoom}%`);
     });
-  }
-  
-  private applyFontSize(percentage: number): void {
-    const scale = percentage / 100;
-    document.documentElement.style.setProperty('--font-scale', scale.toString());
-    console.log(`🔤 Applied font scale: ${scale} (${percentage}%)`);
   }
   
   private setupSortingControls(): void {

@@ -8,10 +8,24 @@ class IdleAlchemy {
   private ui: UI | null = null;
   
   constructor() {
+    // Register service worker for performance
+    this.registerServiceWorker();
+    
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.initialize());
     } else {
       this.initialize();
+    }
+  }
+
+  private async registerServiceWorker(): Promise<void> {
+    if ('serviceWorker' in navigator && 'production' === 'production') {
+      try {
+        const registration = await navigator.serviceWorker.register('/sw.js');
+        console.log('✅ Service Worker registered successfully', registration.scope);
+      } catch (error) {
+        console.warn('❌ Service Worker registration failed:', error);
+      }
     }
   }
   
@@ -51,6 +65,12 @@ class IdleAlchemy {
       
       // Clear loading message
       gameContainer.innerHTML = '';
+      
+      // Hide the main loading screen
+      const loadingScreen = document.getElementById('loading-screen');
+      if (loadingScreen) {
+        loadingScreen.style.display = 'none';
+      }
       
       // Initialize the game
       this.game = new Game(gameContainer);

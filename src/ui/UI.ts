@@ -104,9 +104,6 @@ export class UI {
         <div class="element-grid-container">
           <div class="element-grid" id="element-grid"></div>
         </div>
-        
-        <!-- Resize Handle -->
-        <div class="resize-handle" id="panel-resize-handle"></div>
       </div>
       
       <!-- Game Actions -->
@@ -120,25 +117,30 @@ export class UI {
         </div>
       </div>
       
-      <!-- Help Tooltip -->
-      <div class="help-overlay pointer-events-auto" id="help-tooltip">
-        <div class="help-modal">
-          <button class="help-close" id="close-tooltip">
-            <span class="material-symbols-outlined">close</span>
-          </button>
-          <div class="help-content">
-            <h3 class="help-title" id="help-title"></h3>
-            <div class="help-steps">
-              <p id="help-step1"></p>
-              <p id="help-step2"></p>
-              <p id="help-step3"></p>
-              <p id="help-step4"></p>
-              <p id="help-step5"></p>
-            </div>
+    `;
+    
+    // Create help overlay separately and append to body for full window coverage
+    const helpOverlay = document.createElement('div');
+    helpOverlay.className = 'help-overlay pointer-events-auto';
+    helpOverlay.id = 'help-tooltip';
+    helpOverlay.innerHTML = `
+      <div class="help-modal">
+        <button class="help-close" id="close-tooltip">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+        <div class="help-content">
+          <h3 class="help-title" id="help-title"></h3>
+          <div class="help-steps">
+            <p id="help-step1"></p>
+            <p id="help-step2"></p>
+            <p id="help-step3"></p>
+            <p id="help-step4"></p>
+            <p id="help-step5"></p>
           </div>
         </div>
       </div>
     `;
+    document.body.appendChild(helpOverlay);
     
     // Now populate with translated content
     this.updateTranslatedContent();
@@ -153,6 +155,19 @@ export class UI {
   private addStyles(): void {
     const style = document.createElement('style');
     style.textContent = `
+      /* Global Background Fix */
+      html, body {
+        background: transparent !important;
+        background-color: transparent !important;
+        margin: 0;
+        padding: 0;
+      }
+      
+      #app {
+        background: transparent !important;
+        background-color: transparent !important;
+      }
+      
       /* Global Font */
       * {
         font-family: system-ui, -apple-system, sans-serif;
@@ -393,28 +408,43 @@ export class UI {
         align-items: center;
         padding: 6px 10px;
         cursor: pointer;
-        transition: background-color 0.15s;
+        transition: all 0.15s;
         border-radius: 4px;
         gap: 8px;
         font-family: system-ui, -apple-system, sans-serif;
         width: fit-content;
         min-width: fit-content;
+        border: 1px solid #e2e8f0;
+        background: white;
       }
       
       .element-card:hover {
         background: #f1f5f9;
+        border-color: #cbd5e1;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       }
       
       .element-card.clicked {
         background: #dbeafe;
+        border-color: #3b82f6;
+        transform: translateY(0);
+      }
+      
+      .dark .element-card {
+        border-color: #334155;
+        background: #1e293b;
       }
       
       .dark .element-card:hover {
         background: #334155;
+        border-color: #475569;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       }
       
       .dark .element-card.clicked {
         background: #1e3a8a;
+        border-color: #3b82f6;
       }
       
       .element-emoji {
@@ -432,21 +462,6 @@ export class UI {
       
       .dark .element-name {
         color: #e2e8f0;
-      }
-      
-      /* Resize Handle */
-      .resize-handle {
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 4px;
-        cursor: ew-resize;
-        background: transparent;
-      }
-      
-      .resize-handle:hover {
-        background: #3b82f6;
       }
       
       /* Game Actions */
@@ -511,12 +526,13 @@ export class UI {
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 50;
+        z-index: 9999;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 16px;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(2px);
       }
       
       .help-overlay.hidden {
@@ -593,38 +609,6 @@ export class UI {
         font-family: system-ui, -apple-system, sans-serif;
       }
       
-      /* Mobile Responsive */
-      @media (max-width: 768px) {
-        .discovery-panel {
-          position: fixed;
-          top: auto;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          width: 100vw;
-          height: 280px;
-          max-height: 60vh;
-        }
-        
-        .element-card {
-          padding: 6px 12px;
-          gap: 8px;
-        }
-        
-        .element-emoji {
-          font-size: 16px;
-        }
-        
-        .element-name {
-          font-size: 13px;
-        }
-        
-        .game-actions {
-          top: 8px;
-          left: 8px;
-        }
-      }
-      
       /* Utility Classes */
       .element-card.hidden {
         display: none;
@@ -640,6 +624,27 @@ export class UI {
       
       .dark .no-results-message {
         color: #94a3b8;
+      }
+      
+      /* Mobile Responsive Layout */
+      @media (max-width: 768px) {
+        .discovery-panel {
+          top: auto;
+          right: auto;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 280px;
+          min-height: 240px;
+          max-height: 320px;
+          min-width: auto;
+          max-width: none;
+        }
+        
+        .game-actions {
+          top: 8px;
+          left: 8px;
+        }
       }
       `;
     
@@ -722,9 +727,6 @@ export class UI {
     // Search functionality
     this.setupElementSearch();
     
-    // Panel resize functionality
-    this.setupPanelResize();
-    
     // Dark mode toggle
     this.setupDarkModeToggle();
     
@@ -804,7 +806,15 @@ export class UI {
         if (e.dataTransfer) {
           e.dataTransfer.setData('text/plain', element.id);
           e.dataTransfer.effectAllowed = 'copy';
+          
+          // Highlight mergeable elements on canvas
+          this.highlightMergeableElements(element.id);
         }
+      });
+      
+      elementCard.addEventListener('dragend', (e) => {
+        // Remove highlighting when drag ends
+        this.clearMergeableHighlights();
       });
       
       // Add click to add functionality
@@ -1163,209 +1173,6 @@ export class UI {
     });
   }
   
-
-  
-    private setupPanelResize(): void {
-    const resizeHandle = document.getElementById('panel-resize-handle');
-    const discoveryPanel = document.getElementById('discovery-panel');
-    const gameContainer = document.getElementById('game-container');
-    
-    if (!resizeHandle || !discoveryPanel || !gameContainer) {
-      console.error('❌ Panel resize elements not found!');
-      return;
-    }
-    
-    let isResizing = false;
-    let startX = 0;
-    let startY = 0;
-    let startWidth = 0;
-    let startHeight = 0;
-    
-    const updateGameContainerSize = (newWidth?: number, newHeight?: number) => {
-      const isDesktop = window.innerWidth > 768;
-      
-      if (isDesktop) {
-        // Desktop: reset mobile styles and adjust for side panel
-        gameContainer.style.marginBottom = '0';
-        gameContainer.style.height = '100vh';
-        gameContainer.style.top = '0';
-        gameContainer.style.left = '0';
-        gameContainer.style.right = 'auto';
-        gameContainer.style.bottom = 'auto';
-        
-        const panelWidth = newWidth || discoveryPanel.offsetWidth;
-        gameContainer.style.marginRight = `${panelWidth}px`;
-        gameContainer.style.width = `calc(100vw - ${panelWidth}px)`;
-        
-        // Ensure discovery panel is properly positioned
-        discoveryPanel.style.position = 'fixed';
-        discoveryPanel.style.top = '0';
-        discoveryPanel.style.right = '0';
-        discoveryPanel.style.bottom = '0';
-        discoveryPanel.style.width = `${panelWidth}px`;
-        discoveryPanel.style.height = '100vh';
-      } else {
-        // Mobile: reset desktop styles and adjust for bottom panel
-        gameContainer.style.marginRight = '0';
-        gameContainer.style.width = '100vw';
-        gameContainer.style.top = '0';
-        gameContainer.style.left = '0';
-        gameContainer.style.right = 'auto';
-        gameContainer.style.bottom = 'auto';
-        
-        const panelHeight = newHeight || discoveryPanel.offsetHeight;
-        gameContainer.style.marginBottom = `${panelHeight}px`;
-        gameContainer.style.height = `calc(100vh - ${panelHeight}px)`;
-        
-        // Ensure discovery panel is properly positioned
-        discoveryPanel.style.position = 'fixed';
-        discoveryPanel.style.bottom = '0';
-        discoveryPanel.style.left = '0';
-        discoveryPanel.style.right = '0';
-        discoveryPanel.style.width = '100vw';
-        discoveryPanel.style.height = `${panelHeight}px`;
-      }
-      
-      // Trigger PIXI resize with proper timing
-      requestAnimationFrame(() => {
-        if ((window as any).game && (window as any).game.app) {
-          const canvas = (window as any).game.app.view;
-          const container = canvas.parentElement;
-          if (container) {
-            const rect = container.getBoundingClientRect();
-            (window as any).game.app.renderer.resize(rect.width, rect.height);
-          }
-        }
-      });
-    };
-    
-    const handleMouseDown = (e: MouseEvent) => {
-      isResizing = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      
-      const isDesktop = window.innerWidth > 768;
-      if (isDesktop) {
-        startWidth = discoveryPanel.offsetWidth;
-      } else {
-        startHeight = discoveryPanel.offsetHeight;
-      }
-      
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      document.body.style.cursor = isDesktop ? 'ew-resize' : 'ns-resize';
-      document.body.style.userSelect = 'none';
-      // Disable pointer events on iframe/canvas during resize to prevent issues
-      document.body.style.pointerEvents = 'none';
-      resizeHandle.style.pointerEvents = 'auto';
-      e.preventDefault();
-    };
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isResizing) return;
-      
-      const isDesktop = window.innerWidth > 768;
-      
-      if (isDesktop) {
-        // Desktop: horizontal resize (right panel)
-        const deltaX = startX - e.clientX; // Reversed because panel is on the right
-        const maxWidth = Math.min(500, window.innerWidth * 0.6); // Max 60% of viewport
-        const newWidth = Math.min(maxWidth, Math.max(200, startWidth + deltaX));
-        
-        discoveryPanel.style.width = `${newWidth}px`;
-        updateGameContainerSize(newWidth);
-      } else {
-        // Mobile: vertical resize (bottom panel)
-        const deltaY = startY - e.clientY; // Reversed because panel is at the bottom
-        const maxHeight = Math.min(350, window.innerHeight * 0.5); // Max 50% of viewport
-        const newHeight = Math.min(maxHeight, Math.max(120, startHeight + deltaY));
-        
-        discoveryPanel.style.height = `${newHeight}px`;
-        updateGameContainerSize(undefined, newHeight);
-      }
-    };
-    
-    const handleMouseUp = () => {
-      isResizing = false;
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-      document.body.style.pointerEvents = '';
-      resizeHandle.style.pointerEvents = '';
-    };
-    
-    // Touch events for mobile
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
-      
-      const touch = e.touches[0];
-      isResizing = true;
-      startX = touch.clientX;
-      startY = touch.clientY;
-      
-      const isDesktop = window.innerWidth > 768;
-      if (isDesktop) {
-        startWidth = discoveryPanel.offsetWidth;
-      } else {
-        startHeight = discoveryPanel.offsetHeight;
-      }
-      
-      document.addEventListener('touchmove', handleTouchMove, { passive: false });
-      document.addEventListener('touchend', handleTouchEnd);
-      document.body.style.userSelect = 'none';
-      e.preventDefault();
-    };
-    
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isResizing || e.touches.length !== 1) return;
-      
-      const touch = e.touches[0];
-      const isDesktop = window.innerWidth > 768;
-      
-      if (isDesktop) {
-        // Desktop: horizontal resize
-        const deltaX = startX - touch.clientX;
-        const maxWidth = Math.min(500, window.innerWidth * 0.6);
-        const newWidth = Math.min(maxWidth, Math.max(200, startWidth + deltaX));
-        
-        discoveryPanel.style.width = `${newWidth}px`;
-        updateGameContainerSize(newWidth);
-      } else {
-        // Mobile: vertical resize
-        const deltaY = startY - touch.clientY;
-        const maxHeight = Math.min(350, window.innerHeight * 0.5);
-        const newHeight = Math.min(maxHeight, Math.max(120, startHeight + deltaY));
-        
-        discoveryPanel.style.height = `${newHeight}px`;
-        updateGameContainerSize(undefined, newHeight);
-      }
-      
-      e.preventDefault();
-    };
-    
-    const handleTouchEnd = () => {
-      isResizing = false;
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
-      document.body.style.userSelect = '';
-    };
-    
-    resizeHandle.addEventListener('mousedown', handleMouseDown);
-    resizeHandle.addEventListener('touchstart', handleTouchStart);
-    
-    // Handle window resize to transition between desktop/mobile layouts
-    const handleWindowResize = () => {
-      // Update layout based on current window size
-      updateGameContainerSize();
-    };
-    
-    window.addEventListener('resize', handleWindowResize);
-    
-    // Initial layout setup
-    updateGameContainerSize();
-  }
-  
   private setupElementSearch(): void {
     const searchInput = document.getElementById('element-search') as HTMLInputElement;
     
@@ -1424,6 +1231,69 @@ export class UI {
     });
   }
  
+  private highlightMergeableElements(draggedElementId: string): void {
+    console.log('🟢 Highlighting mergeable elements for:', draggedElementId);
+    
+    // Get all elements on canvas from the game
+    if ((window as any).game) {
+      const canvasElements = (window as any).game.getAllCanvasElements();
+      console.log('🎯 Found canvas elements:', canvasElements.length);
+      
+      canvasElements.forEach((canvasElement: any) => {
+        // Check if these elements can merge
+        const elementId = canvasElement.definition?.id || canvasElement.elementId;
+        console.log(`🔍 Checking merge: ${draggedElementId} + ${elementId}`);
+        
+        const recipe = configLoader.getRecipeByInputs(draggedElementId, elementId);
+        if (recipe) {
+          console.log('✅ Found recipe! Highlighting element:', elementId);
+          // Highlight this element with green background
+          this.setElementHighlight(canvasElement, true);
+        }
+      });
+    }
+  }
+  
+  private clearMergeableHighlights(): void {
+    console.log('🔄 Clearing all highlights');
+    
+    // Clear all highlighting on canvas elements
+    if ((window as any).game) {
+      const canvasElements = (window as any).game.getAllCanvasElements();
+      
+      canvasElements.forEach((canvasElement: any) => {
+        this.setElementHighlight(canvasElement, false);
+      });
+    }
+  }
+  
+  private setElementHighlight(canvasElement: any, highlight: boolean): void {
+    console.log('🎨 Setting highlight:', highlight, 'for element:', canvasElement.definition?.id);
+    
+    // Try multiple ways to access the sprite/visual representation
+    let target = null;
+    
+    if (canvasElement.sprite) {
+      target = canvasElement.sprite;
+    } else if (canvasElement.container) {
+      target = canvasElement.container;
+    } else if (canvasElement.tint !== undefined) {
+      target = canvasElement;
+    }
+    
+    if (target) {
+      if (highlight) {
+        target.tint = 0x90EE90; // Light green
+        console.log('✅ Applied green highlight');
+      } else {
+        target.tint = 0xFFFFFF; // Reset to white
+        console.log('🔄 Removed highlight');
+      }
+    } else {
+      console.warn('⚠️ Could not find target for highlighting:', canvasElement);
+    }
+  }
+
   private showToast(message: string): void {
     const toast = document.createElement('div');
     toast.style.cssText = `

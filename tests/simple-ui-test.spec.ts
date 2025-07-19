@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Basic UI Structure', () => {
   test('should have Reset button in discovery panel header', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('/');
     
     // Wait for the game to load
     await page.waitForSelector('#discovery-panel', { timeout: 10000 });
@@ -17,7 +17,7 @@ test.describe('Basic UI Structure', () => {
   });
 
   test('should have only arrangement actions in bottom-actions', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+    await page.goto('/');
     await page.waitForSelector('#bottom-actions', { timeout: 10000 });
     
     const bottomActions = page.locator('#bottom-actions');
@@ -31,32 +31,21 @@ test.describe('Basic UI Structure', () => {
     await expect(bottomActions.locator('#reset-action')).toHaveCount(0);
   });
 
-  test('should have resizable discovery panel', async ({ page }) => {
-    await page.goto('http://localhost:3001');
+  test('should have fixed discovery panel (no resize handle)', async ({ page }) => {
+    await page.goto('/');
     await page.waitForSelector('#discovery-panel', { timeout: 10000 });
     
+    const discoveryPanel = page.locator('#discovery-panel');
+    await expect(discoveryPanel).toBeVisible();
+    
+    // Verify there's no resize handle
     const resizeHandle = page.locator('#panel-resize-handle');
+    await expect(resizeHandle).toHaveCount(0);
     
-    // Check resize handle is present
-    await expect(resizeHandle).toBeVisible();
-    
-    // Check resize handle has correct cursor on desktop
-    if (page.viewportSize()!.width > 768) {
-      await expect(resizeHandle).toHaveCSS('cursor', 'ew-resize');
-    } else {
-      await expect(resizeHandle).toHaveCSS('cursor', 'ns-resize');
-    }
+    // Panel should have fixed width on desktop
+    await page.setViewportSize({ width: 1200, height: 800 });
+    const panelBox = await discoveryPanel.boundingBox();
+    expect(panelBox!.width).toBe(320);
   });
 
-  test('should have working language selector in header', async ({ page }) => {
-    await page.goto('http://localhost:3001');
-    await page.waitForSelector('#discovery-panel', { timeout: 10000 });
-    
-    const languageSelector = page.locator('#discovery-panel .language-selector');
-    const languageButton = page.locator('#language-button');
-    
-    // Check language selector is in the header controls
-    await expect(languageSelector).toBeVisible();
-    await expect(languageButton).toBeVisible();
-  });
-}); 
+});

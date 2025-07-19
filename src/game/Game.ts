@@ -517,7 +517,7 @@ export class Game {
     return this.elementManager.getHint();
   }
   
-  public getProgress(): ReturnType<ElementManager['getDiscoveryProgress']> {
+  public getProgress(): { discovered: number; total: number } {
     return this.elementManager.getDiscoveryProgress();
   }
   
@@ -561,80 +561,91 @@ export class Game {
     // Force UI update - useful after loading progress
     this.onGameStateChanged();
   }
+  
+  public getAllCanvasElements(): Element[] {
+    return this.elements;
+  }
 
   public autoArrangeElements(): void {
     if (this.elements.length === 0) return;
 
-    // Get canvas dimensions and current discovery panel width
+    console.log(`🎯 Auto-arranging ${this.elements.length} elements`);
+
+    // Get actual canvas viewport dimensions
     const canvas = this.app.view as HTMLCanvasElement;
-    const rect = canvas.getBoundingClientRect();
-    const discoveryPanel = document.getElementById('discovery-panel');
+    const viewportWidth = canvas.width;
+    const viewportHeight = canvas.height;
     
-    // Calculate available area based on current panel size
-    const isDesktop = window.innerWidth > 768;
-    let availableWidth = rect.width;
-    let availableHeight = rect.height;
+    // Element properties - using closer spacing as requested
+    const elementSize = 60; // Approximate diameter of elements
+    const spacing = 3; // Very small margin as requested (3px)
+    const padding = 30; // Smaller padding for more room
     
-    if (isDesktop && discoveryPanel) {
-      // Desktop: exclude the discovery panel width from the right
-      availableWidth = rect.width - discoveryPanel.offsetWidth;
-    } else if (!isDesktop && discoveryPanel) {
-      // Mobile: exclude the discovery panel height from the bottom
-      availableHeight = rect.height - discoveryPanel.offsetHeight;
+    const elementCount = this.elements.length;
+    console.log(`📐 Canvas: ${viewportWidth}x${viewportHeight}, Elements: ${elementCount}`);
+    
+    // Available space for the grid
+    const availableWidth = viewportWidth - (padding * 2);
+    const availableHeight = viewportHeight - (padding * 2);
+    
+    // Smart grid sizing logic
+    let cols: number, rows: number;
+    
+    if (elementCount <= 4) {
+      // Small grids: 1x1, 1x2, 2x2, 2x2
+      cols = elementCount <= 2 ? elementCount : 2;
+      rows = Math.ceil(elementCount / cols);
+    } else if (elementCount <= 9) {
+      // Medium grids: 3x3 or smaller
+      cols = Math.min(3, Math.ceil(Math.sqrt(elementCount)));
+      rows = Math.ceil(elementCount / cols);
+    } else if (elementCount <= 16) {
+      // Larger grids: 4x4 or rectangular
+      cols = Math.min(4, Math.ceil(Math.sqrt(elementCount)));
+      rows = Math.ceil(elementCount / cols);
+    } else {
+      // Very large grids: calculate based on available space
+      const maxColsByWidth = Math.floor(availableWidth / (elementSize + spacing));
+      cols = Math.min(maxColsByWidth, Math.ceil(Math.sqrt(elementCount * 1.3)));
+      rows = Math.ceil(elementCount / cols);
     }
     
-    // Add padding from edges
-    const padding = 20;
-    const usableWidth = availableWidth - (padding * 2);
-    const usableHeight = availableHeight - (padding * 2);
+    console.log(`📏 Grid layout: ${cols}x${rows}`);
     
-    // Each element is roughly 60px diameter
-    const elementSize = 60;
+    // Calculate total grid size with minimal spacing
+    const totalGridWidth = cols * elementSize + (cols - 1) * spacing;
+    const totalGridHeight = rows * elementSize + (rows - 1) * spacing;
     
-    // Calculate optimal grid dimensions
-    const elementCount = this.elements.length;
-    const aspectRatio = usableWidth / usableHeight;
-    const cols = Math.ceil(Math.sqrt(elementCount * aspectRatio));
-    const rows = Math.ceil(elementCount / cols);
+    console.log(`📦 Grid size: ${totalGridWidth}x${totalGridHeight}`);
     
-    // Calculate spacing to fit elements in available space
-    let spacingX = Math.max(2, Math.floor((usableWidth - cols * elementSize) / Math.max(1, cols - 1)));
-    let spacingY = Math.max(2, Math.floor((usableHeight - rows * elementSize) / Math.max(1, rows - 1)));
+    // Center the grid in the current viewport
+    const viewCenterX = -this.panOffset.x + viewportWidth / 2;
+    const viewCenterY = -this.panOffset.y + viewportHeight / 2;
     
-    // Limit spacing to reasonable values
-    spacingX = Math.min(spacingX, 20);
-    spacingY = Math.min(spacingY, 20);
+    const gridStartX = viewCenterX - totalGridWidth / 2;
+    const gridStartY = viewCenterY - totalGridHeight / 2;
     
-    // Calculate actual grid size and center it
-    const gridWidth = cols * elementSize + (cols - 1) * spacingX;
-    const gridHeight = rows * elementSize + (rows - 1) * spacingY;
+    console.log(`🎯 Grid position: (${gridStartX}, ${gridStartY})`);
     
-    // Screen coordinates (center of available area)
-    const screenCenterX = availableWidth / 2;
-    const screenCenterY = availableHeight / 2;
-    const screenStartX = screenCenterX - gridWidth / 2;
-    const screenStartY = screenCenterY - gridHeight / 2;
-    
-    // Convert to world coordinates
-    // The gameContainer position represents the current pan offset
-    const worldStartX = screenStartX - this.gameContainer.x;
-    const worldStartY = screenStartY - this.gameContainer.y;
-    
-    // Arrange elements in grid with smooth animation
+    // Arrange elements with smooth animation
     this.elements.forEach((element, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
       
-      const targetX = worldStartX + col * (elementSize + spacingX) + elementSize / 2;
-      const targetY = worldStartY + row * (elementSize + spacingY) + elementSize / 2;
+      const targetX = gridStartX + col * (elementSize + spacing) + elementSize / 2;
+      const targetY = gridStartY + row * (elementSize + spacing) + elementSize / 2;
       
-      // Smooth animation to new position
+      console.log(`🎲 Element ${index}: (${col},${row}) -> (${targetX}, ${targetY})`);
+      
+      // Smooth animation to target position
       const startX = element.x;
       const startY = element.y;
       
       let progress = 0;
+      const duration = 0.5; // Slightly faster animation
+      
       const animate = () => {
-        progress += 0.08; // Slightly slower for smoother animation
+        progress += 0.016 / duration; // ~60fps animation
         
         if (progress >= 1) {
           element.x = targetX;
@@ -642,7 +653,7 @@ export class Game {
           return;
         }
         
-        // Smooth easing function
+        // Smooth easing function (ease-out cubic)
         const eased = 1 - Math.pow(1 - progress, 3);
         element.x = startX + (targetX - startX) * eased;
         element.y = startY + (targetY - startY) * eased;
@@ -652,6 +663,8 @@ export class Game {
       
       animate();
     });
+    
+    console.log('✅ Auto-arrange animation started');
   }
 
   public removeDuplicateElements(): number {
@@ -693,5 +706,13 @@ export class Game {
 
   public destroy(): void {
     this.app.destroy(true);
+  }
+
+  public resizeRenderer(): void {
+    const view = this.app?.view as HTMLCanvasElement;
+    if (view?.parentElement) {
+      const { width, height } = view.parentElement.getBoundingClientRect();
+      this.app.renderer.resize(width, height);
+    }
   }
 } 

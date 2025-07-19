@@ -201,6 +201,17 @@ export const t = (keyPath: string, variables?: Record<string, any>): string => {
       env: { ...process.env, VITE_BUILD_LANG: lang }
     });
     
+    // Fix asset paths in index.html for subdirectory deployment
+    const htmlPath = path.join(langDir, 'index.html');
+    if (fs.existsSync(htmlPath)) {
+      let htmlContent = fs.readFileSync(htmlPath, 'utf8');
+      // Replace absolute asset paths with relative paths
+      htmlContent = htmlContent.replace(/src="\/assets\//g, 'src="./assets/');
+      htmlContent = htmlContent.replace(/href="\/assets\//g, 'href="./assets/');
+      fs.writeFileSync(htmlPath, htmlContent);
+      console.log(`   🔧 Fixed asset paths in ${lang}/index.html`);
+    }
+    
     // Copy necessary JSON files to the output directory
     const localesDir = path.join(langDir, 'locales');
     fs.mkdirSync(localesDir, { recursive: true });

@@ -1,0 +1,7 @@
+name = "idle-alchemy"
+compatibility_date = "2024-01-15"
+pages_build_output_dir = "dist"
+
+# Environment variables (if needed)
+[vars]
+NODE_ENV = "production" 

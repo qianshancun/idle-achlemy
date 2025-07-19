@@ -812,7 +812,7 @@ export class UI {
         }
       });
       
-      elementCard.addEventListener('dragend', (e) => {
+      elementCard.addEventListener('dragend', () => {
         // Remove highlighting when drag ends
         this.clearMergeableHighlights();
       });

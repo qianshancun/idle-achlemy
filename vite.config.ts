@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  base: './', // Use relative paths for assets
+  base: process.env.NODE_ENV === 'production' ? '/' : './',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -20,11 +20,22 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: false, // Disable sourcemaps in production for faster deployment
+    assetsDir: 'assets',
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
       },
+      output: {
+        // Better asset naming for caching
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+      },
     },
+    // Optimize for production deployment
+    minify: 'terser',
+    target: 'es2020',
+    cssMinify: true,
   },
 }); 

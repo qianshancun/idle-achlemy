@@ -5,14 +5,22 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "npm run compile && tsc && node scripts/build-i18n.js",
+    "build": "npm run compile && tsc && node scripts/build-i18n.js && vite build",
     "build:single": "npm run compile && tsc && vite build",
+    "build:cf": "node scripts/build-cloudflare.js",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "compile": "node src/config/compile-config.js",
     "test-optimization": "node scripts/test-storage-optimization.js",
     "test": "playwright test",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "deploy": "npm run build:cf && npm run deploy:cf:production",
+    "deploy:cf": "wrangler pages deploy dist",
+    "deploy:cf:production": "wrangler pages deploy dist --project-name idle-alchemy",
+    "cf:login": "wrangler login",
+    "cf:whoami": "wrangler whoami",
+    "cf:pages:create": "wrangler pages project create idle-alchemy",
+    "cf:pages:list": "wrangler pages project list"
   },
   "keywords": [
     "game",
@@ -30,8 +38,10 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
+    "terser": "^5.43.1",
     "typescript": "^5.3.0",
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "wrangler": "^4.25.0"
   },
   "dependencies": {
     "pixi.js": "^7.3.0"

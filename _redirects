@@ -1,0 +1,20 @@
+# Multi-language routing
+# Serve language-specific versions
+
+# Spanish routes
+/es/* /es/:splat 200
+/es /es/index.html 200
+
+# English routes (explicit)
+/en/* /en/:splat 200
+/en /en/index.html 200
+
+# Default to English for root and unmatched routes
+/* /index.html 200
+
+# Optional: Redirect specific paths for better SEO
+/game /index.html 200
+/play /index.html 200
+
+# Health check endpoint (if needed)
+/health /index.html 200 

@@ -586,7 +586,7 @@ export class Game {
     
     // Available space for the grid
     const availableWidth = viewportWidth - (padding * 2);
-    const availableHeight = viewportHeight - (padding * 2);
+    // Note: availableHeight reserved for future grid layout improvements
     
     // Smart grid sizing logic
     let cols: number, rows: number;
